@@ -1,0 +1,131 @@
+
+
+/* General background and color */
+*, QLabel, QCheckbox {
+    background-color: #101010;
+    color: #c0c0c0;
+}
+QPushButton {
+    padding: 4px;
+    margin: 2px;
+}
+
+/*1.03*/
+QSpinBox:up-arrow {
+	image: url('assets/arrowup.png');
+}
+QSpinBox:down-arrow {
+	image: url('assets/cbarrow.png');
+}
+
+QSpinBox:!enabled, QCheckBox:!enabled, QLineEdit:!enabled, QComboBox:!enabled
+{
+     color:#101010;
+     background-color: #303030
+}
+/*
+*::focus {
+    background-color: #503000
+}
+*/
+/* Borders per control */
+QTabWidget, QCheckBox {
+    border: 0px
+}
+QSplitter {
+    border: 1px solid gray
+}
+QComboBox, QLineEdit, QSpinBox, QTextEdit {
+    /*border: 1px solid #262324;*/
+    border: 1px solid gray;
+}
+
+QLineEdit {
+    margin: 2px;
+    /*margin-left: 0;
+    margin-right: 0;*/
+}
+
+
+
+QComboBox::down-arrow {
+	image: url('assets/cbarrow.png');
+}
+
+/* Specific customizations */
+*[alert="true"], *[alert="false"] QLabel {
+    background-color: #FFF12C;
+    color: #101020
+}
+
+QLabel#alert {
+    color: #FFF12C;
+}
+
+*[parity="even"], *[parity="even"] QLabel, *[parity="even"] QCheckBox {
+    background-color: #181818;
+}
+*[selection="true"], *[selection="true"] QLabel {
+    /*background-color: #7f3f11;*/
+}
+QWidget[selection="true"] {
+    border: 2px solid #D46344;
+}
+
+.ConfigWidget {
+
+}
+
+QPushButton#DumpBtn {
+    color: #FFF12C;
+}
+
+QPushButton#TestAll {
+    font-weight: bold;
+}
+
+*[feedback="true"], *[feedback="true"] QLabel {
+    color: #D46344;
+    font-weight: bold;
+}
+
+
+
+QTabBar::tab:selected {
+    border: 1px solid #FFF12C;
+}
+
+QTabBar::tab {
+    background-color: #505050;
+    margin: 4px;
+    padding: 8px;
+    /*padding-right: 4px;*/
+}
+
+
+
+QPushButton {
+    border-top: 1px solid #c0c0c0;
+    border-left: 1px solid #c0c0c0;
+    border-bottom: 2px solid #808080;
+    border-right: 2px solid #808080;
+    background-color: #303030
+}
+QPushButton::pressed {
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-bottom: 1px solid #c0c0c0;
+    border-right: 1px solid #c0c0c0;
+}
+
+#BankLine {
+    border: 1px solid gray
+}
+
+/*QComboBox::drop-down {
+    background: transparent
+}*/
+
+
+/*QSpinBox::up-button { }
+QSpinBox::down-button { width: 32px; }*/
