@@ -297,7 +297,7 @@ $ ln -s /usr/lib/python3/dist-packages/PySide/ yaeltex-env/lib/python3.5/site-pa
 
 ##C. Modo rápido (python3.5 SIN virtualenv):
         \# Funciona en ubuntu 16.04, pero en 14.04 por ejemplo no
-# Sin virtual-env y python3.5 (dependencias en el sistema)
+\# Sin virtual-env y python3.5 (dependencias en el sistema)
 $ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
 $ sudo pip3 install python_rtmidi # o bajando zip y compilando
 
