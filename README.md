@@ -181,7 +181,7 @@ $ pip install -U setuptools
 
 \# python rtmidi version 1.0.0rc1
 
-#Lo siguiente no funciona, tampoco la versión 0.5b
+\#Lo siguiente no funciona, tampoco la versión 0.5b
 
 $ pip install python_rtmidi 
 
@@ -216,7 +216,7 @@ $ cd python-rtmidi-1.0.0rc1.zip
 
 \# Bajar e instalar qt 4.8 : https://download.qt.io/archive/qt/4.8/4.8.4/qt-win-opensource-4.8.4-vs2010.exe
 
-\# Agregar al path C:\Qt\4.8.4\bin
+\# Agregar a la variable de entorno PATH, la ruta C:\Qt\4.8.4\bin
 
 \# Bajar PySide como wheel precompilado http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyside
 
