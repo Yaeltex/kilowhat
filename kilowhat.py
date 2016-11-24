@@ -249,11 +249,10 @@ class MemoryWidget(QWidget):
 
 		tiny = 112		# FIXME: this is not a great way, but layouts are being dicks
 		small = None
-		h.label(_("MIDI ports")).widget(cmi, width=tiny).widget(cmo, width=tiny)\
-			.pic("assets/arrow_right.png", spany=3)\
-			.label(_("Set banks")).widget(self.banks, width=tiny).pic("assets/arrow_right.png", spany=3)\
+		h.label(_("MIDI ports")).widget(cmi, spanx=2, width=tiny).widget(cmo, spanx=1, width=tiny)\
+			.label(_("Set banks")).widget(self.banks, width=tiny)\
 			.newLine()
-		h.label(_("Scan")).widget(self.btn_reload_midi, spanx=3, width=small).label(_(" ")).widget(self.ins, width=tiny).newLine()
+		h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_(" ")).widget(self.ins, width=tiny).newLine()
 		h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
 		h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
 
@@ -897,34 +896,27 @@ class Form(QFrame):
 		print("Form() Memory widget ok")
 
 		self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-		layout_top.addWidget(self.memory_widget)
-		layout_top.setAlignment(self.memory_widget, Qt.AlignTop)
+		
+		layout_htop = QVBoxLayout()
+		layout_htop.addWidget(self.memory_widget)
 
 		layout_apply = QVBoxLayout()
-		layout_top.addLayout(layout_apply)
+		#layout_top.addLayout(layout_apply)
 
 		self.btn_apply = QPushButton(_("Apply"))
 		self.btn_apply.setMinimumWidth(160)
 		self.btn_apply.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 		self.btn_apply.pressed.connect(lambda: self.memory_widget.save_model())
-		layout_apply.addSpacing(64)
+		layout_apply.addStretch()
 		layout_apply.addWidget(self.btn_apply)
-		layout_apply2 = QHBoxLayout()
-		layout_apply.addLayout(layout_apply2)
-		img = QLabel()
+		layout_apply.addStretch()
+		layout_apply.setAlignment(Qt.AlignCenter)
 
-		print("Form() setpixmap")
-
-		img.setPixmap(QPixmap("assets/arrow_down.png"))
-		layout_apply2.addWidget(img)
-		layout_apply2.addStretch()
+		layout_htop.addLayout(layout_apply)
 		
-		img = QLabel()
-		img.setPixmap(QPixmap("assets/arrow_up_right.png"))
-		layout_apply2.addWidget(img)
-		layout_apply2.setAlignment(img, Qt.AlignRight)
-
-		#layout_top.addStretch()
+		layout_top.addLayout(layout_htop)
+		#layout_top.setAlignment(self.memory_widget, Qt.AlignTop)
+		layout_top.addStretch() # space between
 
 		load_save_layout = QGridLayout()
 		load_save_layout.setSizeConstraint(QLayout.SetMaximumSize)
