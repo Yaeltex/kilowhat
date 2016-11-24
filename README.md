@@ -5,7 +5,9 @@ Dependencias multiplataforma paso a paso
 
 ###Nota general:
 Python: versión 3.4.x debido a que PySide via pip install a la fecha soporta versiones < 3.5 (en linux esta disponible para py3.5 pero vía apt-get, no vía pip)
+
 RtMidi: 0.5b o 1.0 dependiendo de la plataforma
+
 Se dejan documentadas tachadas y/o en gris claro opciones que se probaron y no funcionan.
 Al final se listan las versiones específicas usadas de cada programa.
 
@@ -40,34 +42,31 @@ $ sudo port install py34-readline
 $ sudo port install py34-pip
 $ sudo port select --set pip pip34
 
-
 \# virtualenv
 $ sudo pip install virtualenv
 $ virtualenv -p python3.4 yaeltex-py3.4.5
 $ source yaeltex-py3.4.5/bin/activate
 
-
 \# RtMidi
 $ brew install rtmidi # lib en c
 
 
-# (@yaeltex-py3.4.5) rtmidi bindings para py versión python-rtmidi-0.5b1
-# la 1.0.0 problema con threads
+\# (@yaeltex-py3.4.5) rtmidi bindings para py versión python-rtmidi-0.5b1
+\# la 1.0.0 problema con threads
 $ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
 $ unzip python-rtmidi-0.5b1.zip
 $ cd python-rtmidi-0.5b1
 
-
-# cmake
+\# cmake
 $ brew install cmake
 $ brew install qt
 
 
-# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
+\# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
 $ pip install PySide -v # version 1.2.4
 
 
-# Patchear pyside: cpython, shiboken, qtcore, qtgui fix
+\# Patchear pyside: cpython, shiboken, qtcore, qtgui fix
 $ export ENV_PATH=~/Virtualenvs/yaeltex-env-py3.4/lib/python3.4/site-packages/PySide/
 $ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib $ENV_PATH/libpyside.cpython-34m.1.2.dylib $ENV_PATH/QtCore.so 
 
