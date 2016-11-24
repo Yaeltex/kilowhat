@@ -208,20 +208,28 @@ $ pip install pypiwin32-219-cp34-none-win_amd64.whl
 
 
 ### Detalle de versiones (pip list)
-\Cython (0.24.1)
-\future (0.16.0)
-\pefile (2016.3.28)
-\pip (1.5.4)
-\PyInstaller (3.2)
-\pypiwin32 (219)
-\PySide (1.2.2)
-\python-rtmidi (1.0.0rc1)
-\setuptools (28.8.0)
-\Shiboken (1.2.2)
-\wheel (0.29.0)
 
+Cython (0.24.1)
 
+future (0.16.0)
 
+pefile (2016.3.28)
+
+pip (1.5.4)
+
+PyInstaller (3.2)
+
+pypiwin32 (219)
+
+PySide (1.2.2)
+
+python-rtmidi (1.0.0rc1)
+
+setuptools (28.8.0)
+
+Shiboken (1.2.2)
+
+wheel (0.29.0)
 
 #Linux
 Testeado en Ubuntu 16.04.1 y 14.04
@@ -229,112 +237,142 @@ Testeado en Ubuntu 16.04.1 y 14.04
 
 ##A. Modo virtual-env compilación completa Python 3.4.0
 
-
 \# Python 3.4.0 (versión original)
 Nota: hay que bajar y compilar la versión 3.4.0 porque en los repositorios esta la 3.5 que por lo menos en este momento no es compatible con PySide compilado vía pip “only these python versions are supported: [(2, 6), (2, 7), (3, 2), (3, 3), (3, 4)]”
 
-
 $ wget https://www.python.org/ftp/python/3.4.0/Python-3.4.0.tgz
+
 $ tar -xf Python-3.4.0.tgz
+
 $ cd Python-3.4.0
+
 $ sudo apt-get install build-essential
 
-
 \# Activar zlib y ssl
+
 $ sudo apt-get install zlib1g-dev libssl-dev
+
 $ vi /Modules/Setup
+
 Descomentar las líneas:
 
-
 zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
-
 
 SSL=/usr/local/ssl
 _ssl _ssl.c \
    -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
    -L$(SSL)/lib -lssl -lcrypto
 
-
 \# Enable shared para poder compilar pyside al instalar vía pip
-$ ./configure --enable-shared
-$ make -j3
-$ sudo make install
 
+$ ./configure --enable-shared
+
+$ make -j3
+
+$ sudo make install
 
 $ export LD_LIBRARY_PATH=/usr/local/lib 
 
-
 \# Para que lo anterior sea permanente, editar .bashrc y agregar la línea
-
 
 $ vi ~/.bashrc
    Agregar al final: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
-
 \# Virtualenv:
+
 $ sudo apt install virtualenv
+
 $ virtualenv -p python3.4 yaeltex-env
+
 $ source yaeltex-env/bin/activate
 
-
 \# (@yaeltex-env) rtmidi:
+
 $ sudo apt install librtmidi-dev # y dependencias
+
 $ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
+
 $ unzip python-rtmidi-1.0.0rc1.zip
+
 $ cd python-rtmidi-1.0.0rc1
+
 $ python setup.py install
 
-
 \# (@yaeltex-env) pyside
+
 $ sudo apt install cmake
+
 $ sudo apt-get install qt4-qmake qt-sdk
+
 $ sudo apt-get install libxml++2.6-dev libxslt1-dev
+
 $ pip install sphinx
+
 $ pip install pyside
 
-
 ##B. Módo mixto virtualenv + apt-get (python 3.5) (recomendado):
+
 $ sudo apt install virtualenv
+
 $ virtualenv -p python3.5 yaeltex-env
+
 $ source yaeltex-env/bin/activate
 
 \# (@yaeltex-env) rtmidi:
+
 $ sudo apt install librtmidi-dev
+
 $ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
 
 $ unzip python-rtmidi-0.5b1.zip
+
 $ cd python-rtmidi-0.5b1/
+
 $ python setup.py install
 
 \# (@yaeltex-env) pyside
+
 $ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
+
 $ ln -s /usr/lib/python3/dist-packages/PySide/ yaeltex-env/lib/python3.5/site-packages/
 
 
 
 ##C. Modo rápido (python3.5 SIN virtualenv):
         \# Funciona en ubuntu 16.04, pero en 14.04 por ejemplo no
+
 \# Sin virtual-env y python3.5 (dependencias en el sistema)
+
 $ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
+
 $ sudo pip3 install python_rtmidi # o bajando zip y compilando
 
 
 \# Ejecutar
+
 $ python kilowhat.py #o python3 si no se esta en el virtualenv
 
 
 \# PyInstaller
+
 $ sudo pip3 install pyinstaller
 
 
 \# Armar bundle para distribución:
+
 $ python -m PyInstaller kmgui_linux.spec
 
 
 ### Detalle de versiones (pip list)
+
 Python3.4 o 3.5
+
 pip (8.1.2)
+
 pkg-resources (0.0.0)
+
 python-rtmidi (1.0.0rc1)
+
 setuptools (28.4.0)
+
 wheel (0.30.0a0)
