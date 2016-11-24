@@ -181,7 +181,11 @@ $ pip install -U setuptools
 
 \# python rtmidi version 1.0.0rc1
 
-$ pip install python_rtmidi #No funciona, tampoco la versión 0.5b
+#Lo siguiente no funciona, tampoco la versión 0.5b
+
+$ pip install python_rtmidi 
+
+\#Hay que compilar la librería
 
 $ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
 
