@@ -160,10 +160,12 @@ Bajar https://www.python.org/ftp/python/3.4.0/python-3.4.0.amd64.msi e instalar 
 
 
 \# Abrir una consola (cmd)
+
 $ pip install penv
 
 
 \# Crear virtualenv
+
 $ python -m venv yaeltex-env-py3.4
 
 
