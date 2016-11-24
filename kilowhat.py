@@ -252,9 +252,9 @@ class MemoryWidget(QWidget):
 		h.label(_("MIDI ports")).widget(cmi, spanx=2, width=tiny).widget(cmo, spanx=1, width=tiny)\
 			.label(_("Set banks")).widget(self.banks, width=tiny)\
 			.newLine()
-		h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_(" ")).widget(self.ins, width=tiny).newLine()
-		h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
-		h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
+		h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
+		h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
+		h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_(" ")).newLine()
 
 		# Config widgets
 		self.output_matrix.addItems([_("Normal"), _("Matrix")])
