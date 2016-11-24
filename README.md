@@ -214,7 +214,7 @@ $ cd python-rtmidi-1.0.0rc1.zip
 
 \# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
 
-\# Bajar qt 4.8 : https://download.qt.io/archive/qt/4.8/4.8.4/qt-win-opensource-4.8.4-vs2010.exe
+\# Bajar e instalar qt 4.8 : https://download.qt.io/archive/qt/4.8/4.8.4/qt-win-opensource-4.8.4-vs2010.exe
 
 \# Agregar al path C:\Qt\4.8.4\bin
 
