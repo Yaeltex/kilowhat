@@ -143,19 +143,18 @@ $ yaeltex-env-py3.4\Scripts\activate.bat
 
 
 \# cython
-$ pip install Cython
 
+$ pip install Cython
 
 $ pip install -U setuptools
 
-
 \# python rtmidi version 1.0.0rc1
+
 $ pip install python_rtmidi #No funciona, tampoco la versión 0.5b
+
 $ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
+
 $ unzip python-rtmidi-1.0.0rc1.zip
-
-
-
 
 Compilar rtmidi con Visual Studio 2015 Community Edition no funciona. Hay que instalar el Visual C++ 2010 Express de la siguiente forma:
 * Bajar e instalar http://download.microsoft.com/download/1/D/9/1D9A6C0E-FC89-43EE-9658-B9F0E3A76983/vc_web.exe
