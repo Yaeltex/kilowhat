@@ -4,7 +4,6 @@ Software de configuración por SysEx de Yaeltex.
  
 Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
 
-
 #Dependencias multiplataforma paso a paso
 
 *Fecha*: 11/2016
@@ -22,11 +21,13 @@ Testeada en ‘el capitán’ v10.11
 Python version: 3.4.5
 
 \# Instalar Xcode tools (vía Mac App Store)
+
 \# Asegurarse de instalar también las Command Line Tools (ver Xcode -> Preferences -> Downloads)
+
 $ xcode-select --install
 
-
 \# Instalar brew
+
 $ ruby -e "$(curl -fsSL
 https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -42,42 +43,60 @@ Opciones con problemas:
 
 
 \# Instalar mac ports https://guide.macports.org/
+
 $ wget https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.11-ElCapitan.pkg
+
 $ sudo port install python34
+
 $ sudo port install py34-readline
+
 $ sudo port install py34-pip
+
 $ sudo port select --set pip pip34
 
 \# virtualenv
+
 $ sudo pip install virtualenv
+
 $ virtualenv -p python3.4 yaeltex-py3.4.5
+
 $ source yaeltex-py3.4.5/bin/activate
 
 \# RtMidi
+
 $ brew install rtmidi # lib en c
 
-
 \# (@yaeltex-py3.4.5) rtmidi bindings para py versión python-rtmidi-0.5b1
+
 \# la 1.0.0 problema con threads
+
 $ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
+
 $ unzip python-rtmidi-0.5b1.zip
+
 $ cd python-rtmidi-0.5b1
 
 \# cmake
+
 $ brew install cmake
+
 $ brew install qt
 
 
 \# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
+
 $ pip install PySide -v # version 1.2.4
 
 
 \# Patchear pyside: cpython, shiboken, qtcore, qtgui fix
+
 $ export ENV_PATH=~/Virtualenvs/yaeltex-env-py3.4/lib/python3.4/site-packages/PySide/
+
 $ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib $ENV_PATH/libpyside.cpython-34m.1.2.dylib $ENV_PATH/QtCore.so 
 
 
 \# pyside, libshiboken and qtcore fix
+
 $ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib  $ENV_PATH/libshiboken.cpython-34m.1.2.dylib $ENV_PATH/QtCore.so 
 
 
@@ -91,22 +110,32 @@ $ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib  $ENV_
 
 
 \# py2app (bundle build)
+
 \# Instalar py2app con bug fix working with a newer version of ModuleGraph
+
 $ pip install -U git+https://github.com/metachris/py2app.git@master
 
 
 \# Construir bundle
+
 $ python setup_mac.py py2app
 
 
 ###Detalle de versiones (pip y brew list)
 (yaeltex-py3.4.5)$ brew list --versions
+
 autoconf 2.69
+
 cmake 3.6.2
+
 pkg-config 0.29.1_2
+
 pyenv 1.0.2_1
+
 qt 4.8.7_2
+
 readline 7.0
+
 rtmidi 2.1.1
 
 
