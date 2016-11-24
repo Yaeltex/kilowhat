@@ -150,9 +150,10 @@ def send_sysex_dump():
 		for pkt in pkt_list:
 			print("SYSEX_PKT ", len(pkt), pkt)
 			midi_send(pkt)
-			if platform.system() == "Darwin":
-				print("Sleep 1 seg")
-				time.sleep(1)
+			#FIXME: send in multiple packets only in Darwin/MacOSs
+			#if platform.system() == "Darwin":
+			print("Sleep 1 seg")
+			time.sleep(1)
 	except Exception as e:
 		print("Exception", e)
 
