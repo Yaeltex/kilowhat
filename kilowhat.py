@@ -1,4 +1,4 @@
-#############################################
+############################################
 # Code by Martin Sebastian Wain for YAELTEX #
 #############################################
 
@@ -249,10 +249,10 @@ class MemoryWidget(QWidget):
 		tiny = 112		# FIXME: this is not a great way, but layouts are being dicks
 		small = None
 		h.label(_("MIDI ports")).widget(cmi, width=tiny).widget(cmo, width=tiny)\
-			.widget(self.btn_reload_midi, width=tiny)\
 			.pic("assets/arrow_right.png", spany=3)\
 			.label(_("Set banks")).widget(self.banks, width=tiny).pic("assets/arrow_right.png", spany=3)\
 			.newLine()
+		h.label(_("Scan")).widget(self.btn_reload_midi, spanx=3, width=small).label(_(" ")).widget(self.ins, width=tiny).newLine()
 		h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
 		h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
 
