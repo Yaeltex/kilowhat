@@ -139,8 +139,8 @@ $ python -m venv yaeltex-env-py3.4
 
 
 \# activar
-$ yaeltex-env-py3.4\Scripts\activate.bat
 
+$ yaeltex-env-py3.4\Scripts\activate.bat
 
 \# cython
 
@@ -168,45 +168,57 @@ http://haypo-notes.readthedocs.io/python.html#build-a-python-wheel-package-on-wi
 
 
 \# Desde una consola “Windows SDK 7.1 Command Prompt” hacer:
+
 \# activar
+
 $ yaeltex-env-py3.4\Scripts\activate.bat
+
 $ cd python-rtmidi-1.0.0rc1.zip
+
 (@Yaeltex-env-py3.4)$ python setup.py install
 
 \# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
+
 \# Bajar qt 4.8 : https://download.qt.io/archive/qt/4.8/4.8.4/qt-win-opensource-4.8.4-vs2010.exe
 
 \# Agregar al path C:\Qt\4.8.4\bin
 
 \# Bajar PySide como wheel precompilado http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyside
+
 $ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none-win_amd64.whl
+
 (@Yaeltex-env-py3.4)$ pip install PySide-1.2.2-cp34-none-win_amd64.whl
 
 
 \# PyInstaller
+
 \#$ pip install PyInstaller
+
 \# No funca porque pywin32 no se instala correctamente vía pip en windows 10, entonces instalar este último vía wheel
+
 $ wget https://pypi.python.org/packages/8f/da/36439654abd8f39bcad0664c68674a41b838ca902da440defde17abbeade/pypiwin32-219-cp34-none-win_amd64.whl#md5=110e2769da6659c270b8e6e4595155eb
+
 $ pip install pypiwin32-219-cp34-none-win_amd64.whl
 
 (@Yaeltex-env-py3.4)$ pip install PyInstaller
 
 \# Armar bundle para distribución:
+
 (@Yaeltex-env-py3.4)$ python -m PyInstaller kmgui_win.spec
 
 
 ### Detalle de versiones (pip list)
-Cython (0.24.1)
-future (0.16.0)
-pefile (2016.3.28)
-pip (1.5.4)
-PyInstaller (3.2)
-pypiwin32 (219)
-PySide (1.2.2)
-python-rtmidi (1.0.0rc1)
-setuptools (28.8.0)
-Shiboken (1.2.2)
-wheel (0.29.0)
+\Cython (0.24.1)
+\future (0.16.0)
+\pefile (2016.3.28)
+\pip (1.5.4)
+\PyInstaller (3.2)
+\pypiwin32 (219)
+\PySide (1.2.2)
+\python-rtmidi (1.0.0rc1)
+\setuptools (28.8.0)
+\Shiboken (1.2.2)
+\wheel (0.29.0)
 
 
 
