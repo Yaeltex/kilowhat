@@ -1,5 +1,11 @@
 #Kilowhat
-Dependencias multiplataforma paso a paso
+
+Software de configuración por SysEx de Yaeltex.
+ 
+Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
+
+
+#Dependencias multiplataforma paso a paso
 
 *Fecha*: 11/2016
 
