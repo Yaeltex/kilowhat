@@ -5,11 +5,11 @@
 import sys
 import datetime
 
+# Debug mode: python kilowhat.py -d
 DEBUG = False
 #print(sys.argv)
 if len(sys.argv) >= 2 and sys.argv[1] == "-d":
 	DEBUG = True
-
 
 if not DEBUG:
 	sys.stdout = open("kmgui_log.txt", "a", 4)
