@@ -218,7 +218,11 @@ $ cd python-rtmidi-1.0.0rc1.zip
 
 \# Agregar a la variable de entorno PATH, la ruta C:\Qt\4.8.4\bin
 
-\# Bajar PySide como wheel precompilado http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyside
+\# Probar instalar PySide con pip
+
+$ pip install -U PySide
+
+\# Si no funciona, bajar PySide como wheel precompilado http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyside
 
 $ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none-win_amd64.whl
 

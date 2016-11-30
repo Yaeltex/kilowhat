@@ -146,6 +146,7 @@ def send_sysex_dump():
 		print(len(accum))
 		print(accum)
 		pkt_list = sysex.make_sysex_multi_packet(sysex.DUMP_TO_HW, accum)
+
 		print("PKT COUNT ", len(pkt_list))
 		for pkt in pkt_list:
 			print("SYSEX_PKT ", len(pkt), pkt)
@@ -176,9 +177,8 @@ class GridHelper:
 	def _skip(self):
 		# asd = self._grid.itemAtPosition(self._y, self._x)
 		while self._grid.itemAtPosition(self._y, self._x) is not None:
-			self._x += 1
-
-
+			self._x += 1		
+		
 	def widget(self, w, spanx=1, spany=1, width=None, align=0):
 		#print("ADD {0} at {1},{2}".format(w, self._x, self._y))
 		if width is not None:
@@ -213,8 +213,6 @@ class GridHelper:
 
 
 class MemoryWidget(QWidget):
-
-
 	def __init__(self, parent):
 		print("MemoryWidget() parent ctor")
 		super().__init__(parent)
@@ -239,6 +237,7 @@ class MemoryWidget(QWidget):
 		self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
 		grid = QGridLayout()
+		grid.setHorizontalSpacing(15)
 		self.setLayout(grid)
 		h = GridHelper(grid)
 
@@ -286,7 +285,10 @@ class MemoryWidget(QWidget):
 		self.reopen_ports()
 
 	def reload_midi_ports(self):
+		global form
 		print("Reloading MIDI ports")
+		form.txt_log.clear()
+		form.txt_log.append(_("Welcome to Kilowhat!"))
 		ports = midiin.get_ports()
 		print(ports)
 		self.cmi.clear() # Clear items of the ComboBox
@@ -356,6 +358,9 @@ class MemoryWidget(QWidget):
 
 	def change_midi_out(self, index):
 		print("Open OUT {0}".format(index))
+		global form
+		form.txt_log.clear()
+		form.txt_log.append(_("Welcome to Kilowhat!"))
 		self.reopen_ports()
 
 	def raise_changed_memory_event(self):
@@ -1288,7 +1293,7 @@ class Form(QFrame):
 			if QMessageBox.warning(self, _("Dump error"), _("{0} warnings trying to dump, continue anyway?").format(warnings), QMessageBox.Yes, QMessageBox.No) != QMessageBox.Yes:
 				self.txt_log.append(_("<b>Dump aborted</b>"))
 				return
-
+				
 		send_sysex_dump()
 		self.txt_log.append(_("Dump sent"))
 
