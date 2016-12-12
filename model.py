@@ -18,10 +18,10 @@ MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
 
 MAX_INPUTS_CC	= 32
 MAX_OUTPUTS		= 64
-MAX_BANKS 		= 4
+MAX_BANKS 		= 10
 
 class GlobalData:
-	output_matrix = True
+	output_matrix = False
 	memory_mode = 1024				#memory.HARDWARE[0][1]	# FIXME: MAGIC NUMBER
 	version = 0
 	num_banks = 2

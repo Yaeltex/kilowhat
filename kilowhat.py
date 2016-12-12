@@ -199,7 +199,9 @@ class GridHelper:
 
 	def label(self, text, spanx=1, spany=1, align=Qt.AlignLeft):
 		#print("\nLBALE {0} at {1},{2}".format(text, self._x, self._y))
-		self._grid.addWidget(QLabel(text), self._y, self._x, spany, spanx, align)
+		lbl = QLabel(text)
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
+		self._grid.addWidget(lbl, self._y, self._x, spany, spanx, align)
 		self._skip()
 		return self
 
@@ -219,19 +221,27 @@ class MemoryWidget(QWidget):
 		print("MemoryWidget()")
 
 		self.cmi = cmi = QComboBox()
+		self.cmi.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.cmo = cmo = QComboBox()
+		self.cmo.setStyleSheet("QComboBox { font-size: 10pt }")
 
 		#Reload MIDI ports
 		self.btn_reload_midi = QPushButton(_("Scan")) 
+		self.btn_reload_midi.setStyleSheet("QPushButton { font-size: 10pt }")
 		self.btn_reload_midi.setMinimumWidth(160)
 		self.btn_reload_midi.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
 		#Create controls
 		self.output_matrix = QComboBox()
+		self.output_matrix.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.hardware = QComboBox()
+		self.hardware.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.banks = QSpinBox()
+		self.banks.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.ins = QSpinBox()
+		self.ins.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.outs = QSpinBox()
+		self.outs.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.test = QLabel()		#Never added
 
 		self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -240,7 +250,6 @@ class MemoryWidget(QWidget):
 		grid.setHorizontalSpacing(15)
 		self.setLayout(grid)
 		h = GridHelper(grid)
-
 
 		#Workaround for very small combo boxes
 		cmi.view().setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Ignored) #.setSizeAdjustPolicy(QComboBox.AdjustToContents)
@@ -301,13 +310,13 @@ class MemoryWidget(QWidget):
 		ports = midiin.get_ports()
 		if ports:
 			for i, port in enumerate(ports):
-				self.cmi.addItem(_("In {0}: {1}").format(i, port), i)
+				self.cmi.addItem(_("In {0}: {1}").format(i, port))
 		print("midiin ports ", ports)
 
 		ports = midiout.get_ports()
 		if ports:
 			for i, port in enumerate(ports):
-				self.cmo.addItem(_("Out {0}: {1}").format(i, port), i)
+				self.cmo.addItem(_("Out {0}: {1}").format(i, port))
 		print("midiout ports ", ports)
 
 	def reopen_ports(self):
@@ -466,7 +475,9 @@ class ConfigWidget(QWidget):
 	def addwl(self, label, w, idx = -1):
 		idx = self.h_layout.count() if idx < 0 else idx
 		self.add(w, idx)
-		self.add(QLabel(label, self), idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
+		lbl = QLabel(label, self)
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
+		self.add(lbl, idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
 		return w
 
 
@@ -536,10 +547,11 @@ class OutputConfig(ConfigWidget):
 		super(OutputConfig, self).__init__(model_name, index, parent)
 
 		number = self.add(QLabel(str(index)))
-		number.setStyleSheet("QLabel { font-size: 24pt }")
+		number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.test = self.add(QPushButton(_("Test")))
-		self.test.setFixedWidth(80)
+		self.test.setStyleSheet("QPushButton { font-size: 10pt }")
+		self.test.setFixedWidth(70)
 		self.test.pressed.connect(self.on_test_press)
 		self.test.released.connect(self.on_test_release)
 		#self.monitor = add(QLabel())
@@ -549,16 +561,24 @@ class OutputConfig(ConfigWidget):
 		#self.mode = addwl(_("Mode"), QComboBox())
 		#self.mode.addItems((_("Note"), _("CC"), _("NRPN")))
 
-		self.param = self.addwl(_("Note"), QSpinBox())
+		noteSB = QSpinBox()
+		noteSB.setStyleSheet("QLabel { font-size: 10pt }")
+		self.param = self.addwl(_("Note"), noteSB)
 		self.param.setRange(0, 127)
 
-		self.channel = self.addwl(_("Channel"), QSpinBox())
+		chanSB = QSpinBox()
+		chanSB.setStyleSheet("QLabel { font-size: 10pt }")
+		self.channel = self.addwl(_("Channel"), chanSB)
 		self.channel.setRange(0, 15)
 
-		self.min = self.addwl(_("Min."), QSpinBox())
+		minSB = QSpinBox()
+		minSB.setStyleSheet("QLabel { font-size: 10pt }")
+		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
 
-		self.max = self.addwl(_("Max."), QSpinBox())
+		maxSB = QSpinBox()
+		maxSB.setStyleSheet("QLabel { font-size: 10pt }")
+		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		self.max.setValue(127)
 
@@ -641,31 +661,44 @@ class InputConfig(ConfigWidget):
 		super(InputConfig, self).__init__(model_name, index, parent)
 
 		self.number = self.add(QLabel(str(index)))
-		self.number.setStyleSheet("QLabel { font-size: 24pt }")
+		self.number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.monitor = self.add(QLabel())
+		self.monitor.setStyleSheet("QLabel { font-size: 10pt }")
 		self.monitor.setFixedWidth(100)
 		self.monitor.setAutoFillBackground(True)
 
 		self.enable_monitor = self.addwl(_("Monitor"), QCheckBox())
 		self.enable_monitor.setChecked(True)
 
-		self.mode = self.addwl(_("Mode"), QComboBox())
+		modeCB = QComboBox()
+		modeCB.setStyleSheet("QComboBox { font-size: 10pt }")
+		self.mode = self.addwl(_("Mode"), modeCB)
 		for labelIdx in MODE_ENABLED:
 			self.mode.addItem(MODE_LABELS[labelIdx])
 		self.mode.setCurrentIndex(MODE_NOTE) #Default value
 		self.mode.currentIndexChanged.connect(self.on_param_value_changed)
 
-		self.param =self.addwl(_("Param"), QSpinBox());
+		paramSB = QSpinBox()
+		paramSB.setStyleSheet("QSpinBox { font-size: 10pt }")
+		self.param =self.addwl(_("Param"), paramSB);
 		self.param.valueChanged.connect(self.on_param_value_changed)
 		#setWidgetBackground(self.param, Qt.black)
 		#self.param.setToolTip(_("El rango para Notas y CC es de 0 a 127"))
 		self.param.setRange(0, pow(2, 14)-1)
-		self.channel = self.addwl(_("Channel"), QSpinBox())
+		
+		channelSB = QSpinBox()
+		channelSB.setStyleSheet("QSpinBox { font-size: 10pt }")
+		self.channel = self.addwl(_("Channel"), channelSB)
 		self.channel.setRange(0, 15)
-		self.min = self.addwl(_("Min."), QSpinBoxHack())
+		
+		minSB = QSpinBoxHack()
+		minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
+		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
-		self.max = self.addwl(_("Max."), QSpinBoxHack())
+		maxSB = QSpinBoxHack()
+		maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
+		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		#self.max.valueChanged.connect(self.on_max_value_changed)
 
@@ -744,10 +777,12 @@ class InputConfigCC(InputConfig):
 	def __init__(self, model_name, index, parent=None):
 
 		ad = QComboBox()
+		ad.setStyleSheet("QComboBox {font-size:10pt}")
 		ad.addItems((_("Analog"), _("Digital")))
 		self.analog = ad
 
 		pt = QComboBox()
+		pt.setStyleSheet("QComboBox {font-size:10pt}")
 		pt.addItems((_("Toggle"), _("Momentary")))
 		self.toggle = pt		# Changes for regular input (pot, slider) and ultrasound config
 
@@ -784,9 +819,11 @@ class InputConfigUS(InputConfig):
 	def __init__(self, model_name, parent=None):
 
 		self.dist_min = QSpinBox()
+		self.dist_min.setStyleSheet("QSpinBox {font-size:10pt}")
 		max_uint14 = pow(2, 14)-1
 		self.dist_min.setMaximum(max_uint14)
 		self.dist_max = QSpinBox()
+		self.dist_max.setStyleSheet("QSpinBox {font-size:10pt}")
 		self.dist_max.setMaximum(max_uint14)
 		self.dist_max.setValue(max_uint14)
 
@@ -847,9 +884,9 @@ class Form(QFrame):
 			midi_send((MIDI_NOTE_OFF | tuple[0], tuple[1], 0))
 		self.testing = None
 
-	def on_set_bank_channels(self):
-		for i in self.inputs + self.outputs + [self.input_us]:
-			i.channel.setValue(self.set_chan_channel.value())
+	#def on_set_bank_channels(self):
+	#	for i in self.inputs + self.outputs + [self.input_us]:
+	#		i.channel.setValue(self.set_chan_channel.value())
 
 	_reentry = 0
 	def call_on_param_value_changed_on_inputs(self):
@@ -885,9 +922,10 @@ class Form(QFrame):
 
 		def addLabelWA(layout, text):		#Workaround for labels that resized big time
 			lbl = QLabel(text)
-			lbl.setStyleSheet("QLabel { font-weight: bold }")
+			lbl.setStyleSheet("QLabel { font-weight: bold; font-size: 10pt }")
 			#lbl.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 			layout.addWidget(lbl)
+			
 
 		############## TOP LAYOUT #############
 
@@ -909,7 +947,8 @@ class Form(QFrame):
 		#layout_top.addLayout(layout_apply)
 
 		self.btn_apply = QPushButton(_("Apply"))
-		self.btn_apply.setMinimumWidth(160)
+		self.btn_apply.setStyleSheet("QPushButton { font-size: 10pt }")
+		self.btn_apply.setMinimumWidth(130)
 		self.btn_apply.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 		self.btn_apply.pressed.connect(lambda: self.memory_widget.save_model())
 		layout_apply.addStretch()
@@ -959,17 +998,20 @@ class Form(QFrame):
 
 
 		btn = QPushButton(_("Load file"))
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.pressed.connect(self.on_load_file)
 		btn.setIcon(QIcon("assets/load.png"))
 		lsh.widget(btn, width=lsh_w2)
 
 		btn = QPushButton(_("Save file"))
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setIcon(QIcon("assets/save.png"))
 		btn.pressed.connect(self.on_save_file)
 		lsh.widget(btn, width=lsh_w2)
 		lsh.newLine()
 
 		btn = QPushButton(_("Dump to Arduino"))
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setObjectName("DumpBtn")
 		#btn.setIcon(QIcon("test.png"))
 		btn.setIconSize(QSize(24,24))
@@ -985,18 +1027,17 @@ class Form(QFrame):
 			master_layout.addWidget(self.button)
 		self.button.clicked.connect(self.on_debug_test)
 
-
-
-
 		widget_bank_line = PaintWidget()
 		layout_bank_line = QHBoxLayout()
 		widget_bank_line.setObjectName("BankLine")
 		#widget_bank_line.setStyleSheet(".QWidget { border: 1px solid white }")
+		
 		widget_bank_line.setLayout(layout_bank_line)
 		#master_layout.addLayout(layout_bank_line)
 		master_layout.addWidget(widget_bank_line)
 
 		self.tabs = QTabBar()
+		self.tabs.setStyleSheet("QTabBar { font-size: 10pt }")
 		self.tabs.setUsesScrollButtons(False)
 		self.tabs.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
 		#self.tabs.setForegroundRole(QPalette.Light)
@@ -1005,23 +1046,23 @@ class Form(QFrame):
 		layout_bank_line.addWidget(self.tabs)
 		self.tabs.currentChanged.connect(self.on_change_tab_bank)
 		self.refresh_tabs()
-		layout_bank_line.addStretch(3)
+		layout_bank_line.addStretch(1)
 
 
 		#################################################
 		# Set all bank channels
 		#################################################
-		set_chan_layout = QHBoxLayout()
-		set_chan_btn = QPushButton(_("Set bank channels"))
-		set_chan_btn.pressed.connect(self.on_set_bank_channels)
-		self.set_chan_channel = QSpinBox()
-		self.set_chan_channel.setValue(0)
-		self.set_chan_channel.setMinimum(0)
-		self.set_chan_channel.setMaximum(15)
-		set_chan_layout.addWidget(set_chan_btn)
-		set_chan_layout.addWidget(self.set_chan_channel)
+		#set_chan_layout = QHBoxLayout()
+		#set_chan_btn = QPushButton(_("Set bank channels"))
+		#set_chan_btn.pressed.connect(self.on_set_bank_channels)
+		#self.set_chan_channel = QSpinBox()
+		#self.set_chan_channel.setValue(0)
+		#self.set_chan_channel.setMinimum(0)
+		#self.set_chan_channel.setMaximum(15)
+		#set_chan_layout.addWidget(set_chan_btn)
+		#set_chan_layout.addWidget(self.set_chan_channel)
 
-		layout_bank_line.addLayout(set_chan_layout)
+		#layout_bank_line.addLayout(set_chan_layout)
 		#################################################
 
 		if 1:
@@ -1037,8 +1078,6 @@ class Form(QFrame):
 			# Add input widgets #
 			#####################
 
-
-
 			inputs_side = QFrame()
 			input_layout = QVBoxLayout()
 			inputs_side.setLayout(input_layout)
@@ -1047,8 +1086,8 @@ class Form(QFrame):
 			saw = QWidget()
 
 			# Add US widget
-
 			addLabelWA(input_layout, _("Ultrasound input"))
+			
 
 			us_area = QScrollArea()
 
@@ -1161,6 +1200,7 @@ class Form(QFrame):
 			test_all_layout.addWidget(QLabel(_("with velocity")))
 
 			self.test_all_velocity = QSpinBox()
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size:12pt}");
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
