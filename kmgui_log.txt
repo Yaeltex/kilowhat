@@ -94766,3 +94766,1253 @@ Setting font
 Novecento Wide Light
 Show form
 Run app
+-----------------------------------
+Tue Dec 13 12:36:22 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+-----------------------------------
+Tue Dec 13 15:12:04 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+-----------------------------------
+Tue Dec 13 15:17:16 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+-----------------------------------
+Tue Dec 13 15:17:44 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+-----------------------------------
+Tue Dec 13 15:18:06 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+-----------------------------------
+Tue Dec 13 15:23:01 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+-----------------------------------
+Tue Dec 13 15:24:00 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+-----------------------------------
+Tue Dec 13 15:26:26 2016
+DEBUG: False
+-----------------------------------
+Found lang: es
+Lang handler
+Lang handler OK
+Windows
+Starting App
+Set Icon
+Win workaround task-bar icons
+Creating form
+Form()  B Form init
+Form()  2 Form set window title
+Form()  1 Move resize
+Form() 13 Master layout
+Form() Memory widget
+MemoryWidget() parent ctor
+MemoryWidget()
+MemoryWidget() populate_ports
+populate_ports()
+midiin ports  ['In From MIDI Yoke:  1 0', 'In From MIDI Yoke:  2 1', 'In From MIDI Yoke:  3 2', 'In From MIDI Yoke:  4 3', 'In From MIDI Yoke:  5 4', 'In From MIDI Yoke:  6 5', 'In From MIDI Yoke:  7 6', 'In From MIDI Yoke:  8 7', 'Franco-PC 8']
+midiout ports  ['Microsoft GS Wavetable Synth 0', 'Out To MIDI Yoke:  1 1', 'Out To MIDI Yoke:  2 2', 'Out To MIDI Yoke:  3 3', 'Out To MIDI Yoke:  4 4', 'Out To MIDI Yoke:  5 5', 'Out To MIDI Yoke:  6 6', 'Out To MIDI Yoke:  7 7', 'Out To MIDI Yoke:  8 8', 'Franco-PC 9']
+MemoryWidget() connect signals
+MemoryWidget() reset
+MemoryWidget() on_param_value_changed
+MemoryWidget() reopen ports
+reopen_ports: close
+reopen_ports: midi in  0 10
+Open in port:  0
+reopen_ports: midi out  0 10
+Open out port:  0
+Send CONFIG_MODE sysex
+SYSEX SENT: CONFIG_MODE
+midi_send()  [240, 89, 84, 88, 1, 0, 247]
+reopen_ports: OK
+Form() Memory widget ok
+Form() logo.png
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+MemoryWidget() on_param_value_changed
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Refreshing alerts
+Form created
+fix combox
+Combos fixed
+Setting font
+Novecento Wide Light
+Show form
+Run app
+midi_send()  (144, 0, 64)
+midi_send()  (144, 1, 64)
+midi_send()  (144, 2, 64)
+midi_send()  (144, 3, 64)
+midi_send()  (144, 4, 64)
+midi_send()  (144, 5, 64)
+midi_send()  (144, 6, 64)
+midi_send()  (144, 7, 64)
+midi_send()  (128, 0, 0)
+midi_send()  (128, 1, 0)
+midi_send()  (128, 2, 0)
+midi_send()  (128, 3, 0)
+midi_send()  (128, 4, 0)
+midi_send()  (128, 5, 0)
+midi_send()  (128, 6, 0)
+midi_send()  (128, 7, 0)
