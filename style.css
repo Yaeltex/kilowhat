@@ -119,7 +119,7 @@ QPushButton::pressed {
 }
 
 #BankLine {
-    border: 1px solid gray
+    border: 1px solid gray;
 }
 
 /*QComboBox::drop-down {
