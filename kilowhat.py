@@ -12,7 +12,7 @@ if len(sys.argv) >= 2 and sys.argv[1] == "-d":
 	DEBUG = True
 
 if not DEBUG:
-	sys.stdout = open("kmgui_log.txt", "a", 4)
+	sys.stdout = open("kwt_log.txt", "a", 4)
 	print("-----------------------------------")
 	print(datetime.datetime.utcnow().ctime())
 	print("DEBUG: "+ str(DEBUG))
@@ -49,8 +49,8 @@ MONITOR_CHAN_US = 15					# Ultra sound channel monitoring
 # Files
 PROTOCOL_VERSION = 1					# For file save/load & EEPROM validation
 
-FILE_AUTOMATIC = "automatic.kmgui"
-FILE_RECOVER = "recover.kmgui"
+FILE_AUTOMATIC = "automatic.kwt"
+FILE_RECOVER = "recover.kwt"
 
 
 # Combo box indexes
@@ -742,6 +742,8 @@ class InputConfig(ConfigWidget):
 		else:
 			repeated = False
 			if mode == MODE_SHIFTER:
+				for bankIdx in range(MAX_BANKS):
+					config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER					
 				for i, w in enumerate(self.window().inputs):
 					if self._index != i:
 						if w.mode.currentIndex() == MODE_SHIFTER and w.param.value() == param:
@@ -749,6 +751,11 @@ class InputConfig(ConfigWidget):
 							alertParam = True
 							repeated = True
 							break
+			else:
+				for bankIdx in range(MAX_BANKS):
+					if config['banks'][bankIdx].input_cc[self._index].mode == MODE_SHIFTER:
+						config['banks'][bankIdx].input_cc[self._index].mode = mode
+						break
 			#print(self.window())
 
 			if not repeated:
@@ -1339,7 +1346,7 @@ class Form(QFrame):
 
 	def on_load_file(self):
 		# TODO: Check if it was saved!
-		fileName, __ = QFileDialog.getOpenFileName(self, _("Open kmgui configuration file"),  filter = _("kmgui file (*.kmgui)"))
+		fileName, __ = QFileDialog.getOpenFileName(self, _("Open kwt configuration file"),  filter = _("kwt file (*.kwt)"))
 		if not fileName:
 			return
 		self.load_file(fileName)
@@ -1363,7 +1370,7 @@ class Form(QFrame):
 			if file_ver != PROTOCOL_VERSION:
 				if not automatic:
 					QMessageBox.warning(self, _('Error'),
-										_('Invalid version of kmgui configuration file "{0}"\nVersion {1} should be {2} ')
+										_('Invalid version of kwt configuration file "{0}"\nVersion {1} should be {2} ')
 										.format(fileName, file_ver, PROTOCOL_VERSION))
 			else:
 				config = config2
@@ -1373,7 +1380,7 @@ class Form(QFrame):
 				self.refresh_in_outs()
 			file.close()
 		except Exception as e:
-			QMessageBox.warning(self, _('Error'), _('Error opening kmgui configuration file "{0}"\n{1}').format(fileName, e))
+			QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
 
 	def save_file(self, fileName):
 		try:
@@ -1383,11 +1390,11 @@ class Form(QFrame):
 				pickle.dump(config, file)
 				file.close()
 		except Exception as e:
-			QMessageBox.warning(self, _('Error'), _('Error writing kmgui configuration file "{0}"\n{1}').format(fileName, e))
+			QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
 
 	def on_save_file(self):
 		# TODO: Check if it was saved!
-		fileName, __ = QFileDialog.getSaveFileName(self, _("Save kmgui configuration file"),  filter = _("kmgui file (*.kmgui)"))
+		fileName, __ = QFileDialog.getSaveFileName(self, _("Save kwt configuration file"),  filter = _("kwt file (*.kwt)"))
 		if not fileName:
 			return
 

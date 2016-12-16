@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kmgui 0.9.0\n"
 "POT-Creation-Date: 2016-11-01 17:03-0300\n"
-"PO-Revision-Date: 2016-11-24 19:02-0300\n"
+"PO-Revision-Date: 2016-12-16 15:39-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -240,11 +240,11 @@ msgstr "Configuración enviada"
 
 #: kilowhat.py:1303
 msgid "Open kmgui configuration file"
-msgstr "Abrir archivo de configuracion kmgui"
+msgstr "Abrir archivo de configuracion kwt"
 
 #: kilowhat.py:1303 kilowhat.py:1351
 msgid "kmgui file (*.kmgui)"
-msgstr "Archivo kmgui (*.kmgui)"
+msgstr "Archivo kwt (*.kwt)"
 
 #: kilowhat.py:1326 kilowhat.py:1337 kilowhat.py:1347
 msgid "Error"
@@ -256,7 +256,7 @@ msgid ""
 "Invalid version of kmgui configuration file \"{0}\"\n"
 "Version {1} should be {2} "
 msgstr ""
-"Versión inválida de archivo de configuración kmgui \"{0}\"\n"
+"Versión inválida de archivo de configuración kwt \"{0}\"\n"
 "Version {1} debió ser {2} "
 
 #: kilowhat.py:1337
@@ -265,7 +265,7 @@ msgid ""
 "Error opening kmgui configuration file \"{0}\"\n"
 "{1}"
 msgstr ""
-"Error al abrir archivo de configuración kmgui \"{0}\"\n"
+"Error al abrir archivo de configuración kwt \"{0}\"\n"
 "{1}"
 
 #: kilowhat.py:1347
@@ -274,12 +274,12 @@ msgid ""
 "Error writing kmgui configuration file \"{0}\"\n"
 "{1}"
 msgstr ""
-"Error al escribir archivo de configuración kmgui \"{0}\"\n"
+"Error al escribir archivo de configuración kwt \"{0}\"\n"
 "{1}"
 
 #: kilowhat.py:1351
 msgid "Save kmgui configuration file"
-msgstr "Guardar archivo de configuración kmgui"
+msgstr "Guardar archivo de configuración kwt"
 
 #: kilowhat.py:1367
 msgid "ACK Received. Kilomux connected"

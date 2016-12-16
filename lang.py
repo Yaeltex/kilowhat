@@ -21,7 +21,7 @@ for root, __, files in os.walk(path):
 		if isfile(join(root, f)):
 			#fn, ext = splitext(f)
 			#if ext == '.mo':
-			if f == 'kmgui.mo':
+			if f == 'kwt.mo':
 				lang = root.split(os.sep)[1]
 				print("Found lang: " + lang)
 
@@ -39,8 +39,8 @@ try:
 	#QLocale.setDefault(QLocale("es"))
 	#current_locale, encoding = locale.getdefaultlocale()
 
-	es = gettext.translation('kmgui', localedir='./locales/', languages=['es'])
-	#es = gettext.translation('kmgui', localedir='locales/', languages=[current_locale])
+	es = gettext.translation('kwt', localedir='./locales/', languages=['es'])
+	#es = gettext.translation('kwt', localedir='locales/', languages=[current_locale])
 	es.install()
 except Exception as le:
 	print("Couldn't load language file, using default", le)
