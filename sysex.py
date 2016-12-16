@@ -3,7 +3,7 @@
 # Header to send/receive sysex messages
 HEADER = [ord(ch) for ch in "YTX"]
 
-PACKET_SIZE = 200
+PACKET_SIZE = 57
 
 _packets_info = ["null", "CONFIG_MODE", "CONFIG_ACK", "DUMP_TO_HW"]
 
