@@ -1125,7 +1125,7 @@ class Form(QFrame):
 			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
 			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
 			us_input_layout.addWidget(us_area)
-			us_input_layout.addStretch()
+			us_input_layout.addStretch(10)
 
 			#####################
 			# Add input widgets #
