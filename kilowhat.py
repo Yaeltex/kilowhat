@@ -1067,7 +1067,8 @@ class Form(QFrame):
 
 		if 1: #tabs
 			self.tabs_inout = QTabBar()
-			self.tabs_inout.setStyleSheet("QTabBar { font-size: 9pt }")
+			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 9pt }")
+			self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
 			self.tabs_inout.setUsesScrollButtons(False)
 			self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
 			self.tabs_inout.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -1083,9 +1084,9 @@ class Form(QFrame):
 			master_layout.addWidget(section_splitter)
 			
 			# section_splitter.addWidget(self.tabs_inout)
-			self.tabs_inout.addTab(_("Input"))
-			self.tabs_inout.addTab(_("Output"))
-			self.tabs_inout.addTab(_("Ultrasonic Sensor"))
+			self.tabs_inout.addTab(_("Inputs"))
+			self.tabs_inout.addTab(_("Outputs"))
+			self.tabs_inout.addTab(_("Distance sensor"))
 			self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
 			
 			################################
@@ -1101,7 +1102,7 @@ class Form(QFrame):
 
 			saw = QWidget()
 			
-			# Add US widget
+			# Add UltraSonic widget
 			addLabelWA(input_layout, _("Ultrasound input"))
 			
 			us_area = QScrollArea()
@@ -1122,10 +1123,11 @@ class Form(QFrame):
 			us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 			us_area.setWidgetResizable(True)
 			us_area.setWidget(lw)
-			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
+			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
 			us_input_layout.addWidget(us_area)
-			us_input_layout.addStretch(10)
+			us_input_layout.addSpacing(390)
+			us_input_layout.addStretch()
 
 			#####################
 			# Add input widgets #
@@ -1144,7 +1146,7 @@ class Form(QFrame):
 			sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
 			sa_layout.setSpacing(0)
 			saw.setLayout(sa_layout)
-			saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+			# saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
 			ins_area = QScrollArea()
 			ins_area.setWidgetResizable(True)
