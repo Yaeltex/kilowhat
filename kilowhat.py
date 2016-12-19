@@ -1084,21 +1084,23 @@ class Form(QFrame):
 			
 			# section_splitter.addWidget(self.tabs_inout)
 			self.tabs_inout.addTab(_("Input"))
-			self.tabs_inout.addTab(_("Ultrasonic Sensor"))
 			self.tabs_inout.addTab(_("Output"))
+			self.tabs_inout.addTab(_("Ultrasonic Sensor"))
 			self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
 			
-			#####################
-			# Add input widgets #
-			#####################
+			################################
+			# Add UltraSonic input widgets #
+			################################
 
-			inputs_side = QFrame()
-			input_layout = QVBoxLayout()
+			self.us_inputs_side = QFrame()
+			inputs_side = self.us_inputs_side
+			us_input_layout = QVBoxLayout()
+			input_layout = us_input_layout
 			inputs_side.setLayout(input_layout)
 			section_splitter.addWidget(inputs_side)
 
 			saw = QWidget()
-
+			
 			# Add US widget
 			addLabelWA(input_layout, _("Ultrasound input"))
 			
@@ -1120,12 +1122,22 @@ class Form(QFrame):
 			us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 			us_area.setWidgetResizable(True)
 			us_area.setWidget(lw)
-			us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-			input_layout.addWidget(us_area)
+			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
+			us_input_layout.addWidget(us_area)
+			us_input_layout.addStretch()
 
-
+			#####################
+			# Add input widgets #
+			#####################
 			# Add CC widgets
 
+			self.inputs_side = QFrame()
+			inputs_side = self.inputs_side
+			input_layout = QVBoxLayout()
+			inputs_side.setLayout(input_layout)
+			section_splitter.addWidget(inputs_side)
+			
 			addLabelWA(input_layout, _("Input #"))
 
 			sa_layout = QVBoxLayout()
@@ -1157,7 +1169,8 @@ class Form(QFrame):
 			# Add output widgets #
 			######################
 
-			outputs_side = QFrame()
+			self.outputs_side = QFrame()
+			outputs_side = self.outputs_side
 			output_layout = QVBoxLayout()
 			outputs_side.setLayout(output_layout)
 			section_splitter.addWidget(outputs_side)
@@ -1245,6 +1258,9 @@ class Form(QFrame):
 			###############
 
 			section_splitter.setSizes([self.width()/2] * 2)
+			
+			#Default view: inputs
+			self.change_views_inout_tab(0)
 		else: #old code
 			#section_layout = QHBoxLayout()
 			section_splitter = QSplitter()
@@ -1454,22 +1470,23 @@ class Form(QFrame):
 	def on_change_tab_inout(self):
 		if self.current_inout_tab != self.tabs_inout.currentIndex():
 			self.current_inout_tab = self.tabs_inout.currentIndex()
-			print(self.current_inout_tab)
-			# with wait_cursor():
-			# 	self.change_views_inout(self.current_inout_tab)
+			print("Current IN/OUT tab: %i"%self.current_inout_tab)
+			with wait_cursor():
+				self.change_views_inout_tab(self.current_inout_tab)
 
-	def change_views_inout(self, bankIdx):
-		#TODO:
+	def change_views_inout_tab(self, bankIdx):
 		if bankIdx==0:
-			#load inputs 
-			pass
+			self.inputs_side.show() #load inputs 
+			self.outputs_side.hide()
+			self.us_inputs_side.hide()
 		elif bankIdx==1:
-			#load outputs 
-			pass
+			self.inputs_side.hide()
+			self.outputs_side.show() #load outputs 
+			self.us_inputs_side.hide()
 		else:
-			#load ultrasonic 
-			pass
-
+			self.inputs_side.hide()
+			self.outputs_side.hide()
+			self.us_inputs_side.show() #load ultrasonic
 
 	def refresh_tabs(self):
 		nbanks = config['global'].num_banks
