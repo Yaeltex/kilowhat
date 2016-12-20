@@ -105,7 +105,7 @@ QTabBar::tab {
 QTabBar#inout::tab {
     background-color: #505050;
     margin: 4px 4px 0px 4px;
-    padding: 8px 8px 30px 8px;
+    padding: 8px 8px 20px 8px;
     /*padding-right: 4px;*/
 }
 
@@ -127,6 +127,10 @@ QPushButton::pressed {
 
 #BankLine {
     border: 1px solid gray;
+}
+
+QWidget#LogArea {
+    margin: 4px;
 }
 
 /*QComboBox::drop-down {

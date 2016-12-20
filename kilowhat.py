@@ -368,8 +368,8 @@ class MemoryWidget(QWidget):
 	def change_midi_out(self, index):
 		print("Open OUT {0}".format(index))
 		global form
-		form.txt_log.clear()
-		form.txt_log.append(_("Welcome to Kilowhat!"))
+		#form.txt_log.clear()
+		#form.txt_log.append(_("Welcome to Kilowhat!"))
 		self.reopen_ports()
 
 	def raise_changed_memory_event(self):
@@ -414,12 +414,12 @@ class MemoryWidget(QWidget):
 	def load_model(self):
 		model = self.model()
 
-		self.output_matrix.setCurrentIndex(config['global'].output_matrix);
+		self.output_matrix.setCurrentIndex(config['global'].output_matrix)
 
 		# Workaround: Temporary!
-		self.banks.setMaximum(10000);
-		self.ins.setMaximum(10000);
-		self.outs.setMaximum(10000);
+		self.banks.setMaximum(10000)
+		self.ins.setMaximum(10000)
+		self.outs.setMaximum(10000)
 
 		self.hardware.setCurrentIndex(self.hardware.findData(model.memory_mode))
 		self.banks.setValue(model.num_banks)
@@ -682,7 +682,7 @@ class InputConfig(ConfigWidget):
 
 		paramSB = QSpinBox()
 		paramSB.setStyleSheet("QSpinBox { font-size: 10pt }")
-		self.param =self.addwl(_("Param"), paramSB);
+		self.param =self.addwl(_("Param"), paramSB)
 		self.param.valueChanged.connect(self.on_param_value_changed)
 		#setWidgetBackground(self.param, Qt.black)
 		#self.param.setToolTip(_("El rango para Notas y CC es de 0 a 127"))
@@ -837,7 +837,7 @@ class InputConfigUS(InputConfig):
 
 		super().__init__(model_name, 0, parent)
 		self.number.setText("")
-		self.mode.setCurrentIndex(MODE_OFF);
+		self.mode.setCurrentIndex(MODE_OFF)
 		self.dist_min = self.addwl(_("Min. Dist."), self.dist_min)
 		self.dist_max = self.addwl(_("Max. Dist."), self.dist_max)
 
@@ -1088,7 +1088,7 @@ class Form(QFrame):
 			section_splitter = QSplitter()
 			section_splitter.setChildrenCollapsible(False)
 			#section_splitter.setHandleWidth(10)
-			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
+			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }")
 			section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 			master_layout.addWidget(section_splitter)
 			
@@ -1227,18 +1227,18 @@ class Form(QFrame):
 			test_all_layout = QHBoxLayout()
 			#test_all_layout.addStretch()
 			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}")
 			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 			#test_all_btn.setFixedWidth(100)
 			test_all_btn.pressed.connect(self.on_test_all_press)
 			test_all_btn.released.connect(self.on_test_all_release)
 			test_all_layout.addWidget(test_all_btn)
 			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}")
 			test_all_layout.addWidget(lbl_test)
 
 			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}")
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
@@ -1277,7 +1277,7 @@ class Form(QFrame):
 			section_splitter = QSplitter()
 			section_splitter.setChildrenCollapsible(False)
 			#section_splitter.setHandleWidth(10)
-			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
+			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }")
 			section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 			master_layout.addWidget(section_splitter)
 
@@ -1396,18 +1396,18 @@ class Form(QFrame):
 			test_all_layout = QHBoxLayout()
 			#test_all_layout.addStretch()
 			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}")
 			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 			#test_all_btn.setFixedWidth(100)
 			test_all_btn.pressed.connect(self.on_test_all_press)
 			test_all_btn.released.connect(self.on_test_all_release)
 			test_all_layout.addWidget(test_all_btn)
 			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}")
 			test_all_layout.addWidget(lbl_test)
 
 			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}")
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
@@ -1441,12 +1441,30 @@ class Form(QFrame):
 		# end in/out config
 
 		self.refresh_in_outs()
-
+		
+		log_widget = QWidget()
+		log_layout = QHBoxLayout()
+		log_widget.setObjectName("LogArea")
+		
+		log_widget.setLayout(log_layout)
+		master_layout.addWidget(log_widget)
+		
 		self.txt_log = QTextEdit()
 		self.txt_log.setReadOnly(True)
+		self.txt_log.setStyleSheet("QTextEdit {font-size: 10pt}")
 		self.txt_log.setMaximumHeight(120)
-		master_layout.addWidget(self.txt_log)
+		log_layout.addWidget(self.txt_log)
 		self.txt_log.append(_("Welcome to Kilowhat!"))
+		
+		self.midi_monitor = QTextEdit()
+		self.midi_monitor.setReadOnly(True)
+		self.midi_monitor.setStyleSheet("QTextEdit {font-size: 10pt}")
+		self.midi_monitor.setMaximumHeight(120)
+		log_layout.addWidget(self.midi_monitor)
+		self.midi_monitor.append(_("MIDI Monitor"))
+		
+		
+		
 		#self.txt_log.append(">CWD>")
 		#self.txt_log.append(os.getcwd())
 		#self.txt_log.append(">FD>")
@@ -1630,6 +1648,7 @@ class Form(QFrame):
 
 		print("Received command")
 		print(cmd)
+		#self.txt_log.append("MIDI RECEIVED: " + str(cmd))
 
 		#TODO: make packets static once
 		if cmd == sysex.make_sysex_packet(sysex.CONFIG_ACK, []):
@@ -1654,6 +1673,7 @@ class Form(QFrame):
 				target = self.inputs[param]
 
 		if target is not None:
+			self.midi_monitor.append((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(param) + " " + str(value))
 			target.show_value((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(value))
 			last_value = self._last_in_values[param]
 			if abs(last_value - value) > THRESHOLD_SELECT:
