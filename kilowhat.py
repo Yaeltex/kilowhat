@@ -200,7 +200,7 @@ class GridHelper:
 	def label(self, text, spanx=1, spany=1, align=Qt.AlignLeft):
 		#print("\nLBALE {0} at {1},{2}".format(text, self._x, self._y))
 		lbl = QLabel(text)
-		lbl.setStyleSheet("QLabel {font-size: 9pt}")
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
 		self._grid.addWidget(lbl, self._y, self._x, spany, spanx, align)
 		self._skip()
 		return self
@@ -221,27 +221,27 @@ class MemoryWidget(QWidget):
 		print("MemoryWidget()")
 
 		self.cmi = cmi = QComboBox()
-		self.cmi.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.cmi.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.cmo = cmo = QComboBox()
-		self.cmo.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.cmo.setStyleSheet("QComboBox { font-size: 10pt }")
 
 		#Reload MIDI ports
 		self.btn_reload_midi = QPushButton(_("Scan")) 
-		self.btn_reload_midi.setStyleSheet("QPushButton { font-size: 9pt }")
+		self.btn_reload_midi.setStyleSheet("QPushButton { font-size: 10pt }")
 		self.btn_reload_midi.setMinimumWidth(160)
 		self.btn_reload_midi.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
 		#Create controls
 		self.output_matrix = QComboBox()
-		self.output_matrix.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.output_matrix.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.hardware = QComboBox()
-		self.hardware.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.hardware.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.banks = QSpinBox()
-		self.banks.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.banks.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.ins = QSpinBox()
-		self.ins.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.ins.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.outs = QSpinBox()
-		self.outs.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.outs.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.test = QLabel()		#Never added
 
 		self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -477,7 +477,7 @@ class ConfigWidget(QWidget):
 		idx = self.h_layout.count() if idx < 0 else idx
 		self.add(w, idx)
 		lbl = QLabel(label, self)
-		lbl.setStyleSheet("QLabel {font-size: 9pt}")
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
 		self.add(lbl, idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
 		return w
 
@@ -551,8 +551,8 @@ class OutputConfig(ConfigWidget):
 		number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.test = self.add(QPushButton(_("Test")))
-		self.test.setStyleSheet("QPushButton { font-size: 8pt }")
-		self.test.setFixedWidth(60)
+		self.test.setStyleSheet("QPushButton { font-size: 10pt }")
+		self.test.setFixedWidth(70)
 		self.test.pressed.connect(self.on_test_press)
 		self.test.released.connect(self.on_test_release)
 		#self.monitor = add(QLabel())
@@ -563,22 +563,22 @@ class OutputConfig(ConfigWidget):
 		#self.mode.addItems((_("Note"), _("CC"), _("NRPN")))
 
 		noteSB = QSpinBox()
-		noteSB.setStyleSheet("QLabel { font-size: 8pt }")
+		noteSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.param = self.addwl(_("Note"), noteSB)
 		self.param.setRange(0, 127)
 
 		chanSB = QSpinBox()
-		chanSB.setStyleSheet("QLabel { font-size: 8pt }")
+		chanSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.channel = self.addwl(_("Channel"), chanSB)
 		self.channel.setRange(0, 15)
 
 		minSB = QSpinBox()
-		minSB.setStyleSheet("QLabel { font-size: 8pt }")
+		minSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
 
 		maxSB = QSpinBox()
-		maxSB.setStyleSheet("QLabel { font-size: 8pt }")
+		maxSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		self.max.setValue(127)
@@ -665,7 +665,7 @@ class InputConfig(ConfigWidget):
 		self.number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.monitor = self.add(QLabel())
-		self.monitor.setStyleSheet("QLabel { font-size: 9pt }")
+		self.monitor.setStyleSheet("QLabel { font-size: 10pt }")
 		self.monitor.setFixedWidth(100)
 		self.monitor.setAutoFillBackground(True)
 
@@ -673,7 +673,7 @@ class InputConfig(ConfigWidget):
 		self.enable_monitor.setChecked(True)
 
 		modeCB = QComboBox()
-		modeCB.setStyleSheet("QComboBox { font-size: 9pt }")
+		modeCB.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.mode = self.addwl(_("Mode"), modeCB)
 		for labelIdx in MODE_ENABLED:
 			self.mode.addItem(MODE_LABELS[labelIdx])
@@ -681,7 +681,7 @@ class InputConfig(ConfigWidget):
 		self.mode.currentIndexChanged.connect(self.on_param_value_changed)
 
 		paramSB = QSpinBox()
-		paramSB.setStyleSheet("QSpinBox { font-size: 9pt }")
+		paramSB.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.param =self.addwl(_("Param"), paramSB);
 		self.param.valueChanged.connect(self.on_param_value_changed)
 		#setWidgetBackground(self.param, Qt.black)
@@ -689,16 +689,16 @@ class InputConfig(ConfigWidget):
 		self.param.setRange(0, pow(2, 14)-1)
 		
 		channelSB = QSpinBox()
-		channelSB.setStyleSheet("QSpinBox { font-size: 9pt }")
+		channelSB.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.channel = self.addwl(_("Channel"), channelSB)
 		self.channel.setRange(0, 15)
 		
 		minSB = QSpinBoxHack()
-		minSB.setStyleSheet("QSpinBoxHack { font-size: 9pt }")
+		minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
 		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
 		maxSB = QSpinBoxHack()
-		maxSB.setStyleSheet("QSpinBoxHack { font-size: 9pt }")
+		maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
 		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		#self.max.valueChanged.connect(self.on_max_value_changed)
@@ -785,12 +785,12 @@ class InputConfigCC(InputConfig):
 	def __init__(self, model_name, index, parent=None):
 
 		ad = QComboBox()
-		ad.setStyleSheet("QComboBox {font-size: 9pt}")
+		ad.setStyleSheet("QComboBox {font-size: 10pt}")
 		ad.addItems((_("Analog"), _("Digital")))
 		self.analog = ad
 
 		pt = QComboBox()
-		pt.setStyleSheet("QComboBox {font-size: 9pt}")
+		pt.setStyleSheet("QComboBox {font-size: 10pt}")
 		pt.addItems((_("Toggle"), _("Momentary")))
 		self.toggle = pt		# Changes for regular input (pot, slider) and ultrasound config
 
@@ -827,11 +827,11 @@ class InputConfigUS(InputConfig):
 	def __init__(self, model_name, parent=None):
 
 		self.dist_min = QSpinBox()
-		self.dist_min.setStyleSheet("QSpinBox {font-size: 9pt}")
+		self.dist_min.setStyleSheet("QSpinBox {font-size: 10pt}")
 		max_uint14 = pow(2, 14)-1
 		self.dist_min.setMaximum(max_uint14)
 		self.dist_max = QSpinBox()
-		self.dist_max.setStyleSheet("QSpinBox {font-size: 9pt}")
+		self.dist_max.setStyleSheet("QSpinBox {font-size: 10pt}")
 		self.dist_max.setMaximum(max_uint14)
 		self.dist_max.setValue(max_uint14)
 
@@ -930,7 +930,7 @@ class Form(QFrame):
 
 		def addLabelWA(layout, text):		#Workaround for labels that resized big time
 			lbl = QLabel(text)
-			lbl.setStyleSheet("QLabel { font-weight: bold; font-size: 9pt }")
+			lbl.setStyleSheet("QLabel { font-weight: bold; font-size: 10pt }")
 			#lbl.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 			layout.addWidget(lbl)
 			
@@ -955,7 +955,7 @@ class Form(QFrame):
 		#layout_top.addLayout(layout_apply)
 
 		self.btn_apply = QPushButton(_("Apply"))
-		self.btn_apply.setStyleSheet("QPushButton { font-size: 9pt }")
+		self.btn_apply.setStyleSheet("QPushButton { font-size: 10pt }")
 		self.btn_apply.setMinimumWidth(130)
 		self.btn_apply.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 		self.btn_apply.pressed.connect(lambda: self.memory_widget.save_model())
@@ -992,7 +992,7 @@ class Form(QFrame):
 
 		link = QLabel()
 		link.setText(_("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">Ayuda</a>"))
-		link.setStyleSheet("QLabel { font-size: 9pt }")
+		link.setStyleSheet("QLabel { font-size: 10pt }")
 		link.setTextInteractionFlags(Qt.TextBrowserInteraction)
 		link.setTextFormat(Qt.RichText)
 		link.setOpenExternalLinks(True)
@@ -1006,20 +1006,20 @@ class Form(QFrame):
 
 
 		btn = QPushButton(_("Load file"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.pressed.connect(self.on_load_file)
 		btn.setIcon(QIcon("assets/load.png"))
 		lsh.widget(btn, width=lsh_w2)
 
 		btn = QPushButton(_("Save file"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setIcon(QIcon("assets/save.png"))
 		btn.pressed.connect(self.on_save_file)
 		lsh.widget(btn, width=lsh_w2)
 		lsh.newLine()
 
 		btn = QPushButton(_("Dump to Arduino"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setObjectName("DumpBtn")
 		#btn.setIcon(QIcon("test.png"))
 		btn.setIconSize(QSize(24,24))
@@ -1045,7 +1045,7 @@ class Form(QFrame):
 		master_layout.addWidget(widget_bank_line)
 
 		self.tabs = QTabBar()
-		self.tabs.setStyleSheet("QTabBar { font-size: 9pt }")
+		self.tabs.setStyleSheet("QTabBar { font-size: 10pt }")
 		self.tabs.setUsesScrollButtons(False)
 		self.tabs.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
 		#self.tabs.setForegroundRole(QPalette.Light)
@@ -1073,7 +1073,206 @@ class Form(QFrame):
 		#layout_bank_line.addLayout(set_chan_layout)
 		#################################################
 
-		if 1:
+		if 1: #tabs
+			self.tabs_inout = QTabBar()
+			self.tabs_inout.setObjectName("inout")
+			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
+			self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
+			self.tabs_inout.setUsesScrollButtons(False)
+			self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
+			self.tabs_inout.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+			
+			layout_bank_line.addWidget(self.tabs_inout)
+
+			#section_layout = QHBoxLayout()
+			section_splitter = QSplitter()
+			section_splitter.setChildrenCollapsible(False)
+			#section_splitter.setHandleWidth(10)
+			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
+			section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+			master_layout.addWidget(section_splitter)
+			
+			# section_splitter.addWidget(self.tabs_inout)
+			self.tabs_inout.addTab(_("Inputs"))
+			self.tabs_inout.addTab(_("Outputs"))
+			self.tabs_inout.addTab(_("Distance sensor"))
+			self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
+			
+			################################
+			# Add UltraSonic input widgets #
+			################################
+
+			self.us_inputs_side = QFrame()
+			inputs_side = self.us_inputs_side
+			us_input_layout = QVBoxLayout()
+			input_layout = us_input_layout
+			inputs_side.setLayout(input_layout)
+			section_splitter.addWidget(inputs_side)
+
+			saw = QWidget()
+			
+			# Add UltraSonic widget
+			addLabelWA(input_layout, _("Ultrasound input"))
+			
+			us_area = QScrollArea()
+			lw = InputConfigUS('input_us', self)
+			#config['banks'][bankIdx].input_cc
+			#lw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+			#lw.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Ignored)
+			#lw.setBackgroundRole(QPalette.Dark)
+			lw.setProperty("parity", "even")
+			lw.setMinimumHeight(20)
+			#input_layout.addWidget(lw)
+			self.input_us = lw
+			#Pre-config banks
+			for bankIdx in range(MAX_BANKS):
+				config['banks'][bankIdx].input_us[0].mode = MODE_OFF
+
+
+			us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+			us_area.setWidgetResizable(True)
+			us_area.setWidget(lw)
+			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
+			us_input_layout.addWidget(us_area)
+			us_input_layout.addSpacing(390)
+			us_input_layout.addStretch()
+
+			#####################
+			# Add input widgets #
+			#####################
+			# Add CC widgets
+
+			self.inputs_side = QFrame()
+			inputs_side = self.inputs_side
+			input_layout = QVBoxLayout()
+			inputs_side.setLayout(input_layout)
+			section_splitter.addWidget(inputs_side)
+			
+			addLabelWA(input_layout, _("Input #"))
+
+			sa_layout = QVBoxLayout()
+			sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
+			sa_layout.setSpacing(0)
+			saw.setLayout(sa_layout)
+			# saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+
+			ins_area = QScrollArea()
+			ins_area.setWidgetResizable(True)
+			ins_area.setWidget(saw)
+			self.ins_area = ins_area
+			input_layout.addWidget(ins_area)
+
+			for i in range(0, MAX_INPUTS_CC):
+				#For each config, pre-config banks
+				for bankIdx in range(MAX_BANKS):
+					config['banks'][bankIdx].input_cc[i].param = i
+
+				lw = InputConfigCC('input_cc', i, self)
+				lw.load_model()
+				if i % 2 == 0:
+					lw.setProperty("parity", "even")	#For stylesheets
+				self.inputs.append(lw)
+				self._last_in_values.append(-THRESHOLD_SELECT)
+				sa_layout.addWidget(lw)
+
+			######################
+			# Add output widgets #
+			######################
+
+			self.outputs_side = QFrame()
+			outputs_side = self.outputs_side
+			output_layout = QVBoxLayout()
+			outputs_side.setLayout(output_layout)
+			section_splitter.addWidget(outputs_side)
+
+
+			# Test grid: removed
+			#grid = QGridLayout()
+			#grid.setSpacin#g(0)
+			#gridw = QWidget()
+			#gridw.setLayout(grid)
+			#gridw.setFixedSize(160, 160)
+			## gridw.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+			#for x in range(16):
+			#	for y in range(16):
+			#		gbtn = QPushButton()
+			#		gbtn.setFixedSize(10, 10)
+			#		grid.addWidget(gbtn, x, y)
+			#output_layout.addWidget(gridw)
+
+
+
+			addLabelWA(output_layout, _("Output #"))
+
+			saw = QWidget()
+			sa_layout = QVBoxLayout()
+			#sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
+			sa_layout.setSpacing(0)
+			saw.setLayout(sa_layout)
+			saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+
+			outs_area = QScrollArea()
+			outs_area.setWidgetResizable(True)
+			outs_area.setWidget(saw)
+			self.outs_area = outs_area
+			output_layout.addWidget(outs_area)
+
+			#################################################
+			# Test all segment
+			#################################################
+			test_all_widget = QWidget()
+			test_all_widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+			test_all_widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+			test_all_layout = QHBoxLayout()
+			#test_all_layout.addStretch()
+			test_all_btn = QPushButton(_("Test all"))
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
+			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+			#test_all_btn.setFixedWidth(100)
+			test_all_btn.pressed.connect(self.on_test_all_press)
+			test_all_btn.released.connect(self.on_test_all_release)
+			test_all_layout.addWidget(test_all_btn)
+			lbl_test = QLabel(_("with velocity"))
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
+			test_all_layout.addWidget(lbl_test)
+
+			self.test_all_velocity = QSpinBox()
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
+			self.test_all_velocity.setValue(64)
+			self.test_all_velocity.setMinimum(0)
+			self.test_all_velocity.setMaximum(0x7f)
+			test_all_btn.setObjectName("TestAll")
+			#self.test_all_velocity.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+			test_all_layout.addWidget(self.test_all_velocity)
+
+			#sa_layout.addLayout(test_all_layout)
+			sa_layout.addWidget(test_all_widget)
+			test_all_widget.setLayout(test_all_layout)
+			#################################################
+
+			for i in range(0, MAX_OUTPUTS):
+				#For each config, pre-config banks
+				for bankIdx in range(MAX_BANKS):
+					config['banks'][bankIdx].output[i].note = i
+
+				lw = OutputConfig('output', i)
+				lw.load_model()
+				#lw.param.setValue(i)
+				if i % 2 == 0:
+					lw.setProperty("parity", "even")	#For stylesheets
+				self.outputs.append(lw)
+				sa_layout.addWidget(lw)
+
+
+			###############
+
+			section_splitter.setSizes([self.width()/2] * 2)
+			
+			#Default view: inputs
+			self.change_views_inout_tab(0)
+		else: #old code
 			#section_layout = QHBoxLayout()
 			section_splitter = QSplitter()
 			section_splitter.setChildrenCollapsible(False)
@@ -1197,18 +1396,18 @@ class Form(QFrame):
 			test_all_layout = QHBoxLayout()
 			#test_all_layout.addStretch()
 			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 9pt}");
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
 			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 			#test_all_btn.setFixedWidth(100)
 			test_all_btn.pressed.connect(self.on_test_all_press)
 			test_all_btn.released.connect(self.on_test_all_release)
 			test_all_layout.addWidget(test_all_btn)
 			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 9pt}");
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
 			test_all_layout.addWidget(lbl_test)
 
 			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 9pt}");
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
@@ -1239,6 +1438,7 @@ class Form(QFrame):
 			###############
 
 			section_splitter.setSizes([self.width()/2] * 2)
+		# end in/out config
 
 		self.refresh_in_outs()
 
@@ -1269,7 +1469,7 @@ class Form(QFrame):
 			print(self.current_bank)
 			with wait_cursor():
 				self.change_views_bank(self.current_bank)
-
+	
 	def change_views_bank(self, bankIdx):
 		self.save_model()
 
@@ -1277,6 +1477,27 @@ class Form(QFrame):
 			w.bank = bankIdx
 
 		self.load_model()
+
+	def on_change_tab_inout(self):
+		if self.current_inout_tab != self.tabs_inout.currentIndex():
+			self.current_inout_tab = self.tabs_inout.currentIndex()
+			print("Current IN/OUT tab: %i"%self.current_inout_tab)
+			with wait_cursor():
+				self.change_views_inout_tab(self.current_inout_tab)
+
+	def change_views_inout_tab(self, bankIdx):
+		if bankIdx==0:
+			self.inputs_side.show() #load inputs 
+			self.outputs_side.hide()
+			self.us_inputs_side.hide()
+		elif bankIdx==1:
+			self.inputs_side.hide()
+			self.outputs_side.show() #load outputs 
+			self.us_inputs_side.hide()
+		else:
+			self.inputs_side.hide()
+			self.outputs_side.hide()
+			self.us_inputs_side.show() #load ultrasonic
 
 	def refresh_tabs(self):
 		nbanks = config['global'].num_banks
@@ -1376,6 +1597,7 @@ class Form(QFrame):
 			else:
 				config = config2
 				self.current_bank = 0
+				self.current_inout_tab = 0
 				self.load_model()
 				self.refresh_tabs()
 				self.refresh_in_outs()
