@@ -7,5 +7,5 @@ echo ".mo generation"
 msgfmt translation_es.po -o translation_es.mo
 
 echo "install"
-cp translation_es.mo locales/es/LC_MESSAGES/kmgui.mo
+cp translation_es.mo locales/es/LC_MESSAGES/kwt.mo
 
