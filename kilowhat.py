@@ -1067,6 +1067,7 @@ class Form(QFrame):
 
 		if 1: #tabs
 			self.tabs_inout = QTabBar()
+			self.tabs_inout.setObjectName("inout")
 			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
 			self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
 			self.tabs_inout.setUsesScrollButtons(False)
