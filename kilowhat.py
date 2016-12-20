@@ -406,6 +406,7 @@ class MemoryWidget(QWidget):
 		self.ins.setSuffix('/{0}'.format(max_ins))
 		self.outs.setMaximum(max(1, max_outs))
 		self.outs.setSuffix('/{0}'.format(max_outs))
+		lambda: self.save_model()
 
 	def model(self) -> GlobalData:
 		return config['global']
