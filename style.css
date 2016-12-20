@@ -97,8 +97,15 @@ QTabBar::tab:selected {
 
 QTabBar::tab {
     background-color: #505050;
-    margin: 4px;
+    margin: 0px 4px;
     padding: 8px;
+    /*padding-right: 4px;*/
+}
+
+QTabBar#inout::tab {
+    background-color: #505050;
+    margin: 4px 4px 0px 4px;
+    padding: 8px 8px 30px 8px;
     /*padding-right: 4px;*/
 }
 

@@ -1,8 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kmgui 0.9.0\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2016-12-19 19:18-0300\n"
 "PO-Revision-Date: 2016-12-19 19:19-0300\n"
+=======
+<<<<<<< HEAD
+"POT-Creation-Date: 2016-11-01 17:03-0300\n"
+"PO-Revision-Date: 2016-12-16 15:39-0300\n"
+=======
+"POT-Creation-Date: 2016-12-19 19:18-0300\n"
+"PO-Revision-Date: 2016-12-19 19:19-0300\n"
+>>>>>>> dev
+>>>>>>> 034676d52a8b31df1066bfb584d22f9ef272a041
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"

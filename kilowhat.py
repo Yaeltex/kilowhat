@@ -200,7 +200,7 @@ class GridHelper:
 	def label(self, text, spanx=1, spany=1, align=Qt.AlignLeft):
 		#print("\nLBALE {0} at {1},{2}".format(text, self._x, self._y))
 		lbl = QLabel(text)
-		lbl.setStyleSheet("QLabel {font-size: 9pt}")
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
 		self._grid.addWidget(lbl, self._y, self._x, spany, spanx, align)
 		self._skip()
 		return self
@@ -221,27 +221,27 @@ class MemoryWidget(QWidget):
 		print("MemoryWidget()")
 
 		self.cmi = cmi = QComboBox()
-		self.cmi.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.cmi.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.cmo = cmo = QComboBox()
-		self.cmo.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.cmo.setStyleSheet("QComboBox { font-size: 10pt }")
 
 		#Reload MIDI ports
 		self.btn_reload_midi = QPushButton(_("Scan")) 
-		self.btn_reload_midi.setStyleSheet("QPushButton { font-size: 9pt }")
+		self.btn_reload_midi.setStyleSheet("QPushButton { font-size: 10pt }")
 		self.btn_reload_midi.setMinimumWidth(160)
 		self.btn_reload_midi.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
 		#Create controls
 		self.output_matrix = QComboBox()
-		self.output_matrix.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.output_matrix.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.hardware = QComboBox()
-		self.hardware.setStyleSheet("QComboBox { font-size: 9pt }")
+		self.hardware.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.banks = QSpinBox()
-		self.banks.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.banks.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.ins = QSpinBox()
-		self.ins.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.ins.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.outs = QSpinBox()
-		self.outs.setStyleSheet("QSpinBox { font-size: 9pt }")
+		self.outs.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.test = QLabel()		#Never added
 
 		self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -477,7 +477,7 @@ class ConfigWidget(QWidget):
 		idx = self.h_layout.count() if idx < 0 else idx
 		self.add(w, idx)
 		lbl = QLabel(label, self)
-		lbl.setStyleSheet("QLabel {font-size: 9pt}")
+		lbl.setStyleSheet("QLabel {font-size: 10pt}")
 		self.add(lbl, idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
 		return w
 
@@ -551,8 +551,8 @@ class OutputConfig(ConfigWidget):
 		number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.test = self.add(QPushButton(_("Test")))
-		self.test.setStyleSheet("QPushButton { font-size: 8pt }")
-		self.test.setFixedWidth(60)
+		self.test.setStyleSheet("QPushButton { font-size: 10pt }")
+		self.test.setFixedWidth(70)
 		self.test.pressed.connect(self.on_test_press)
 		self.test.released.connect(self.on_test_release)
 		#self.monitor = add(QLabel())
@@ -563,22 +563,22 @@ class OutputConfig(ConfigWidget):
 		#self.mode.addItems((_("Note"), _("CC"), _("NRPN")))
 
 		noteSB = QSpinBox()
-		noteSB.setStyleSheet("QLabel { font-size: 8pt }")
+		noteSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.param = self.addwl(_("Note"), noteSB)
 		self.param.setRange(0, 127)
 
 		chanSB = QSpinBox()
-		chanSB.setStyleSheet("QLabel { font-size: 8pt }")
+		chanSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.channel = self.addwl(_("Channel"), chanSB)
 		self.channel.setRange(0, 15)
 
 		minSB = QSpinBox()
-		minSB.setStyleSheet("QLabel { font-size: 8pt }")
+		minSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
 
 		maxSB = QSpinBox()
-		maxSB.setStyleSheet("QLabel { font-size: 8pt }")
+		maxSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		self.max.setValue(127)
@@ -665,7 +665,7 @@ class InputConfig(ConfigWidget):
 		self.number.setStyleSheet("QLabel { font-size: 12pt }")
 
 		self.monitor = self.add(QLabel())
-		self.monitor.setStyleSheet("QLabel { font-size: 9pt }")
+		self.monitor.setStyleSheet("QLabel { font-size: 10pt }")
 		self.monitor.setFixedWidth(100)
 		self.monitor.setAutoFillBackground(True)
 
@@ -673,7 +673,7 @@ class InputConfig(ConfigWidget):
 		self.enable_monitor.setChecked(True)
 
 		modeCB = QComboBox()
-		modeCB.setStyleSheet("QComboBox { font-size: 9pt }")
+		modeCB.setStyleSheet("QComboBox { font-size: 10pt }")
 		self.mode = self.addwl(_("Mode"), modeCB)
 		for labelIdx in MODE_ENABLED:
 			self.mode.addItem(MODE_LABELS[labelIdx])
@@ -681,7 +681,7 @@ class InputConfig(ConfigWidget):
 		self.mode.currentIndexChanged.connect(self.on_param_value_changed)
 
 		paramSB = QSpinBox()
-		paramSB.setStyleSheet("QSpinBox { font-size: 9pt }")
+		paramSB.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.param =self.addwl(_("Param"), paramSB);
 		self.param.valueChanged.connect(self.on_param_value_changed)
 		#setWidgetBackground(self.param, Qt.black)
@@ -689,16 +689,16 @@ class InputConfig(ConfigWidget):
 		self.param.setRange(0, pow(2, 14)-1)
 		
 		channelSB = QSpinBox()
-		channelSB.setStyleSheet("QSpinBox { font-size: 9pt }")
+		channelSB.setStyleSheet("QSpinBox { font-size: 10pt }")
 		self.channel = self.addwl(_("Channel"), channelSB)
 		self.channel.setRange(0, 15)
 		
 		minSB = QSpinBoxHack()
-		minSB.setStyleSheet("QSpinBoxHack { font-size: 9pt }")
+		minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
 		self.min = self.addwl(_("Min."), minSB)
 		self.min.setRange(0, 127)
 		maxSB = QSpinBoxHack()
-		maxSB.setStyleSheet("QSpinBoxHack { font-size: 9pt }")
+		maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
 		self.max = self.addwl(_("Max."), maxSB)
 		self.max.setRange(0, 127)
 		#self.max.valueChanged.connect(self.on_max_value_changed)
@@ -785,12 +785,12 @@ class InputConfigCC(InputConfig):
 	def __init__(self, model_name, index, parent=None):
 
 		ad = QComboBox()
-		ad.setStyleSheet("QComboBox {font-size: 9pt}")
+		ad.setStyleSheet("QComboBox {font-size: 10pt}")
 		ad.addItems((_("Analog"), _("Digital")))
 		self.analog = ad
 
 		pt = QComboBox()
-		pt.setStyleSheet("QComboBox {font-size: 9pt}")
+		pt.setStyleSheet("QComboBox {font-size: 10pt}")
 		pt.addItems((_("Toggle"), _("Momentary")))
 		self.toggle = pt		# Changes for regular input (pot, slider) and ultrasound config
 
@@ -827,11 +827,11 @@ class InputConfigUS(InputConfig):
 	def __init__(self, model_name, parent=None):
 
 		self.dist_min = QSpinBox()
-		self.dist_min.setStyleSheet("QSpinBox {font-size: 9pt}")
+		self.dist_min.setStyleSheet("QSpinBox {font-size: 10pt}")
 		max_uint14 = pow(2, 14)-1
 		self.dist_min.setMaximum(max_uint14)
 		self.dist_max = QSpinBox()
-		self.dist_max.setStyleSheet("QSpinBox {font-size: 9pt}")
+		self.dist_max.setStyleSheet("QSpinBox {font-size: 10pt}")
 		self.dist_max.setMaximum(max_uint14)
 		self.dist_max.setValue(max_uint14)
 
@@ -930,7 +930,7 @@ class Form(QFrame):
 
 		def addLabelWA(layout, text):		#Workaround for labels that resized big time
 			lbl = QLabel(text)
-			lbl.setStyleSheet("QLabel { font-weight: bold; font-size: 9pt }")
+			lbl.setStyleSheet("QLabel { font-weight: bold; font-size: 10pt }")
 			#lbl.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 			layout.addWidget(lbl)
 			
@@ -955,7 +955,7 @@ class Form(QFrame):
 		#layout_top.addLayout(layout_apply)
 
 		self.btn_apply = QPushButton(_("Apply"))
-		self.btn_apply.setStyleSheet("QPushButton { font-size: 9pt }")
+		self.btn_apply.setStyleSheet("QPushButton { font-size: 10pt }")
 		self.btn_apply.setMinimumWidth(130)
 		self.btn_apply.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 		self.btn_apply.pressed.connect(lambda: self.memory_widget.save_model())
@@ -992,7 +992,7 @@ class Form(QFrame):
 
 		link = QLabel()
 		link.setText(_("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">Ayuda</a>"))
-		link.setStyleSheet("QLabel { font-size: 9pt }")
+		link.setStyleSheet("QLabel { font-size: 10pt }")
 		link.setTextInteractionFlags(Qt.TextBrowserInteraction)
 		link.setTextFormat(Qt.RichText)
 		link.setOpenExternalLinks(True)
@@ -1006,20 +1006,20 @@ class Form(QFrame):
 
 
 		btn = QPushButton(_("Load file"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.pressed.connect(self.on_load_file)
 		btn.setIcon(QIcon("assets/load.png"))
 		lsh.widget(btn, width=lsh_w2)
 
 		btn = QPushButton(_("Save file"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setIcon(QIcon("assets/save.png"))
 		btn.pressed.connect(self.on_save_file)
 		lsh.widget(btn, width=lsh_w2)
 		lsh.newLine()
 
 		btn = QPushButton(_("Dump to Arduino"))
-		btn.setStyleSheet("QPushButton { font-size: 9pt }")
+		btn.setStyleSheet("QPushButton { font-size: 10pt }")
 		btn.setObjectName("DumpBtn")
 		#btn.setIcon(QIcon("test.png"))
 		btn.setIconSize(QSize(24,24))
@@ -1045,7 +1045,7 @@ class Form(QFrame):
 		master_layout.addWidget(widget_bank_line)
 
 		self.tabs = QTabBar()
-		self.tabs.setStyleSheet("QTabBar { font-size: 9pt }")
+		self.tabs.setStyleSheet("QTabBar { font-size: 10pt }")
 		self.tabs.setUsesScrollButtons(False)
 		self.tabs.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
 		#self.tabs.setForegroundRole(QPalette.Light)
@@ -1075,7 +1075,8 @@ class Form(QFrame):
 
 		if 1: #tabs
 			self.tabs_inout = QTabBar()
-			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 9pt }")
+			self.tabs_inout.setObjectName("inout")
+			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
 			self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
 			self.tabs_inout.setUsesScrollButtons(False)
 			self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
@@ -1226,18 +1227,18 @@ class Form(QFrame):
 			test_all_layout = QHBoxLayout()
 			#test_all_layout.addStretch()
 			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 9pt}");
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
 			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 			#test_all_btn.setFixedWidth(100)
 			test_all_btn.pressed.connect(self.on_test_all_press)
 			test_all_btn.released.connect(self.on_test_all_release)
 			test_all_layout.addWidget(test_all_btn)
 			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 9pt}");
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
 			test_all_layout.addWidget(lbl_test)
 
 			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 9pt}");
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
@@ -1395,18 +1396,18 @@ class Form(QFrame):
 			test_all_layout = QHBoxLayout()
 			#test_all_layout.addStretch()
 			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 9pt}");
+			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
 			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
 			#test_all_btn.setFixedWidth(100)
 			test_all_btn.pressed.connect(self.on_test_all_press)
 			test_all_btn.released.connect(self.on_test_all_release)
 			test_all_layout.addWidget(test_all_btn)
 			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 9pt}");
+			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
 			test_all_layout.addWidget(lbl_test)
 
 			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 9pt}");
+			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
 			self.test_all_velocity.setValue(64)
 			self.test_all_velocity.setMinimum(0)
 			self.test_all_velocity.setMaximum(0x7f)
