@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kmgui 0.9.0\n"
-"POT-Creation-Date: 2016-12-20 12:48-0300\n"
-"PO-Revision-Date: 2016-12-20 12:48-0300\n"
+"POT-Creation-Date: 2016-12-20 16:44-0300\n"
+"PO-Revision-Date: 2016-12-20 16:47-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: lang.py\n"
@@ -23,283 +23,292 @@ msgid "ERROR OUT: "
 msgstr "ERROR ENV:"
 
 # Actualizar puertos MIDI
-#: kilowhat.py:229
+#: kilowhat.py:227
 msgid "Scan"
 msgstr "ACTUALIZAR PUERTOS"
 
-#: kilowhat.py:260
+#: kilowhat.py:258
 msgid "MIDI ports"
 msgstr "Puertos MIDI"
 
-#: kilowhat.py:261
+#: kilowhat.py:259
 msgid "Set banks"
 msgstr "Definir N° bancos"
 
-#: kilowhat.py:263 kilowhat.py:265
+#: kilowhat.py:261 kilowhat.py:263
 msgid " "
 msgstr ""
 
-#: kilowhat.py:263
+#: kilowhat.py:261
 msgid "Set inputs"
 msgstr "Definir N° entradas"
 
-#: kilowhat.py:264
+#: kilowhat.py:262
 msgid "Hardware"
 msgstr "Selección Hardware"
 
-#: kilowhat.py:264
+#: kilowhat.py:262
 msgid "Set outputs"
 msgstr "Definir N° salidas"
 
-#: kilowhat.py:265
+#: kilowhat.py:263
 msgid "LEDS mode"
 msgstr "Modo de LEDS"
 
-#: kilowhat.py:268
+#: kilowhat.py:266
 msgid "Normal"
 msgstr "Normal"
 
-#: kilowhat.py:268
+#: kilowhat.py:266
 msgid "Matrix"
 msgstr "Matriz"
 
-#: kilowhat.py:300 kilowhat.py:372 kilowhat.py:1449
+#: kilowhat.py:298 kilowhat.py:1455
 msgid "Welcome to Kilowhat!"
 msgstr "¡Bienvenido a Kilowhat!"
 
-#: kilowhat.py:313
+#: kilowhat.py:311
 #, python-brace-format
 msgid "In {0}: {1}"
 msgstr "E{0}: {1}"
 
-#: kilowhat.py:319
+#: kilowhat.py:317
 #, python-brace-format
 msgid "Out {0}: {1}"
 msgstr "S{0}: {1}"
 
-#: kilowhat.py:553
+#: kilowhat.py:551
 msgid "Test"
 msgstr "Probar"
 
-#: kilowhat.py:567 kilowhat.py:1657 model.py:16
+#: kilowhat.py:565 kilowhat.py:1665 kilowhat.py:1667 kilowhat.py:1684
+#: model.py:16
 msgid "Note"
 msgstr "Nota"
 
-#: kilowhat.py:572 kilowhat.py:693
+#: kilowhat.py:570 kilowhat.py:691
 msgid "Channel"
 msgstr "Canal"
 
-#: kilowhat.py:577 kilowhat.py:698
+#: kilowhat.py:575 kilowhat.py:696
 msgid "Min."
 msgstr "Mín."
 
-#: kilowhat.py:582 kilowhat.py:702
+#: kilowhat.py:580 kilowhat.py:700
 msgid "Max."
 msgstr "Máx."
 
-#: kilowhat.py:586
+#: kilowhat.py:584
 msgid "Intermitent"
 msgstr "Intermitente"
 
-#: kilowhat.py:672
+#: kilowhat.py:670
 msgid "Monitor"
 msgstr "Monitor"
 
-#: kilowhat.py:677
+#: kilowhat.py:675
 msgid "Mode"
 msgstr "Modo"
 
-#: kilowhat.py:685
+#: kilowhat.py:683
 msgid "Param"
 msgstr "Parám"
 
-#: kilowhat.py:739
+#: kilowhat.py:737
 #, python-brace-format
 msgid "Note/CC param {0} outside valid range 0-127"
 msgstr "Parametro Nota/CC {0} fuera del rango válido 0-127"
 
-#: kilowhat.py:742
+#: kilowhat.py:740
 #, python-brace-format
 msgid "Shifter param {0} outside bank range 0-{1}"
 msgstr "Parametro Shifter {0} fuera del rango de bancos 0-{1}"
 
-#: kilowhat.py:751
+#: kilowhat.py:749
 #, python-brace-format
 msgid "Banco de shifter repetido ({0})"
 msgstr "Banco de shifter repetido ({0})"
 
-#: kilowhat.py:789
+#: kilowhat.py:787
 msgid "Analog"
 msgstr "Analog."
 
-#: kilowhat.py:789
+#: kilowhat.py:787
 msgid "Digital"
 msgstr "Digital"
 
-#: kilowhat.py:794
+#: kilowhat.py:792
 msgid "Toggle"
 msgstr ""
 
-#: kilowhat.py:794
+#: kilowhat.py:792
 msgid "Momentary"
 msgstr "Momentario"
 
-#: kilowhat.py:798
+#: kilowhat.py:796
 msgid "A/D"
 msgstr "A/D"
 
-#: kilowhat.py:799
+#: kilowhat.py:797
 msgid "Press"
 msgstr "Acción"
 
-#: kilowhat.py:841
+#: kilowhat.py:839
 msgid "Min. Dist."
 msgstr "Dist. Mín."
 
-#: kilowhat.py:842
+#: kilowhat.py:840
 msgid "Max. Dist."
 msgstr "Dist. Máx."
 
-#: kilowhat.py:957
+#: kilowhat.py:955
 msgid "Apply"
 msgstr "Aplicar"
 
-#: kilowhat.py:994
+#: kilowhat.py:992
 msgid ""
 "<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style="
 "\"color: yellow;\">Ayuda</a>"
 msgstr ""
 
-#: kilowhat.py:1001
+#: kilowhat.py:999
 msgid "Config file description"
 msgstr "Descripción del archivo de configuración"
 
-#: kilowhat.py:1008
+#: kilowhat.py:1006
 msgid "Load file"
 msgstr "Cargar archivo"
 
-#: kilowhat.py:1014
+#: kilowhat.py:1012
 msgid "Save file"
 msgstr "Guardar archivo"
 
-#: kilowhat.py:1021
+#: kilowhat.py:1019
 msgid "Dump to Arduino"
 msgstr "Configurar en Arduino (Dump)"
 
-#: kilowhat.py:1096
+#: kilowhat.py:1094
 msgid "Inputs"
 msgstr "Entradas"
 
-#: kilowhat.py:1097
+#: kilowhat.py:1095
 msgid "Outputs"
 msgstr "Salidas"
 
-#: kilowhat.py:1098
+#: kilowhat.py:1096
 msgid "Distance sensor"
 msgstr "Sensor de distancia"
 
-#: kilowhat.py:1115 kilowhat.py:1296
+#: kilowhat.py:1113 kilowhat.py:1294
 msgid "Ultrasound input"
 msgstr "Sensor ultrasónico"
 
-#: kilowhat.py:1152 kilowhat.py:1322
+#: kilowhat.py:1150 kilowhat.py:1320
 msgid "Input #"
 msgstr "Entradas"
 
-#: kilowhat.py:1206 kilowhat.py:1375
+#: kilowhat.py:1204 kilowhat.py:1373
 msgid "Output #"
 msgstr "Salidas"
 
-#: kilowhat.py:1229 kilowhat.py:1398
+#: kilowhat.py:1227 kilowhat.py:1396
 msgid "Test all"
 msgstr "Probar todos"
 
-#: kilowhat.py:1236 kilowhat.py:1405
+#: kilowhat.py:1234 kilowhat.py:1403
 msgid "with velocity"
 msgstr "con velocidad"
 
-#: kilowhat.py:1505
+#: kilowhat.py:1462
+msgid "MIDI Monitor"
+msgstr ""
+
+#: kilowhat.py:1521
 #, python-brace-format
 msgid "Bank {0}"
 msgstr "Banco {0}"
 
-#: kilowhat.py:1532
+#: kilowhat.py:1548
 msgid "Starting Dump"
 msgstr ""
 "Espera mientras se configura tu dispositivo. No lo desconectes ni apagues"
 
-#: kilowhat.py:1558 kilowhat.py:1562
+#: kilowhat.py:1574 kilowhat.py:1578
 msgid "Dump error"
 msgstr "Error de dump"
 
-#: kilowhat.py:1558
+#: kilowhat.py:1574
 #, python-brace-format
 msgid "{0} errors trying to dump."
 msgstr "{0} errores intentando hacer dump"
 
-#: kilowhat.py:1559 kilowhat.py:1563
+#: kilowhat.py:1575 kilowhat.py:1579
 msgid "<b>Dump aborted</b>"
 msgstr "<b>Dump cancelado</b>"
 
-#: kilowhat.py:1562
+#: kilowhat.py:1578
 #, python-brace-format
 msgid "{0} warnings trying to dump, continue anyway?"
 msgstr "{0} advertencias durante el dump, ¿continuar de todas formas?"
 
-#: kilowhat.py:1567
+#: kilowhat.py:1583
 msgid "Dump sent"
 msgstr "Configuración enviada"
 
-#: kilowhat.py:1571
+#: kilowhat.py:1587
 msgid "Open kwt configuration file"
-msgstr ""
+msgstr "Abrir archivo de configuración kwt"
 
-#: kilowhat.py:1571 kilowhat.py:1620
+#: kilowhat.py:1587 kilowhat.py:1636
 msgid "kwt file (*.kwt)"
-msgstr ""
+msgstr "Archivo KWT (*.kwt)"
 
-#: kilowhat.py:1594 kilowhat.py:1606 kilowhat.py:1616
+#: kilowhat.py:1610 kilowhat.py:1622 kilowhat.py:1632
 msgid "Error"
 msgstr "Error"
 
-#: kilowhat.py:1595
+#: kilowhat.py:1611
 #, python-brace-format
 msgid ""
 "Invalid version of kwt configuration file \"{0}\"\n"
 "Version {1} should be {2} "
 msgstr ""
 
-#: kilowhat.py:1606
+#: kilowhat.py:1622
 #, python-brace-format
 msgid ""
 "Error opening kwt configuration file \"{0}\"\n"
 "{1}"
 msgstr ""
 
-#: kilowhat.py:1616
+#: kilowhat.py:1632
 #, python-brace-format
 msgid ""
 "Error writing kwt configuration file \"{0}\"\n"
 "{1}"
 msgstr ""
 
-#: kilowhat.py:1620
+#: kilowhat.py:1636
 msgid "Save kwt configuration file"
 msgstr ""
 
-#: kilowhat.py:1636
+#: kilowhat.py:1652
 msgid "ACK Received. Kilomux connected"
 msgstr "Arduino encontrada y en modo de configuración"
 
-#: kilowhat.py:1639
+#: kilowhat.py:1655
 msgid "Dump OK"
 msgstr "Configuración exitosa"
 
-#: kilowhat.py:1657 kilowhat.py:1697 model.py:16
+#: kilowhat.py:1663 kilowhat.py:1684 kilowhat.py:1724 model.py:16
 msgid "CC"
 msgstr "CC"
 
-#: kilowhat.py:1684
+#: kilowhat.py:1669
+msgid "MIDI message not supported"
+msgstr "Mensaje MIDI no soportado"
+
+#: kilowhat.py:1711
 msgid "ERROR IN: "
 msgstr "ERROR REC:"
 

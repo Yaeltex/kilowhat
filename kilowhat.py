@@ -42,7 +42,7 @@ VERSION = "v1.06"
 COLOR_TIMEOUT = 500						# ms. Background coloring timeout
 
 # Midi
-POLL_INTERVAL = 25						# ms. Midi in polling interval
+POLL_INTERVAL = 10						# ms. Midi in polling interval
 THRESHOLD_SELECT = 16					# Delta threshold for selecting (coloring background and ensuring is visible in scroll area)
 MONITOR_CHAN_US = 15					# Ultra sound channel monitoring
 
@@ -124,8 +124,6 @@ if False:
 		midi_send(note_off)
 		time.sleep(0.5)
 
-
-
 def send_sysex_dump():
 	glob = config['global'];
 	data = [glob]
@@ -154,7 +152,7 @@ def send_sysex_dump():
 			#FIXME: send in multiple packets only in Darwin/MacOS
 			#if platform.system() == "Darwin":
 			print("Sleep 1 seg")
-			time.sleep(1)
+			time.sleep(0.7)
 	except Exception as e:
 		print("Exception", e)
 
@@ -1457,8 +1455,10 @@ class Form(QFrame):
 		self.txt_log.append(_("Welcome to Kilowhat!"))
 		
 		self.midi_monitor = QTextEdit()
+		self.midi_monitor.setObjectName("MidiMonitor")
 		self.midi_monitor.setReadOnly(True)
 		self.midi_monitor.setStyleSheet("QTextEdit {font-size: 10pt}")
+		self.midi_monitor.setMaximumWidth(200)
 		self.midi_monitor.setMaximumHeight(120)
 		log_layout.addWidget(self.midi_monitor)
 		self.midi_monitor.append(_("MIDI Monitor"))
@@ -1645,7 +1645,6 @@ class Form(QFrame):
 			self.save_file(FILE_RECOVER)
 
 	def processCommand(self, cmd):
-
 		print("Received command")
 		print(cmd)
 		#self.txt_log.append("MIDI RECEIVED: " + str(cmd))
@@ -1661,6 +1660,16 @@ class Form(QFrame):
 		cmd_type = type_chn & 0xf0
 		chn = type_chn & 0xf
 
+		# MIDI Monitor log
+		if cmd_type == MIDI_CC:
+			self.midi_monitor.append(_("CC") + " " + str(param) + " " + str(value))
+		elif cmd_type == MIDI_NOTE_ON:
+			self.midi_monitor.append(_("Note") + " " + str(param) + " " + str(value))
+		elif cmd_type == MIDI_NOTE_OFF:
+			self.midi_monitor.append(_("Note") + " " + str(param) + " " + str(value))
+		else:
+			self.midi_monitor.append(_("MIDI message not supported"))
+				
 		target = None
 		if chn == MONITOR_CHAN_US:
 			target = self.input_us
@@ -1671,9 +1680,9 @@ class Form(QFrame):
 					value = 0
 
 				target = self.inputs[param]
-
-		if target is not None:
-			self.midi_monitor.append((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(param) + " " + str(value))
+		
+		if target is not None:				
+			#self.midi_monitor.append((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(param) + " " + str(value))
 			target.show_value((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(value))
 			last_value = self._last_in_values[param]
 			if abs(last_value - value) > THRESHOLD_SELECT:
@@ -1733,7 +1742,7 @@ def set_my_font():
                 font_id = QFontDatabase.addApplicationFont("./assets/Novecento WideLight.otf")
                 font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
                 print(font_family)
-                font = QFont(font_family, 12)
+                font = QFont(font_family, 10)
 
                 font.setStyleStrategy(QFont.PreferAntialias)	#
                 QApplication.setFont(font)

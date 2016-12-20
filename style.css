@@ -132,6 +132,9 @@ QPushButton::pressed {
 QWidget#LogArea {
     margin: 4px;
 }
+#MidiMonitor {
+    width: 100px;
+}
 
 /*QComboBox::drop-down {
     background: transparent
