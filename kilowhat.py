@@ -1073,372 +1073,210 @@ class Form(QFrame):
 		#layout_bank_line.addLayout(set_chan_layout)
 		#################################################
 
-		if 1: #tabs
-			self.tabs_inout = QTabBar()
-			self.tabs_inout.setObjectName("inout")
-			# self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
-			self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
-			self.tabs_inout.setUsesScrollButtons(False)
-			self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
-			self.tabs_inout.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-			
-			layout_bank_line.addWidget(self.tabs_inout)
+		##########################################
+		# tabs: inputs/outputs/distance sensor
+		##########################################
+		self.tabs_inout = QTabBar()
+		self.tabs_inout.setObjectName("inout")
+		# self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
+		self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
+		self.tabs_inout.setUsesScrollButtons(False)
+		self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
+		self.tabs_inout.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+		
+		layout_bank_line.addWidget(self.tabs_inout)
 
-			#section_layout = QHBoxLayout()
-			section_splitter = QSplitter()
-			section_splitter.setChildrenCollapsible(False)
-			#section_splitter.setHandleWidth(10)
-			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
-			section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-			master_layout.addWidget(section_splitter)
-			
-			# section_splitter.addWidget(self.tabs_inout)
-			self.tabs_inout.addTab(_("Inputs"))
-			self.tabs_inout.addTab(_("Outputs"))
-			self.tabs_inout.addTab(_("Distance sensor"))
-			self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
-			
-			################################
-			# Add UltraSonic input widgets #
-			################################
+		#section_layout = QHBoxLayout()
+		section_splitter = QSplitter()
+		section_splitter.setChildrenCollapsible(False)
+		#section_splitter.setHandleWidth(10)
+		section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
+		section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+		master_layout.addWidget(section_splitter)
+		
+		# section_splitter.addWidget(self.tabs_inout)
+		self.tabs_inout.addTab(_("Inputs"))
+		self.tabs_inout.addTab(_("Outputs"))
+		self.tabs_inout.addTab(_("Distance sensor"))
+		self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
+		
+		################################
+		# Add UltraSonic input widgets #
+		################################
 
-			self.us_inputs_side = QFrame()
-			inputs_side = self.us_inputs_side
-			us_input_layout = QVBoxLayout()
-			input_layout = us_input_layout
-			inputs_side.setLayout(input_layout)
-			section_splitter.addWidget(inputs_side)
+		self.us_inputs_side = QFrame()
+		inputs_side = self.us_inputs_side
+		us_input_layout = QVBoxLayout()
+		input_layout = us_input_layout
+		inputs_side.setLayout(input_layout)
+		section_splitter.addWidget(inputs_side)
 
-			saw = QWidget()
-			
-			# Add UltraSonic widget
-			addLabelWA(input_layout, _("Ultrasound input"))
-			
-			us_area = QScrollArea()
-			lw = InputConfigUS('input_us', self)
-			#config['banks'][bankIdx].input_cc
-			#lw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-			#lw.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Ignored)
-			#lw.setBackgroundRole(QPalette.Dark)
-			lw.setProperty("parity", "even")
-			lw.setMinimumHeight(20)
-			#input_layout.addWidget(lw)
-			self.input_us = lw
-			#Pre-config banks
+		saw = QWidget()
+		
+		# Add UltraSonic widget
+		addLabelWA(input_layout, _("Ultrasound input"))
+		
+		us_area = QScrollArea()
+		lw = InputConfigUS('input_us', self)
+		#config['banks'][bankIdx].input_cc
+		#lw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+		#lw.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Ignored)
+		#lw.setBackgroundRole(QPalette.Dark)
+		lw.setProperty("parity", "even")
+		lw.setMinimumHeight(20)
+		#input_layout.addWidget(lw)
+		self.input_us = lw
+		#Pre-config banks
+		for bankIdx in range(MAX_BANKS):
+			config['banks'][bankIdx].input_us[0].mode = MODE_OFF
+
+
+		us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		us_area.setWidgetResizable(True)
+		us_area.setWidget(lw)
+		#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
+		# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
+		us_input_layout.addWidget(us_area)
+		us_input_layout.addSpacing(390)
+		us_input_layout.addStretch()
+
+		#####################
+		# Add input widgets #
+		#####################
+		# Add CC widgets
+
+		self.inputs_side = QFrame()
+		inputs_side = self.inputs_side
+		input_layout = QVBoxLayout()
+		inputs_side.setLayout(input_layout)
+		section_splitter.addWidget(inputs_side)
+		
+		addLabelWA(input_layout, _("Input #"))
+
+		sa_layout = QVBoxLayout()
+		sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
+		sa_layout.setSpacing(0)
+		saw.setLayout(sa_layout)
+		# saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+
+		ins_area = QScrollArea()
+		ins_area.setWidgetResizable(True)
+		ins_area.setWidget(saw)
+		self.ins_area = ins_area
+		input_layout.addWidget(ins_area)
+
+		for i in range(0, MAX_INPUTS_CC):
+			#For each config, pre-config banks
 			for bankIdx in range(MAX_BANKS):
-				config['banks'][bankIdx].input_us[0].mode = MODE_OFF
+				config['banks'][bankIdx].input_cc[i].param = i
+
+			lw = InputConfigCC('input_cc', i, self)
+			lw.load_model()
+			if i % 2 == 0:
+				lw.setProperty("parity", "even")	#For stylesheets
+			self.inputs.append(lw)
+			self._last_in_values.append(-THRESHOLD_SELECT)
+			sa_layout.addWidget(lw)
+
+		######################
+		# Add output widgets #
+		######################
+
+		self.outputs_side = QFrame()
+		outputs_side = self.outputs_side
+		output_layout = QVBoxLayout()
+		outputs_side.setLayout(output_layout)
+		section_splitter.addWidget(outputs_side)
 
 
-			us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-			us_area.setWidgetResizable(True)
-			us_area.setWidget(lw)
-			#us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-			# us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
-			us_input_layout.addWidget(us_area)
-			us_input_layout.addSpacing(390)
-			us_input_layout.addStretch()
-
-			#####################
-			# Add input widgets #
-			#####################
-			# Add CC widgets
-
-			self.inputs_side = QFrame()
-			inputs_side = self.inputs_side
-			input_layout = QVBoxLayout()
-			inputs_side.setLayout(input_layout)
-			section_splitter.addWidget(inputs_side)
-			
-			addLabelWA(input_layout, _("Input #"))
-
-			sa_layout = QVBoxLayout()
-			sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
-			sa_layout.setSpacing(0)
-			saw.setLayout(sa_layout)
-			# saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
-
-			ins_area = QScrollArea()
-			ins_area.setWidgetResizable(True)
-			ins_area.setWidget(saw)
-			self.ins_area = ins_area
-			input_layout.addWidget(ins_area)
-
-			for i in range(0, MAX_INPUTS_CC):
-				#For each config, pre-config banks
-				for bankIdx in range(MAX_BANKS):
-					config['banks'][bankIdx].input_cc[i].param = i
-
-				lw = InputConfigCC('input_cc', i, self)
-				lw.load_model()
-				if i % 2 == 0:
-					lw.setProperty("parity", "even")	#For stylesheets
-				self.inputs.append(lw)
-				self._last_in_values.append(-THRESHOLD_SELECT)
-				sa_layout.addWidget(lw)
-
-			######################
-			# Add output widgets #
-			######################
-
-			self.outputs_side = QFrame()
-			outputs_side = self.outputs_side
-			output_layout = QVBoxLayout()
-			outputs_side.setLayout(output_layout)
-			section_splitter.addWidget(outputs_side)
-
-
-			# Test grid: removed
-			#grid = QGridLayout()
-			#grid.setSpacin#g(0)
-			#gridw = QWidget()
-			#gridw.setLayout(grid)
-			#gridw.setFixedSize(160, 160)
-			## gridw.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-			#for x in range(16):
-			#	for y in range(16):
-			#		gbtn = QPushButton()
-			#		gbtn.setFixedSize(10, 10)
-			#		grid.addWidget(gbtn, x, y)
-			#output_layout.addWidget(gridw)
+		# Test grid: removed
+		#grid = QGridLayout()
+		#grid.setSpacin#g(0)
+		#gridw = QWidget()
+		#gridw.setLayout(grid)
+		#gridw.setFixedSize(160, 160)
+		## gridw.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+		#for x in range(16):
+		#	for y in range(16):
+		#		gbtn = QPushButton()
+		#		gbtn.setFixedSize(10, 10)
+		#		grid.addWidget(gbtn, x, y)
+		#output_layout.addWidget(gridw)
 
 
 
-			addLabelWA(output_layout, _("Output #"))
+		addLabelWA(output_layout, _("Output #"))
 
-			saw = QWidget()
-			sa_layout = QVBoxLayout()
-			#sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
-			sa_layout.setSpacing(0)
-			saw.setLayout(sa_layout)
-			saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+		saw = QWidget()
+		sa_layout = QVBoxLayout()
+		#sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
+		sa_layout.setSpacing(0)
+		saw.setLayout(sa_layout)
+		saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
-			outs_area = QScrollArea()
-			outs_area.setWidgetResizable(True)
-			outs_area.setWidget(saw)
-			self.outs_area = outs_area
-			output_layout.addWidget(outs_area)
+		outs_area = QScrollArea()
+		outs_area.setWidgetResizable(True)
+		outs_area.setWidget(saw)
+		self.outs_area = outs_area
+		output_layout.addWidget(outs_area)
 
-			#################################################
-			# Test all segment
-			#################################################
-			test_all_widget = QWidget()
-			test_all_widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-			test_all_widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-			test_all_layout = QHBoxLayout()
-			#test_all_layout.addStretch()
-			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
-			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-			#test_all_btn.setFixedWidth(100)
-			test_all_btn.pressed.connect(self.on_test_all_press)
-			test_all_btn.released.connect(self.on_test_all_release)
-			test_all_layout.addWidget(test_all_btn)
-			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
-			test_all_layout.addWidget(lbl_test)
+		#################################################
+		# Test all segment
+		#################################################
+		test_all_widget = QWidget()
+		test_all_widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+		test_all_widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+		test_all_layout = QHBoxLayout()
+		#test_all_layout.addStretch()
+		test_all_btn = QPushButton(_("Test all"))
+		test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
+		#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+		#test_all_btn.setFixedWidth(100)
+		test_all_btn.pressed.connect(self.on_test_all_press)
+		test_all_btn.released.connect(self.on_test_all_release)
+		test_all_layout.addWidget(test_all_btn)
+		lbl_test = QLabel(_("with velocity"))
+		lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
+		test_all_layout.addWidget(lbl_test)
 
-			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
-			self.test_all_velocity.setValue(64)
-			self.test_all_velocity.setMinimum(0)
-			self.test_all_velocity.setMaximum(0x7f)
-			test_all_btn.setObjectName("TestAll")
-			#self.test_all_velocity.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+		self.test_all_velocity = QSpinBox()
+		self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
+		self.test_all_velocity.setValue(64)
+		self.test_all_velocity.setMinimum(0)
+		self.test_all_velocity.setMaximum(0x7f)
+		test_all_btn.setObjectName("TestAll")
+		#self.test_all_velocity.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-			test_all_layout.addWidget(self.test_all_velocity)
+		test_all_layout.addWidget(self.test_all_velocity)
 
-			#sa_layout.addLayout(test_all_layout)
-			sa_layout.addWidget(test_all_widget)
-			test_all_widget.setLayout(test_all_layout)
-			#################################################
+		#sa_layout.addLayout(test_all_layout)
+		sa_layout.addWidget(test_all_widget)
+		test_all_widget.setLayout(test_all_layout)
+		#################################################
 
-			for i in range(0, MAX_OUTPUTS):
-				#For each config, pre-config banks
-				for bankIdx in range(MAX_BANKS):
-					config['banks'][bankIdx].output[i].note = i
-
-				lw = OutputConfig('output', i)
-				lw.load_model()
-				#lw.param.setValue(i)
-				if i % 2 == 0:
-					lw.setProperty("parity", "even")	#For stylesheets
-				self.outputs.append(lw)
-				sa_layout.addWidget(lw)
-
-
-			###############
-
-			section_splitter.setSizes([self.width()/2] * 2)
-			
-			#Default view: inputs
-			self.change_views_inout_tab(0)
-		else: #old code
-			#section_layout = QHBoxLayout()
-			section_splitter = QSplitter()
-			section_splitter.setChildrenCollapsible(False)
-			#section_splitter.setHandleWidth(10)
-			section_splitter.setStyleSheet("QSplitter::handle { background-color: gray }");
-			section_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-			master_layout.addWidget(section_splitter)
-
-			#####################
-			# Add input widgets #
-			#####################
-
-			inputs_side = QFrame()
-			input_layout = QVBoxLayout()
-			inputs_side.setLayout(input_layout)
-			section_splitter.addWidget(inputs_side)
-
-			saw = QWidget()
-
-			# Add US widget
-			addLabelWA(input_layout, _("Ultrasound input"))
-			
-			us_area = QScrollArea()
-			lw = InputConfigUS('input_us', self)
-			#config['banks'][bankIdx].input_cc
-			#lw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-			#lw.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Ignored)
-			#lw.setBackgroundRole(QPalette.Dark)
-			lw.setProperty("parity", "even")
-			lw.setMinimumHeight(20)
-			#input_layout.addWidget(lw)
-			self.input_us = lw
-			#Pre-config banks
+		for i in range(0, MAX_OUTPUTS):
+			#For each config, pre-config banks
 			for bankIdx in range(MAX_BANKS):
-				config['banks'][bankIdx].input_us[0].mode = MODE_OFF
+				config['banks'][bankIdx].output[i].note = i
+
+			lw = OutputConfig('output', i)
+			lw.load_model()
+			#lw.param.setValue(i)
+			if i % 2 == 0:
+				lw.setProperty("parity", "even")	#For stylesheets
+			self.outputs.append(lw)
+			sa_layout.addWidget(lw)
 
 
-			us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-			us_area.setWidgetResizable(True)
-			us_area.setWidget(lw)
-			us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-			input_layout.addWidget(us_area)
+		###############
 
-
-			# Add CC widgets
-
-			addLabelWA(input_layout, _("Input #"))
-
-			sa_layout = QVBoxLayout()
-			sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
-			sa_layout.setSpacing(0)
-			saw.setLayout(sa_layout)
-			saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
-
-			ins_area = QScrollArea()
-			ins_area.setWidgetResizable(True)
-			ins_area.setWidget(saw)
-			self.ins_area = ins_area
-			input_layout.addWidget(ins_area)
-
-			for i in range(0, MAX_INPUTS_CC):
-				#For each config, pre-config banks
-				for bankIdx in range(MAX_BANKS):
-					config['banks'][bankIdx].input_cc[i].param = i
-
-				lw = InputConfigCC('input_cc', i, self)
-				lw.load_model()
-				if i % 2 == 0:
-					lw.setProperty("parity", "even")	#For stylesheets
-				self.inputs.append(lw)
-				self._last_in_values.append(-THRESHOLD_SELECT)
-				sa_layout.addWidget(lw)
-
-			######################
-			# Add output widgets #
-			######################
-
-			outputs_side = QFrame()
-			output_layout = QVBoxLayout()
-			outputs_side.setLayout(output_layout)
-			section_splitter.addWidget(outputs_side)
-
-
-			# Test grid: removed
-			#grid = QGridLayout()
-			#grid.setSpacin#g(0)
-			#gridw = QWidget()
-			#gridw.setLayout(grid)
-			#gridw.setFixedSize(160, 160)
-			## gridw.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-			#for x in range(16):
-			#	for y in range(16):
-			#		gbtn = QPushButton()
-			#		gbtn.setFixedSize(10, 10)
-			#		grid.addWidget(gbtn, x, y)
-			#output_layout.addWidget(gridw)
-
-
-
-			addLabelWA(output_layout, _("Output #"))
-
-			saw = QWidget()
-			sa_layout = QVBoxLayout()
-			#sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
-			sa_layout.setSpacing(0)
-			saw.setLayout(sa_layout)
-			saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
-
-			outs_area = QScrollArea()
-			outs_area.setWidgetResizable(True)
-			outs_area.setWidget(saw)
-			self.outs_area = outs_area
-			output_layout.addWidget(outs_area)
-
-			#################################################
-			# Test all segment
-			#################################################
-			test_all_widget = QWidget()
-			test_all_widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-			test_all_widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-			test_all_layout = QHBoxLayout()
-			#test_all_layout.addStretch()
-			test_all_btn = QPushButton(_("Test all"))
-			test_all_btn.setStyleSheet("QPushButton {font-size: 10pt}");
-			#test_all_btn.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-			#test_all_btn.setFixedWidth(100)
-			test_all_btn.pressed.connect(self.on_test_all_press)
-			test_all_btn.released.connect(self.on_test_all_release)
-			test_all_layout.addWidget(test_all_btn)
-			lbl_test = QLabel(_("with velocity"))
-			lbl_test.setStyleSheet("QLabel {font-size: 10pt}");
-			test_all_layout.addWidget(lbl_test)
-
-			self.test_all_velocity = QSpinBox()
-			self.test_all_velocity.setStyleSheet("QSpinBox {font-size: 10pt}");
-			self.test_all_velocity.setValue(64)
-			self.test_all_velocity.setMinimum(0)
-			self.test_all_velocity.setMaximum(0x7f)
-			test_all_btn.setObjectName("TestAll")
-			#self.test_all_velocity.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-
-			test_all_layout.addWidget(self.test_all_velocity)
-
-			#sa_layout.addLayout(test_all_layout)
-			sa_layout.addWidget(test_all_widget)
-			test_all_widget.setLayout(test_all_layout)
-			#################################################
-
-			for i in range(0, MAX_OUTPUTS):
-				#For each config, pre-config banks
-				for bankIdx in range(MAX_BANKS):
-					config['banks'][bankIdx].output[i].note = i
-
-				lw = OutputConfig('output', i)
-				lw.load_model()
-				#lw.param.setValue(i)
-				if i % 2 == 0:
-					lw.setProperty("parity", "even")	#For stylesheets
-				self.outputs.append(lw)
-				sa_layout.addWidget(lw)
-
-
-			###############
-
-			section_splitter.setSizes([self.width()/2] * 2)
-		# end in/out config
+		section_splitter.setSizes([self.width()/2] * 2)
+		
+		#Default view: inputs
+		self.change_views_inout_tab(0)
+		
+		#end in/out/sensor tab config
+		###############
 
 		self.refresh_in_outs()
 
@@ -1481,7 +1319,7 @@ class Form(QFrame):
 	def on_change_tab_inout(self):
 		if self.current_inout_tab != self.tabs_inout.currentIndex():
 			self.current_inout_tab = self.tabs_inout.currentIndex()
-			print("Current IN/OUT tab: %i"%self.current_inout_tab)
+			# print("Current IN/OUT tab: %i"%self.current_inout_tab)
 			with wait_cursor():
 				self.change_views_inout_tab(self.current_inout_tab)
 
