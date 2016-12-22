@@ -487,31 +487,9 @@ class ConfigWidget(QWidget):
 
     def eventFilter(self, obj, ev):
         global form
-
-        if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        if ev.type() == QEvent.KeyPress:
+            # Tracking of the pressed keys
             
-            # print("Mouse press!")
-            if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
-                form.multiple_select(self)
-            # if self.multiple_edition_mode:
-                print("Update/copy all widgets")
-                print(ev.type())
-                form.multiple_select_copy_values() 
-            else:
-                form.select(self)
-            
-            
-            # self.setFocus()
-            #HACK: Refresh everything just in case
-            # self.window().call_on_param_value_changed_on_inputs()
-            # self.on_param_value_changed()
-
-            # all the widgets with the same values
-            if self.multiple_edition_mode:
-                print("Update/copy all widgets")
-                form.multiple_select_copy_values()
-
-        elif ev.type() == QEvent.KeyPress:
             # print("Key pressed!")
             # print(self.pressedKeys)
 
@@ -530,7 +508,32 @@ class ConfigWidget(QWidget):
             if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys:
                 print("CTRL released")
             form.pressedKeys.remove( ev.key() )
+        
+        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        if ev.type() == QEvent.MouseButtonPress:
+            print("Mouse press!")
+            if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
+                form.multiple_select(self)
+            else:
+                form.select(self)
         # self.setFocus()
+        if ev.type() == QEvent.FocusIn:
+            pass
+            
+            # # if self.multiple_edition_mode:
+            #     print("Update/copy all widgets")
+            #     print(ev.type())
+            #     form.multiple_select_copy_values() 
+            # self.setFocus()
+            #HACK: Refresh everything just in case
+            # self.window().call_on_param_value_changed_on_inputs()
+            # self.on_param_value_changed()
+
+            # # all the widgets with the same values
+            # if self.multiple_edition_mode:
+            #     print("Update/copy all widgets")
+            #     form.multiple_select_copy_values()
+
         return False
 
     def __init__(self, model_name, index, parent=None):
@@ -583,7 +586,16 @@ class ConfigWidget(QWidget):
         stylesheetProp(self, "selection", True)
         self.setStyleSheet(self.styleSheet())
         # self.setFocus()
-
+    
+    def update_grouped_widgets(self, value):
+        """
+            Update all the selected widgets with the same values
+            Multiple selection mode
+        """
+        global form
+        if form and self.multiple_edition_mode:
+            print("Updating %(value)s in all widgets (copying values from reference)")
+            form.multiple_select_copy_values(value)
 
 
 class OutputConfig(ConfigWidget):
@@ -662,6 +674,18 @@ class OutputConfig(ConfigWidget):
         print("Release CH{0} N{1}".format(channel, note))
         midi_send((MIDI_NOTE_OFF | channel, note, 0))
         self.current_test = None
+    
+    def copy_values_from(self, origin, value="all"):
+        print("Updating widget ", self._index)
+        if value=="blink":
+            self.blink.setChecked( origin.blink.isChecked() )
+        elif value=="channel":
+            self.channel.setValue( origin.channel.value() )
+        elif value=="min":
+            self.min.setValue( origin.min.value() )
+        elif value=="max":
+            self.max.setValue( origin.max.value() )
+
 
 def stylesheetProp(widget, name, value):
     widget.setProperty(name, "true" if value is True else "false" if value is False else value)
@@ -718,6 +742,8 @@ class InputConfig(ConfigWidget):
         self.enable_monitor = self.addwl(_("Monitor"), QCheckBox())
         self.enable_monitor.setChecked(True)
 
+        self.enable_monitor.stateChanged.connect(lambda: self.update_grouped_widgets("monitor"))
+        
         modeCB = QComboBox()
         modeCB.setStyleSheet("QComboBox { font-size: 10pt }")
         self.mode = self.addwl(_("Mode"), modeCB)
@@ -725,11 +751,13 @@ class InputConfig(ConfigWidget):
             self.mode.addItem(MODE_LABELS[labelIdx])
         self.mode.setCurrentIndex(MODE_NOTE) #Default value
         self.mode.currentIndexChanged.connect(self.on_param_value_changed)
-
+        self.mode.currentIndexChanged.connect(lambda: self.update_grouped_widgets("mode"))
+        
         paramSB = QSpinBox()
         paramSB.setStyleSheet("QSpinBox { font-size: 10pt }")
         self.param =self.addwl(_("Param"), paramSB);
         self.param.valueChanged.connect(self.on_param_value_changed)
+        #WARNING: param does not update grouped widgets values
         #setWidgetBackground(self.param, Qt.black)
         #self.param.setToolTip(_("El rango para Notas y CC es de 0 a 127"))
         self.param.setRange(0, pow(2, 14)-1)
@@ -738,28 +766,34 @@ class InputConfig(ConfigWidget):
         channelSB.setStyleSheet("QSpinBox { font-size: 10pt }")
         self.channel = self.addwl(_("Channel"), channelSB)
         self.channel.setRange(0, 15)
+        self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel"))
         
         minSB = QSpinBoxHack()
         minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
         self.min = self.addwl(_("Min."), minSB)
         self.min.setRange(0, 127)
+        self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min"))
         maxSB = QSpinBoxHack()
         maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
         self.max = self.addwl(_("Max."), maxSB)
         self.max.setRange(0, 127)
         #self.max.valueChanged.connect(self.on_max_value_changed)
+        self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max"))
 
         self.max.setValue(127)
 
         #TODO: On any change: save model? <- NO
 
-    def copy_values_from(self, origin):
-        self.channel.setValue(origin.channel.value())
-        self.mode.setCurrentIndex(origin.mode.currentIndex())
-        self.param.setValue(origin.param.value())
-        self.min.setValue(origin.min.value())
-        self.max.setValue(origin.max.value())
-    
+    def copy_values_from(self, origin, value="all"):
+        if value=="all":
+            self.channel.setValue( origin.channel.value() )
+            self.mode.setCurrentIndex( origin.mode.currentIndex() )
+            # self.param.setValue( origin.param.value() )
+            self.min.setValue( origin.min.value() )
+            self.max.setValue( origin.max.value() )
+        else:
+            raise Exception("Not yet implemented!")
+
     def show_feedback(self):
         #if self.enable_monitor.isChecked():	#Controlado antes de llamar esta funcion
         super().show_feedback()
@@ -826,13 +860,17 @@ class InputConfig(ConfigWidget):
         self.min.setIncrement(127 if mode == MODE_NRPN else 1)
         self.max.setIncrement(127 if mode == MODE_NRPN else 1)
 
-
         stylesheetProp(self.param, "alert", alertParam)
-
 
     def show_value(self, value):
         self.monitor.setText("({0})".format(value))
 
+    def update_grouped_widgets(self, value):
+        # all the selected widgets with the same values
+        global form
+        if form and self.multiple_edition_mode:
+            print("Updating %(value)s in all widgets (copying values from reference)")
+            form.multiple_select_copy_values(value)
 
 class InputConfigCC(InputConfig):
     def __init__(self, model_name, index, parent=None):
@@ -851,6 +889,9 @@ class InputConfigCC(InputConfig):
         self.addwl(_("A/D"), ad, 4)		# Changes for regular input (pot, slider) and ultrasound config
         self.addwl(_("Press"), pt, 6)		# Changes for regular input (pot, slider) and ultrasound config
 
+        self.analog.currentIndexChanged.connect(lambda: self.update_grouped_widgets("a/d"))
+        self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
+        
         #After super __init__ is called
         ad.currentIndexChanged.connect(self.on_param_value_changed)
         ad.setCurrentIndex(1)
@@ -874,17 +915,31 @@ class InputConfigCC(InputConfig):
         self.analog.setEnabled(en)
         self.toggle.setEnabled(self.analog.currentIndex() != 0)		# 0 = Analog
         #self.toggle.setEnabled(en)
+        #WARNING: param does not update grouped widgets values
 
-    def copy_values_from(self, origin):
+    def copy_values_from(self, origin, value="all"):
         print("Updating widget ", self._index)
-        super().copy_values_from(origin)
-        self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
-        self.analog.setCurrentIndex( origin.analog.currentIndex() )
-        self.toggle.setCurrentIndex( origin.toggle.currentIndex() )
-        # TODO/FIXME
-        # self.ad = origin.ad
-        # self.pot = origin.pot
-        self.on_param_value_changed()
+        if value=="all":
+            super().copy_values_from(origin)
+            self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
+            self.analog.setCurrentIndex( origin.analog.currentIndex() ) # A/D
+            self.toggle.setCurrentIndex( origin.toggle.currentIndex() )
+            # self.pot = origin.pot
+            # self.on_param_value_changed()
+        elif value=="monitor":
+            self.enable_monitor.setChecked( origin.enable_monitor.isChecked() )
+        elif value=="a/d":
+            self.analog.setCurrentIndex( origin.analog.currentIndex() )
+        elif value=="press": # action
+            self.toggle.setCurrentIndex( origin.toggle.currentIndex() )
+        elif value=="mode":
+            self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
+        elif value=="channel":
+            self.channel.setValue( origin.channel.value() )
+        elif value=="min":
+            self.min.setValue( origin.min.value() )
+        elif value=="max":
+            self.max.setValue( origin.max.value() )
 
 class InputConfigUS(InputConfig):
     def __init__(self, model_name, parent=None):
@@ -1412,7 +1467,6 @@ class Form(QFrame):
         while self.tabs.count() > nbanks:
             self.tabs.removeTab(nbanks)
 
-
     def refresh_in_outs(self):
         gd = config['global'] # type: GlobalData
         for i, w in enumerate(self.inputs):
@@ -1422,8 +1476,6 @@ class Form(QFrame):
         for i, w in enumerate(self.outputs):
             w.setVisible(i < gd.num_outputs)
             w.parent().adjustSize()
-
-
 
     def save_model(self):
         config['file']['desc'] = self.description.text()
@@ -1603,13 +1655,12 @@ class Form(QFrame):
         self.prev_selected = widget
         self.selected_list.add( widget )
 
-    def multiple_select_copy_values(self):
-        # if widget in self.selected_list:
-        #     widget.copy_value()
-        origin = self.prev_selected
+    def multiple_select_copy_values(self, value="all"):
+        origin = self.prev_selected #last selected
+
         for i_widget in self.selected_list:
             if i_widget != origin:
-               i_widget.copy_values_from(origin)
+                i_widget.copy_values_from(origin, value)
 
     def multiple_select(self, widget):
         self.prev_selected = widget 
@@ -1617,11 +1668,11 @@ class Form(QFrame):
         if widget in self.selected_list:
             widget.unselect()
             self.selected_list.remove( widget )
-            print("Widget removed to multiple select")
+            print("Widget REMOVED from multiple selected group")
         else:
             widget.select()
             self.selected_list.add( widget )
-            print("Widget added to multiple select")
+            print("Widget ADDED from multiple selected group")
 
     def on_debug_test(self):
         target = self.inputs[16]
@@ -1630,7 +1681,6 @@ class Form(QFrame):
         self.ins_area.ensureWidgetVisible(target)
         self.ins_area.horizontalScrollBar().setValue(0)
         self.select(self.inputs[15])
-        pass
 
 print("Starting App")
 #if __name'' == '''main''':
