@@ -536,6 +536,9 @@ class ConfigWidget(QWidget):
 
         return False
 
+    def copy_values_from(self, origin, value="all"):   
+        raise Exception("Not implemented. Must be implemented in a subclass")
+             
     def __init__(self, model_name, index, parent=None):
         super(ConfigWidget, self).__init__(parent)
 
@@ -629,19 +632,23 @@ class OutputConfig(ConfigWidget):
         chanSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.channel = self.addwl(_("Channel"), chanSB)
         self.channel.setRange(0, 15)
-
+        self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel") )
+        
         minSB = QSpinBox()
         minSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.min = self.addwl(_("Min."), minSB)
         self.min.setRange(0, 127)
+        self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min") )
 
         maxSB = QSpinBox()
         maxSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.max = self.addwl(_("Max."), maxSB)
         self.max.setRange(0, 127)
         self.max.setValue(127)
+        self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max") )
 
         self.blink = self.addwl(_("Intermitent"), QCheckBox())
+        self.blink.stateChanged.connect(lambda: self.update_grouped_widgets("blink"))
 
     def load_model(self):
         model = self.model()
@@ -676,7 +683,7 @@ class OutputConfig(ConfigWidget):
         self.current_test = None
     
     def copy_values_from(self, origin, value="all"):
-        print("Updating widget ", self._index)
+        print("Updating output widget ", self._index)
         if value=="blink":
             self.blink.setChecked( origin.blink.isChecked() )
         elif value=="channel":
@@ -783,16 +790,6 @@ class InputConfig(ConfigWidget):
         self.max.setValue(127)
 
         #TODO: On any change: save model? <- NO
-
-    def copy_values_from(self, origin, value="all"):
-        if value=="all":
-            self.channel.setValue( origin.channel.value() )
-            self.mode.setCurrentIndex( origin.mode.currentIndex() )
-            # self.param.setValue( origin.param.value() )
-            self.min.setValue( origin.min.value() )
-            self.max.setValue( origin.max.value() )
-        else:
-            raise Exception("Not yet implemented!")
 
     def show_feedback(self):
         #if self.enable_monitor.isChecked():	#Controlado antes de llamar esta funcion
@@ -918,7 +915,7 @@ class InputConfigCC(InputConfig):
         #WARNING: param does not update grouped widgets values
 
     def copy_values_from(self, origin, value="all"):
-        print("Updating widget ", self._index)
+        print("Updating input widget ", self._index)
         if value=="all":
             super().copy_values_from(origin)
             self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
