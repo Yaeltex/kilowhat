@@ -488,52 +488,53 @@ class ConfigWidget(QWidget):
 
     def keyPressEvent(self, event):
         print( "KeyPressEvent: ", event.key() )
-        form.pressedKeys.add( ev.key() )
+        form.pressedKeys.add( event.key() )
         super().keyPressEvent(event)
 
     def KeyReleaseEvent(self, event):
         print("Key released!")
-        form.pressedKeys.remove( ev.key() )
+        form.pressedKeys.remove( event.key() )
         super().keyReleaseEvent(event)
 
     def eventFilter(self, obj, ev):
         global form
-        if ev.type() == QEvent.KeyPress:
-            # Tracking of the pressed keys
+        # if ev.type() == QEvent.KeyPress:
+        #     # Tracking of the pressed keys
             
-            # print("Key pressed!")
-            # print(self.pressedKeys)
+        #     # print("Key pressed!")
+        #     # print(self.pressedKeys)
 
-            form.pressedKeys.add( ev.key() )
+        #     form.pressedKeys.add( ev.key() )
 
-            print( "Key: ", ev.key() )
+        #     print( "Key: ", ev.key() )
 
-            if(ev.modifiers() == Qt.ControlModifier):
-                print("modfier pressed!")
+        #     if(ev.modifiers() == Qt.ControlModifier):
+        #         print("modfier pressed!")
 
-            if ev.key()==16777250:
-                print("16777250 pressed!")
+        #     if ev.key()==16777250:
+        #         print("16777250 pressed!")
             
-            # if Qt.Key_W in self.pressedKeys and Qt.Key_D in self.pressedKeys:
-                # print("D and W pressed!")
-            if ev.key() == Qt.CTRL or ev.key()==16777249:
-                print("CTRL pressed!")
+        #     # if Qt.Key_W in self.pressedKeys and Qt.Key_D in self.pressedKeys:
+        #         # print("D and W pressed!")
+        #     if ev.key() == Qt.CTRL or ev.key()==16777249:
+        #         print("CTRL pressed!")
 
-            if ev.key() == Qt.SHIFT or ev.key()==16777248:
-                print("SHIFT pressed!")
+        #     if ev.key() == Qt.SHIFT or ev.key()==16777248:
+        #         print("SHIFT pressed!")
 
-            # return True
-        elif ev.type() == QEvent.KeyRelease:
-            print("Key released!")
-            if ev.key() == Qt.CTRL or 16777250 in form.pressedKeys: # @ mac
-                print("CTRL released")
-            if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys: # @ linux
-                print("CTRL released")
-            form.pressedKeys.remove( ev.key() )
+        #     # return True
+        # elif ev.type() == QEvent.KeyRelease:
+        #     print("Key released!")
+        #     if ev.key() == Qt.CTRL or 16777250 in form.pressedKeys: # @ mac
+        #         print("CTRL released")
+        #     if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys: # @ linux
+        #         print("CTRL released")
+        #     form.pressedKeys.remove( ev.key() )
             
-            # return True
+        #     # return True
         
-        elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
         # if ev.type() == QEvent.MouseButtonPress:
             print("Mouse press!")
             CTRL_CUSTOM_CODE = 16777249 # CTRL code @ windows/linux:  16777249
@@ -630,7 +631,7 @@ class ConfigWidget(QWidget):
         """
         global form
         if form and self.multiple_edition_mode:
-            print("Updating %(value)s in all widgets (copying values from reference)")
+            print("Updating %s in all widgets (copying values from reference)"%value)
             form.multiple_select_copy_values(value)
 
 
@@ -899,7 +900,7 @@ class InputConfig(ConfigWidget):
         # all the selected widgets with the same values
         global form
         if form and self.multiple_edition_mode:
-            print("Updating %(value)s in all widgets (copying values from reference)")
+            print("Updating %s in all widgets (copying values from reference)"%value)
             form.multiple_select_copy_values(value)
 
 class InputConfigCC(InputConfig):
