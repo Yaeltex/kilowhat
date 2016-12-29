@@ -1336,7 +1336,8 @@ class Form(QFrame):
 
 
 
-        self.installEventFilter(lw) #TEST code
+        # if platform.system() == "Darwin":
+        #     self.installEventFilter(lw) #TEST code
 
 
         ######################
@@ -1760,7 +1761,8 @@ print("Creating form")
 form = Form()
 #form.resize(1024, 600)
 print("Form created")
-app.installEventFilter(form) #TEST code
+# if platform.system() == "Darwin":
+#     app.installEventFilter(form) #TEST code
 
 print("fix combox")
 #Workaround for very small combo boxes
