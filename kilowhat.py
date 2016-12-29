@@ -36,7 +36,7 @@ import memory
 
 # General
 TITLE = "Kilowhat"
-VERSION = "v1.06"
+VERSION = "v1.07"
 
 # User interface
 COLOR_TIMEOUT = 500						# ms. Background coloring timeout
@@ -483,7 +483,12 @@ class ConfigWidget(QWidget):
         lbl = QLabel(label, self)
         lbl.setStyleSheet("QLabel {font-size: 10pt}")
         self.add(lbl, idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
+        w.installEventFilter(self)
         return w
+
+    def keyPressEvent(self, event):
+        print( "KeyPressEvent: ", event.key() )
+        super.keyPressEvent(event)
 
     def eventFilter(self, obj, ev):
         global form
@@ -495,30 +500,59 @@ class ConfigWidget(QWidget):
 
             form.pressedKeys.add( ev.key() )
 
-            # print( "Key: ", ev.key() )
+            print( "Key: ", ev.key() )
 
+            if(ev.modifiers() == Qt.ControlModifier):
+                print("modfier pressed!")
+
+            if ev.key()==16777250:
+                print("16777250 pressed!")
+            
             # if Qt.Key_W in self.pressedKeys and Qt.Key_D in self.pressedKeys:
                 # print("D and W pressed!")
             if ev.key() == Qt.CTRL or ev.key()==16777249:
                 print("CTRL pressed!")
-            # if Qt.SHIFT in self.pressedKeys or 16777248 in self.pressedKeys:
-            #     print("SHIFT pressed!")
+
+            if ev.key() == Qt.SHIFT or ev.key()==16777248:
+                print("SHIFT pressed!")
+
+            # return True
         elif ev.type() == QEvent.KeyRelease:
             print("Key released!")
-            if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys:
+            if ev.key() == Qt.CTRL or 16777250 in form.pressedKeys: # @ mac
+                print("CTRL released")
+            if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys: # @ linux
                 print("CTRL released")
             form.pressedKeys.remove( ev.key() )
+            
+            # return True
         
-        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
-        if ev.type() == QEvent.MouseButtonPress:
+        elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        # if ev.type() == QEvent.MouseButtonPress:
             print("Mouse press!")
-            if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
-                form.multiple_select(self)
+            if platform.system() == "Windows":
+                #TODO: check code
+                if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
+                    form.multiple_select(self)
+                else:
+                    form.select(self)
+            elif platform.system() == "Darwin":
+                # CTRL code @ MAC: 16777250
+                if Qt.CTRL in form.pressedKeys or 16777250 in form.pressedKeys:
+                    form.multiple_select(self)
+                else:
+                    form.select(self)
             else:
-                form.select(self)
+                # CTRL code @ linux:  16777249
+                if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
+                    form.multiple_select(self)
+                else:
+                    form.select(self)
+            # return True
         # self.setFocus()
-        if ev.type() == QEvent.FocusIn:
-            pass
+        # if ev.type() == QEvent.FocusIn:
+        #     print("Foucs in!")
+        #     pass
             
             # # if self.multiple_edition_mode:
             #     print("Update/copy all widgets")
@@ -534,6 +568,7 @@ class ConfigWidget(QWidget):
             #     print("Update/copy all widgets")
             #     form.multiple_select_copy_values()
 
+        # return True
         return False
 
     def copy_values_from(self, origin, value="all"):   
@@ -567,6 +602,8 @@ class ConfigWidget(QWidget):
         self._color_timer = timer
 
         self.setAutoFillBackground(True)
+
+        # self.installEventFilter(self)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
@@ -1297,6 +1334,11 @@ class Form(QFrame):
             self._last_in_values.append(-THRESHOLD_SELECT)
             sa_layout.addWidget(lw)
 
+
+
+        self.installEventFilter(lw) #TEST code
+
+
         ######################
         # Add output widgets #
         ######################
@@ -1718,6 +1760,7 @@ print("Creating form")
 form = Form()
 #form.resize(1024, 600)
 print("Form created")
+app.installEventFilter(form) #TEST code
 
 print("fix combox")
 #Workaround for very small combo boxes
