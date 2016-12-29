@@ -488,7 +488,13 @@ class ConfigWidget(QWidget):
 
     def keyPressEvent(self, event):
         print( "KeyPressEvent: ", event.key() )
+        form.pressedKeys.add( ev.key() )
         super().keyPressEvent(event)
+
+    def KeyReleaseEvent(self, event):
+        print("Key released!")
+        form.pressedKeys.remove( ev.key() )
+        super().keyReleaseEvent(event)
 
     def eventFilter(self, obj, ev):
         global form
@@ -530,24 +536,14 @@ class ConfigWidget(QWidget):
         elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
         # if ev.type() == QEvent.MouseButtonPress:
             print("Mouse press!")
-            if platform.system() == "Windows":
-                #TODO: check code
-                if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
-                    form.multiple_select(self)
-                else:
-                    form.select(self)
-            elif platform.system() == "Darwin":
-                # CTRL code @ MAC: 16777250
-                if Qt.CTRL in form.pressedKeys or 16777250 in form.pressedKeys:
-                    form.multiple_select(self)
-                else:
-                    form.select(self)
+            CTRL_CUSTOM_CODE = 16777249 # CTRL code @ windows/linux:  16777249
+            if platform.system() == "Darwin": # CTRL code @ MAC: 16777250
+                CTRL_CUSTOM_CODE = 16777250
+                
+            if Qt.CTRL in form.pressedKeys or CTRL_CUSTOM_CODE in form.pressedKeys:
+                form.multiple_select(self)
             else:
-                # CTRL code @ linux:  16777249
-                if Qt.CTRL in form.pressedKeys or 16777249 in form.pressedKeys:
-                    form.multiple_select(self)
-                else:
-                    form.select(self)
+                form.select(self)
             # return True
         # self.setFocus()
         # if ev.type() == QEvent.FocusIn:
