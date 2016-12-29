@@ -488,7 +488,7 @@ class ConfigWidget(QWidget):
 
     def keyPressEvent(self, event):
         print( "KeyPressEvent: ", event.key() )
-        super.keyPressEvent(event)
+        super().keyPressEvent(event)
 
     def eventFilter(self, obj, ev):
         global form
