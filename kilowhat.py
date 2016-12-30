@@ -290,6 +290,7 @@ class MemoryWidget(QWidget):
 		print("MemoryWidget() reset")
 		self.on_param_value_changed()
 		self.reopen_ports()
+		#midiin.ignoreTypes(False, True, True)
 
 	def reload_midi_ports(self):
 		global form
