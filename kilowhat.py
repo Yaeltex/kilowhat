@@ -103,7 +103,7 @@ else:
 midiout = rtmidi.MidiOut(midi_api)
 midiin = rtmidi.MidiIn(midi_api)
 
-midiin.ignore_types(False, True, True)
+midiin.ignore_types(False, True, True)		# Sysex enabled
 
  # 0x80     Note Off
  #   0x90     Note On
