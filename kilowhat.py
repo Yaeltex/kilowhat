@@ -103,6 +103,8 @@ else:
 midiout = rtmidi.MidiOut(midi_api)
 midiin = rtmidi.MidiIn(midi_api)
 
+midiin.ignore_types(False, True, True)
+
  # 0x80     Note Off
  #   0x90     Note On
  #   0xA0     Aftertouch
@@ -1653,9 +1655,11 @@ class Form(QFrame):
 		#TODO: make packets static once
 		if cmd == sysex.make_sysex_packet(sysex.CONFIG_ACK, []):
 			self.txt_log.append(_("ACK Received. Kilomux connected"))
+			return
 
 		if cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
 			self.txt_log.append(_("Dump OK"))
+			return
 
 		type_chn, param, value = cmd
 		cmd_type = type_chn & 0xf0
