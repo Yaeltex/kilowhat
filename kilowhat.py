@@ -36,7 +36,7 @@ import memory
 
 # General
 TITLE = "Kilowhat"
-VERSION = "v1.06"
+VERSION = "v1.07"
 
 # User interface
 COLOR_TIMEOUT = 500						# ms. Background coloring timeout
@@ -571,7 +571,7 @@ class OutputConfig(ConfigWidget):
 		chanSB = QSpinBox()
 		chanSB.setStyleSheet("QLabel { font-size: 10pt }")
 		self.channel = self.addwl(_("Channel"), chanSB)
-		self.channel.setRange(0, 15)
+		self.channel.setRange(1, 16)
 
 		minSB = QSpinBox()
 		minSB.setStyleSheet("QLabel { font-size: 10pt }")
