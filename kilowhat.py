@@ -18,6 +18,7 @@ if not DEBUG:
     print("DEBUG: "+ str(DEBUG))
     print("-----------------------------------")
 
+from PySide import QtGui, QtCore
 from PySide.QtCore import *
 from PySide.QtGui import *
 import rtmidi
@@ -165,7 +166,7 @@ def grid_create(grid:QGridLayout, stuff):
         for elem in row:
             if isinstance(elem, QWidget):
                 grid.addWidget(elem)
-
+			
 class GridHelper:
     _x = 0
     _y = 0
@@ -455,7 +456,6 @@ class PaintWidget(QWidget):
 
 class ConfigWidget(QWidget):
     alert_txt = None
-    multiple_edition_mode = False
 
     def setAlert(self, txt_or_none):
         self.alert_txt = txt_or_none
@@ -498,6 +498,23 @@ class ConfigWidget(QWidget):
 
     def eventFilter(self, obj, ev):
         global form
+#######################       
+        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
+        # if ev.type() == QEvent.MouseButtonPress:
+            print("Mouse press!")
+            modifiers = QtGui.QApplication.keyboardModifiers()
+            if modifiers == QtCore.Qt.ShiftModifier:
+                form.txt_log.append("SHFT")
+                form.multiple_select_shft(self)
+            elif modifiers == QtCore.Qt.ControlModifier:
+                form.txt_log.append("CTRL")
+                form.multiple_select_ctrl(self)
+            else:
+                form.select(self)
+            return
+#######################        
+             
         # if ev.type() == QEvent.KeyPress:
         #     # Tracking of the pressed keys
             
@@ -532,20 +549,17 @@ class ConfigWidget(QWidget):
         #     form.pressedKeys.remove( ev.key() )
             
         #     # return True
-        
-        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
-        if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
-        # if ev.type() == QEvent.MouseButtonPress:
-            print("Mouse press!")
-            CTRL_CUSTOM_CODE = 16777249 # CTRL code @ windows/linux:  16777249
-            if platform.system() == "Darwin": # CTRL code @ MAC: 16777250
-                CTRL_CUSTOM_CODE = 16777250
+#######################
+            #CTRL_CUSTOM_CODE = 16777249 # CTRL code @ windows/linux:  16777249
+            #if platform.system() == "Darwin": # CTRL code @ MAC: 16777250
+            #    CTRL_CUSTOM_CODE = 16777250
                 
-            if Qt.CTRL in form.pressedKeys or CTRL_CUSTOM_CODE in form.pressedKeys:
-                form.multiple_select(self)
-            else:
-                form.select(self)
+            #if Qt.CTRL in form.pressedKeys or CTRL_CUSTOM_CODE in form.pressedKeys:
+            #    form.multiple_select_ctrl(self)
+            #else:
+            #    form.select(self)
             # return True
+#######################      
         # self.setFocus()
         # if ev.type() == QEvent.FocusIn:
         #     print("Foucs in!")
@@ -665,7 +679,7 @@ class OutputConfig(ConfigWidget):
         chanSB = QSpinBox()
         chanSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.channel = self.addwl(_("Channel"), chanSB)
-        self.channel.setRange(0, 15)
+        self.channel.setRange(1, 16)
         self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel") )
         
         minSB = QSpinBox()
@@ -1021,7 +1035,9 @@ class Form(QFrame):
     _last_in_values = []
     
     pressedKeys = set()
-
+    
+    multiple_edition_mode = False
+    
     testing = None
     def on_test_all_press(self):
         to_test = []
@@ -1699,8 +1715,20 @@ class Form(QFrame):
             if i_widget != origin:
                 i_widget.copy_values_from(origin, value)
 
-    def multiple_select(self, widget):
-        self.prev_selected = widget 
+    def multiple_select_ctrl(self, widget):
+        self.prev_selected = widget
+        widget.multiple_edition_mode = True
+        if widget in self.selected_list:
+            widget.unselect()
+            self.selected_list.remove( widget )
+            print("Widget REMOVED from multiple selected group")
+        else:
+            widget.select()
+            self.selected_list.add( widget )
+            print("Widget ADDED from multiple selected group")
+
+    def multiple_select_shft(self, widget):
+        self.prev_selected = widget
         widget.multiple_edition_mode = True
         if widget in self.selected_list:
             widget.unselect()
@@ -1761,7 +1789,7 @@ print("Form created")
 # if platform.system() == "Darwin":
 #     app.installEventFilter(form) #TEST code
 
-print("fix combox")
+print("fix combos")
 #Workaround for very small combo boxes
 def fix_combos(x):
     for w in x.children():
