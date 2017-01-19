@@ -18,7 +18,6 @@ if not DEBUG:
     print("DEBUG: "+ str(DEBUG))
     print("-----------------------------------")
 
-from PySide import QtGui, QtCore
 from PySide.QtCore import *
 from PySide.QtGui import *
 import rtmidi
@@ -503,11 +502,11 @@ class ConfigWidget(QWidget):
         if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
         # if ev.type() == QEvent.MouseButtonPress:
             print("Mouse press!")
-            modifiers = QtGui.QApplication.keyboardModifiers()
-            if modifiers == QtCore.Qt.ShiftModifier:
+            modifiers = QApplication.keyboardModifiers()
+            if modifiers == Qt.ShiftModifier:
                 form.txt_log.append("SHFT")
                 form.multiple_select_shft(self)
-            elif modifiers == QtCore.Qt.ControlModifier:
+            elif modifiers == Qt.ControlModifier:
                 form.txt_log.append("CTRL")
                 form.multiple_select_ctrl(self)
             else:
