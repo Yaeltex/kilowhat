@@ -455,6 +455,7 @@ class PaintWidget(QWidget):
 
 class ConfigWidget(QWidget):
     alert_txt = None
+    multiple_edition_mode = False
 
     def setAlert(self, txt_or_none):
         self.alert_txt = txt_or_none
@@ -473,7 +474,8 @@ class ConfigWidget(QWidget):
     def add(self, w, idx = -1):
         #self.layout().addWidget(w)
         self.h_layout.insertWidget(idx, w)
-        w.installEventFilter(self)
+        if isinstance(self, InputConfigUS):
+            w.installEventFilter(self)
         return w
 
     def addwl(self, label, w, idx = -1):
@@ -482,103 +484,24 @@ class ConfigWidget(QWidget):
         lbl = QLabel(label, self)
         lbl.setStyleSheet("QLabel {font-size: 10pt}")
         self.add(lbl, idx).setAlignment(Qt.AlignRight | Qt.AlignCenter)
-        w.installEventFilter(self)
+        if isinstance(self, InputConfigUS):
+            w.installEventFilter(self)
         return w
-
-    def keyPressEvent(self, event):
-        print( "KeyPressEvent: ", event.key() )
-        form.pressedKeys.add( event.key() )
-        super().keyPressEvent(event)
-
-    def KeyReleaseEvent(self, event):
-        print("Key released!")
-        form.pressedKeys.remove( event.key() )
-        super().keyReleaseEvent(event)
 
     def eventFilter(self, obj, ev):
         global form
-#######################       
-        # elif ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
         if ev.type() == QEvent.MouseButtonPress or ev.type() == QEvent.FocusIn:
-        # if ev.type() == QEvent.MouseButtonPress:
-            print("Mouse press!")
             modifiers = QApplication.keyboardModifiers()
             if modifiers == Qt.ShiftModifier:
-                form.txt_log.append("SHFT")
+                # form.txt_log.append("SHFT")
+                form.multiple_edition_mode = True
                 form.multiple_select_shft(self)
             elif modifiers == Qt.ControlModifier:
-                form.txt_log.append("CTRL")
+                # form.txt_log.append("CTRL")
+                form.multiple_edition_mode = True
                 form.multiple_select_ctrl(self)
             else:
                 form.select(self)
-            return
-#######################        
-             
-        # if ev.type() == QEvent.KeyPress:
-        #     # Tracking of the pressed keys
-            
-        #     # print("Key pressed!")
-        #     # print(self.pressedKeys)
-
-        #     form.pressedKeys.add( ev.key() )
-
-        #     print( "Key: ", ev.key() )
-
-        #     if(ev.modifiers() == Qt.ControlModifier):
-        #         print("modfier pressed!")
-
-        #     if ev.key()==16777250:
-        #         print("16777250 pressed!")
-            
-        #     # if Qt.Key_W in self.pressedKeys and Qt.Key_D in self.pressedKeys:
-        #         # print("D and W pressed!")
-        #     if ev.key() == Qt.CTRL or ev.key()==16777249:
-        #         print("CTRL pressed!")
-
-        #     if ev.key() == Qt.SHIFT or ev.key()==16777248:
-        #         print("SHIFT pressed!")
-
-        #     # return True
-        # elif ev.type() == QEvent.KeyRelease:
-        #     print("Key released!")
-        #     if ev.key() == Qt.CTRL or 16777250 in form.pressedKeys: # @ mac
-        #         print("CTRL released")
-        #     if ev.key() == Qt.CTRL or 16777249 in form.pressedKeys: # @ linux
-        #         print("CTRL released")
-        #     form.pressedKeys.remove( ev.key() )
-            
-        #     # return True
-#######################
-            #CTRL_CUSTOM_CODE = 16777249 # CTRL code @ windows/linux:  16777249
-            #if platform.system() == "Darwin": # CTRL code @ MAC: 16777250
-            #    CTRL_CUSTOM_CODE = 16777250
-                
-            #if Qt.CTRL in form.pressedKeys or CTRL_CUSTOM_CODE in form.pressedKeys:
-            #    form.multiple_select_ctrl(self)
-            #else:
-            #    form.select(self)
-            # return True
-#######################      
-        # self.setFocus()
-        # if ev.type() == QEvent.FocusIn:
-        #     print("Foucs in!")
-        #     pass
-            
-            # # if self.multiple_edition_mode:
-            #     print("Update/copy all widgets")
-            #     print(ev.type())
-            #     form.multiple_select_copy_values() 
-            # self.setFocus()
-            #HACK: Refresh everything just in case
-            # self.window().call_on_param_value_changed_on_inputs()
-            # self.on_param_value_changed()
-
-            # # all the widgets with the same values
-            # if self.multiple_edition_mode:
-            #     print("Update/copy all widgets")
-            #     form.multiple_select_copy_values()
-
-        # return True
         return False
 
     def copy_values_from(self, origin, value="all"):   
@@ -590,7 +513,6 @@ class ConfigWidget(QWidget):
         self.bank = 0
         self._index = index
         self._model_name = model_name
-
 
         v_layout = QVBoxLayout()
 
@@ -612,8 +534,6 @@ class ConfigWidget(QWidget):
         self._color_timer = timer
 
         self.setAutoFillBackground(True)
-
-        # self.installEventFilter(self)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
@@ -643,10 +563,9 @@ class ConfigWidget(QWidget):
             Multiple selection mode
         """
         global form
-        if form and self.multiple_edition_mode:
-            print("Updating %s in all widgets (copying values from reference)"%value)
-            form.multiple_select_copy_values(value)
-
+        if form and form.multiple_edition_mode:
+            # form.txt_log.append("Updating * %s * in all widgets (copying values)"%value)
+            form.multiple_select_copy_values(self, value)
 
 class OutputConfig(ConfigWidget):
 
@@ -658,6 +577,8 @@ class OutputConfig(ConfigWidget):
         number = self.add(QLabel(str(index)))
         number.setStyleSheet("QLabel { font-size: 12pt }")
 
+        number.installEventFilter(self)
+        
         self.test = self.add(QPushButton(_("Test")))
         self.test.setStyleSheet("QPushButton { font-size: 10pt }")
         self.test.setFixedWidth(70)
@@ -665,6 +586,8 @@ class OutputConfig(ConfigWidget):
         self.test.released.connect(self.on_test_release)
         #self.monitor = add(QLabel())
         #self.monitor.setFixedWidth(60)
+
+        self.test.installEventFilter(self)
 
         #self.da = addwl(_("D/A"), QCheckBox())
         #self.mode = addwl(_("Mode"), QComboBox())
@@ -730,7 +653,7 @@ class OutputConfig(ConfigWidget):
         self.current_test = None
     
     def copy_values_from(self, origin, value="all"):
-        print("Updating output widget ", self._index)
+        # print("Updating output widget ", self._index)
         if value=="blink":
             self.blink.setChecked( origin.blink.isChecked() )
         elif value=="channel":
@@ -785,9 +708,12 @@ class InputConfig(ConfigWidget):
     def __init__(self, model_name, index, parent=None):
         super(InputConfig, self).__init__(model_name, index, parent)
 
+        self._index = index
+        
         self.number = self.add(QLabel(str(index)))
         self.number.setStyleSheet("QLabel { font-size: 12pt }")
-
+        self.number.installEventFilter(self)
+        
         self.monitor = self.add(QLabel())
         self.monitor.setStyleSheet("QLabel { font-size: 10pt }")
         self.monitor.setFixedWidth(100)
@@ -815,7 +741,8 @@ class InputConfig(ConfigWidget):
         #setWidgetBackground(self.param, Qt.black)
         #self.param.setToolTip(_("El rango para Notas y CC es de 0 a 127"))
         self.param.setRange(0, pow(2, 14)-1)
-        
+        self.param.installEventFilter(self)
+
         channelSB = QSpinBox()
         channelSB.setStyleSheet("QSpinBox { font-size: 10pt }")
         self.channel = self.addwl(_("Channel"), channelSB)
@@ -909,12 +836,6 @@ class InputConfig(ConfigWidget):
     def show_value(self, value):
         self.monitor.setText("({0})".format(value))
 
-    def update_grouped_widgets(self, value):
-        # all the selected widgets with the same values
-        global form
-        if form and self.multiple_edition_mode:
-            print("Updating %s in all widgets (copying values from reference)"%value)
-            form.multiple_select_copy_values(value)
 
 class InputConfigCC(InputConfig):
     def __init__(self, model_name, index, parent=None):
@@ -1036,7 +957,7 @@ class Form(QFrame):
     pressedKeys = set()
     
     multiple_edition_mode = False
-    
+
     testing = None
     def on_test_all_press(self):
         to_test = []
@@ -1347,9 +1268,6 @@ class Form(QFrame):
             sa_layout.addWidget(lw)
 
 
-
-        # if platform.system() == "Darwin":
-        #     self.installEventFilter(lw) #TEST code
 
 
         ######################
@@ -1694,8 +1612,10 @@ class Form(QFrame):
 
     prev_selected = None
     def select(self, widget):
-        print("Widget simple select! (from scratch)")
-        #on new selection, first clean possibly multiple old selection
+        """ 
+            Widget simple select (from scratch)
+            On a new selection, first clean possibly multiple old selection
+        """
         widget.multiple_edition_mode = False 
         for i_widget in self.selected_list:
             i_widget.unselect()
@@ -1707,36 +1627,50 @@ class Form(QFrame):
         self.prev_selected = widget
         self.selected_list.add( widget )
 
-    def multiple_select_copy_values(self, value="all"):
-        origin = self.prev_selected #last selected
-
+    def multiple_select_copy_values(self, origin, value="all"):
+        # if not self.multiple_edition_mode:
+        #     return
+        if origin not in self.selected_list:
+            return
         for i_widget in self.selected_list:
             if i_widget != origin:
                 i_widget.copy_values_from(origin, value)
 
     def multiple_select_ctrl(self, widget):
+        if isinstance(widget,InputConfigUS):
+            return
         self.prev_selected = widget
         widget.multiple_edition_mode = True
         if widget in self.selected_list:
             widget.unselect()
             self.selected_list.remove( widget )
-            print("Widget REMOVED from multiple selected group")
         else:
             widget.select()
             self.selected_list.add( widget )
-            print("Widget ADDED from multiple selected group")
 
     def multiple_select_shft(self, widget):
-        self.prev_selected = widget
+        if isinstance(widget,InputConfigUS):
+            return
         widget.multiple_edition_mode = True
-        if widget in self.selected_list:
+        if widget!=self.prev_selected:
+            first = widget._index
+            if first<self.prev_selected._index:
+                last = self.prev_selected._index
+            else:
+                last = first
+                first = self.prev_selected._index
+            if isinstance(widget,InputConfigCC):
+                widgets_list = self.inputs
+            else:
+                widgets_list = self.outputs
+            for w in widgets_list:
+                if w._index in range(first,last+1):
+                    w.select()
+                    self.selected_list.add( w )
+        elif widget in self.selected_list:
             widget.unselect()
             self.selected_list.remove( widget )
-            print("Widget REMOVED from multiple selected group")
-        else:
-            widget.select()
-            self.selected_list.add( widget )
-            print("Widget ADDED from multiple selected group")
+        self.prev_selected = widget
 
     def on_debug_test(self):
         target = self.inputs[16]
@@ -1785,10 +1719,7 @@ print("Creating form")
 form = Form()
 #form.resize(1024, 600)
 print("Form created")
-# if platform.system() == "Darwin":
-#     app.installEventFilter(form) #TEST code
-
-print("fix combos")
+# print("fix combos")
 #Workaround for very small combo boxes
 def fix_combos(x):
     for w in x.children():
