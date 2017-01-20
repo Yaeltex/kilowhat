@@ -229,7 +229,7 @@ msgid "Bank {0}"
 msgstr "Banco {0}"
 
 #: kilowhat.py:1548
-msgid "Starting Dump"
+msgid "Starting Dump. Please don't disconnect the usb cable or turn off the device"
 msgstr ""
 "Espera mientras se configura tu dispositivo. No lo desconectes ni apagues"
 
