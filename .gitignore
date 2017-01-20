@@ -1,5 +1,5 @@
 *.pyc
-automatic.kwt
+*.kwt
 kmgui_log.txt
 kwt_log.txt
 kilowhat-old.py
