@@ -1570,15 +1570,6 @@ class Form(QFrame):
                     self.txt_log.append("{0} #{1}: {2}".format(name, i, w.alert_txt))
                     errors += 1
 
-                # Check redundancies for warnings
-                # for j, w2 in enumerate(lst):
-                #     if w.alert_txt is not None:
-                #         if(w,)
-                #         self.txt_log.append("{0} #{1}: {2}".format(name, i, w.alert_txt))
-                #         warnings += 1
-
-
-
         if errors != 0:
             QMessageBox.critical(self, _("Dump error"), _("{0} errors trying to dump.").format(errors))
             self.txt_log.append(_("<b>Dump aborted</b>"))
