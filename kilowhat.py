@@ -587,7 +587,7 @@ class OutputConfig(ConfigWidget):
         #self.monitor = add(QLabel())
         #self.monitor.setFixedWidth(60)
 
-        self.test.installEventFilter(self)
+        #self.test.installEventFilter(self)
 
         #self.da = addwl(_("D/A"), QCheckBox())
         #self.mode = addwl(_("Mode"), QComboBox())
@@ -718,9 +718,11 @@ class InputConfig(ConfigWidget):
         self.monitor.setStyleSheet("QLabel { font-size: 10pt }")
         self.monitor.setFixedWidth(100)
         self.monitor.setAutoFillBackground(True)
+        self.monitor.installEventFilter(self)
 
         self.enable_monitor = self.addwl(_("Monitor"), QCheckBox())
         self.enable_monitor.setChecked(True)
+        self.monitor.installEventFilter(self)
 
         self.enable_monitor.stateChanged.connect(lambda: self.update_grouped_widgets("monitor"))
         
