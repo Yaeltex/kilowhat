@@ -154,7 +154,7 @@ def send_sysex_dump():
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
             print("Sleep 1 seg")
-            time.sleep(1)
+            time.sleep(0.5)
     except Exception as e:
         print("Exception", e)
 
