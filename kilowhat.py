@@ -1026,8 +1026,8 @@ class Form(QFrame):
         #btn.setIcon(QIcon("test.png"))
         btn.setIconSize(QSize(24,24))
         #btn.setStyleSheet("text-align: right;")
-        btn.pressed.connect(self.on_dump_sysex_pr)
-        btn.released.connect(self.on_dump_sysex_re)
+        btn.pressed.connect(self.on_dump_sysex_press)
+        btn.released.connect(self.on_dump_sysex_release)
         load_save_layout.addWidget(btn)
         lsh.widget(btn, spanx=2, width=lsh_w)
         lsh.newLine()
@@ -1528,7 +1528,7 @@ class Form(QFrame):
         for w in [self.memory_widget, self.input_us] + self.inputs + self.outputs:
             w.save_model()
 
-    def on_dump_sysex_pr(self):
+    def on_dump_sysex_press(self):
         self.txt_log.setText(_("Starting Dump. Please don't disconnect the usb cable or turn off the device"))
         time.sleep(0.2)
         self.save_model()
@@ -1556,7 +1556,7 @@ class Form(QFrame):
                 self.txt_log.append(_("<b>Dump aborted</b>"))
                 return
     
-    def on_dump_sysex_re(self):
+    def on_dump_sysex_pr(self):
         send_sysex_dump()
         self.txt_log.append(_("Dump sent"))
 
