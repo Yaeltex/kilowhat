@@ -88,8 +88,6 @@ class wait_cursor:
 
 
 
-
-
 #print(config['input_cc'])
 
 import platform
@@ -153,8 +151,8 @@ def send_sysex_dump():
             midi_send(pkt)
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
-            print("Sleep 1 seg")
-            time.sleep(0.7)
+            print("Sleep 0.5 seg")
+            time.sleep(0.3)
     except Exception as e:
         print("Exception", e)
 
@@ -242,6 +240,7 @@ class MemoryWidget(QWidget):
         self.ins.setStyleSheet("QSpinBox { font-size: 10pt }")
         self.outs = QSpinBox()
         self.outs.setStyleSheet("QSpinBox { font-size: 10pt }")
+        
         self.test = QLabel()        #Never added
 
         self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -735,7 +734,6 @@ class InputConfig(ConfigWidget):
         mode = self.mode.currentIndex()
         param = self.param.value()
         max_banks = config['global'].num_banks
-
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
             self.setAlert(_("Note/CC param {0} outside valid range 0-127").format(param))
@@ -745,9 +743,12 @@ class InputConfig(ConfigWidget):
         else:
             repeated = False
             if mode == MODE_SHIFTER:
+                self.analog.setCurrentIndex(1)
                 for bankIdx in range(MAX_BANKS):
-                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER
-                    config['banks'][bankIdx].input_cc[self._index].param = param
+                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER      # si es shifter en un banco, lo es en todos
+                    config['banks'][bankIdx].input_cc[self._index].param = param            # copiar parametro de shifter en todos los bancos
+                    config['banks'][bankIdx].input_cc[self._index].analog = 1               # setear como digital en todos los bancos
+                    config['banks'][bankIdx].input_cc[self._index].toggle = self.toggle.currentIndex() == 0
                 for i, w in enumerate(self.window().inputs):
                     if self._index != i:
                         if w.mode.currentIndex() == MODE_SHIFTER and w.param.value() == param:
@@ -767,7 +768,7 @@ class InputConfig(ConfigWidget):
 
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
-
+        
         en = mode != MODE_SHIFTER
         self.min.setEnabled(en)
         self.max.setEnabled(en)
@@ -804,7 +805,7 @@ class InputConfigCC(InputConfig):
         #After super __init__ is called
         ad.currentIndexChanged.connect(self.on_param_value_changed)
         ad.setCurrentIndex(1)
-
+        
     def save_model(self):
         super().save_model()
         m = self.model()
@@ -823,8 +824,6 @@ class InputConfigCC(InputConfig):
         en = mode != MODE_SHIFTER
         self.analog.setEnabled(en)
         self.toggle.setEnabled(self.analog.currentIndex() != 0)        # 0 = Analog
-        #self.toggle.setEnabled(en)
-
 
 class InputConfigUS(InputConfig):
     def __init__(self, model_name, parent=None):
@@ -1359,23 +1358,6 @@ class Form(QFrame):
             outputs_side.setLayout(output_layout)
             section_splitter.addWidget(outputs_side)
 
-
-            # Test grid: removed
-            #grid = QGridLayout()
-            #grid.setSpacin#g(0)
-            #gridw = QWidget()
-            #gridw.setLayout(grid)
-            #gridw.setFixedSize(160, 160)
-            ## gridw.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-            #for x in range(16):
-            #    for y in range(16):
-            #        gbtn = QPushButton()
-            #        gbtn.setFixedSize(10, 10)
-            #        grid.addWidget(gbtn, x, y)
-            #output_layout.addWidget(gridw)
-
-
-
             addLabelWA(output_layout, _("Output #"))
 
             saw = QWidget()
@@ -1437,10 +1419,7 @@ class Form(QFrame):
                     lw.setProperty("parity", "even")    #For stylesheets
                 self.outputs.append(lw)
                 sa_layout.addWidget(lw)
-
-
             ###############
-
             section_splitter.setSizes([self.width()/2] * 2)
         # end in/out config
 
@@ -1467,9 +1446,7 @@ class Form(QFrame):
         self.midi_monitor.setMaximumWidth(200)
         self.midi_monitor.setMaximumHeight(120)
         log_layout.addWidget(self.midi_monitor)
-        self.midi_monitor.append(_("MIDI Monitor"))
-        
-        
+        self.midi_monitor.append(_("MIDI Monitor"))    
         
         #self.txt_log.append(">CWD>")
         #self.txt_log.append(os.getcwd())
