@@ -155,7 +155,7 @@ wheel (0.30.0a0)
 Testeada en Windows 10
 
 
-## Instalar Python 3.4
+### Instalar Python 3.4
 Bajar https://www.python.org/ftp/python/3.4.0/python-3.4.0.amd64.msi e instalar (en la configuración marcar que se agregue al PATH)
 
 ### VirtualEnv
@@ -178,7 +178,11 @@ $ yaeltex-env-py3.4\Scripts\activate.bat
 
 $ pip install Cython
 
+### setuptools
+
 $ pip install -U setuptools
+
+### rtmidi 
 
 \# python rtmidi version 1.0.0rc1
 
@@ -213,6 +217,8 @@ $ cd python-rtmidi-1.0.0rc1.zip
 
 (@Yaeltex-env-py3.4)$ python setup.py install
 
+### PySide y Qt
+
 \# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
 
 \# Bajar e instalar qt 4.8 : https://download.qt.io/archive/qt/4.8/4.8.4/qt-win-opensource-4.8.4-vs2010.exe
@@ -230,7 +236,7 @@ $ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none
 (@Yaeltex-env-py3.4)$ pip install PySide-1.2.2-cp34-none-win_amd64.whl
 
 
-\# PyInstaller
+### PyInstaller
 
 $ pip install PyInstaller
 
@@ -250,7 +256,7 @@ $ pip install pypiwin32-219-cp34-none-win_amd64.whl
 
 (@Yaeltex-env-py3.4)$ pip install PyInstaller
 
-\# Armar bundle para distribución:
+### Bundle en Windows
 
 (@Yaeltex-env-py3.4)$ python -m PyInstaller kmgui_win.spec
 
