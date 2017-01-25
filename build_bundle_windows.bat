@@ -1,1 +1,1 @@
-python -m PyInstaller kmgui_win.spec
+python -m PyInstaller kwt_win.spec
