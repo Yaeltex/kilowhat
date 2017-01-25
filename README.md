@@ -158,7 +158,7 @@ Testeada en Windows 10
 ## Instalar Python 3.4
 Bajar https://www.python.org/ftp/python/3.4.0/python-3.4.0.amd64.msi e instalar (en la configuración marcar que se agregue al PATH)
 
-## VirtualEnv
+### VirtualEnv
 \# Abrir una consola (cmd)
 
 $ pip install penv
@@ -174,7 +174,7 @@ $ python -m venv yaeltex-env-py3.4
 $ yaeltex-env-py3.4\Scripts\activate.bat
 
 
-## cython
+### cython
 
 $ pip install Cython
 
