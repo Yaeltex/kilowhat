@@ -231,9 +231,17 @@ $ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none
 
 \# PyInstaller
 
-\#$ pip install PyInstaller
+$ pip install PyInstaller
 
-\# No funca porque pywin32 no se instala correctamente vía pip en windows 10, entonces instalar este último vía wheel
+\# Si no funca porque pywin32 no se instala correctamente vía pip en windows 10, upgradear pip con la siguiente linea
+
+$ python -m pip install --upgrade pip
+
+\# Luego repetir pip install
+
+$ pip install PyInstaller
+
+\# Si nada de lo anterior funciona, probar entonces instalar este último vía wheel
 
 $ wget https://pypi.python.org/packages/8f/da/36439654abd8f39bcad0664c68674a41b838ca902da440defde17abbeade/pypiwin32-219-cp34-none-win_amd64.whl#md5=110e2769da6659c270b8e6e4595155eb
 
