@@ -2,12 +2,5 @@
 *.kwt
 kmgui_log.txt
 kwt_log.txt
-<<<<<<< HEAD
 kilowhat-old.py
-=======
-<<<<<<< HEAD
-kilowhat-old.py
-=======
-kilowhat-old.py
->>>>>>> selec_multiple_dev
->>>>>>> dev
+
