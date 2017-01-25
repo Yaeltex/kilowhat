@@ -1007,7 +1007,7 @@ class Form(QFrame):
         print("Form()  1 Move resize")
 
         self.move(24, 24)
-        self.resize(1024, 600)
+        self.resize(1280, 720)
 
         print("Form() 13 Master layout")
 
@@ -1271,9 +1271,6 @@ class Form(QFrame):
             self._last_in_values.append(-THRESHOLD_SELECT)
             sa_layout.addWidget(lw)
 
-
-
-
         ######################
         # Add output widgets #
         ######################
@@ -1480,7 +1477,7 @@ class Form(QFrame):
             w.save_model()
 
     def on_dump_sysex_press(self):
-        self.txt_log.setText(_("Starting Dump. Please don't disconnect the usb cable or turn off the device"))
+        self.txt_log.append(_("Starting Dump. Please don't disconnect the usb cable or turn off the device"))
         time.sleep(0.2)
         self.save_model()
 
