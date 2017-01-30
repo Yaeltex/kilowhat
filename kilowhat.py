@@ -416,6 +416,7 @@ class MemoryWidget(QWidget):
         #TODO: if necessary cue  main widget to rebuild tabvs etc
 
     def save_model(self):
+        global form
         model = self.model()
         config['global'].output_matrix = self.output_matrix.currentIndex()
         model.hardware_mode = self.hardware.itemData(self.hardware.currentIndex())
@@ -423,6 +424,20 @@ class MemoryWidget(QWidget):
         model.num_inputs_norm = self.ins.value()
         model.num_outputs = self.outs.value()
         self.raise_changed_memory_event()
+        max_banks = config['global'].num_banks
+        
+        for i, w in enumerate(form.inputs): 
+            mode = w.mode.currentIndex()
+            param = w.param.value()
+            w.alertParam = False
+            if mode == MODE_SHIFTER and param >= max_banks:
+               w.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
+               w.alertParam = True
+            elif mode == MODE_SHIFTER and param < max_banks and w.alert_txt is not None:
+               w.setAlert(None) 
+               w.alertParam = False
+            
+            stylesheetProp(w.param, "alert", w.alertParam)
         #TODO: cue main widget to rebuild tabs and such
  
     def copy_values_from(self, origin):
@@ -779,6 +794,7 @@ class InputConfig(ConfigWidget):
     def on_param_value_changed(self):
         #TODO: Shifter lock in to banks
         alertParam = False
+        glob = config['global'];
         mode = self.mode.currentIndex()
         param = self.param.value()
         max_banks = config['global'].num_banks
@@ -792,15 +808,12 @@ class InputConfig(ConfigWidget):
         else:
             repeated = False
             if mode == MODE_SHIFTER:
-                self.analog.setCurrentIndex(1)
                 for bankIdx in range(MAX_BANKS):
-                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER      # si es shifter en un banco, lo es en todos
-                    config['banks'][bankIdx].input_cc[self._index].param = param            # copiar parametro de shifter en todos los bancos
-                    config['banks'][bankIdx].input_cc[self._index].analog = 1               # setear como digital en todos los bancos
-                    config['banks'][bankIdx].input_cc[self._index].toggle = self.toggle.currentIndex() == 0
+                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER                         # si es shifter en un banco, lo es en todos
+                    config['banks'][bankIdx].input_cc[self._index].param = param                               # copiar parametro de shifter en todos los bancos
 
                 for i, w in enumerate(self.window().inputs):
-                    if self._index != i:
+                    if self._index != i and i < glob.num_inputs_norm:
                         if w.mode.currentIndex() == MODE_SHIFTER and w.param.value() == param:
                             self.setAlert(_("Banco de shifter repetido ({0})").format(param))
                             alertParam = True
@@ -812,14 +825,14 @@ class InputConfig(ConfigWidget):
                         config['banks'][bankIdx].input_cc[self._index].mode = mode
                         break
             #print(self.window())
-
+            
             if not repeated:
                 self.setAlert(None)
 
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
 
-        en = mode != MODE_SHIFTER
+        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
         self.min.setEnabled(en)
         self.max.setEnabled(en)
         self.channel.setEnabled(en)
@@ -851,11 +864,13 @@ class InputConfigCC(InputConfig):
         self.addwl(_("Press"), pt, 6)		# Changes for regular input (pot, slider) and ultrasound config
 
         self.analog.currentIndexChanged.connect(lambda: self.update_grouped_widgets("a/d"))
-        self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
+        #self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
         
         #After super __init__ is called
         ad.currentIndexChanged.connect(self.on_param_value_changed)
         ad.setCurrentIndex(1)
+        pt.currentIndexChanged.connect(self.on_param_value_changed)
+        pt.setCurrentIndex(1)
 
     def save_model(self):
         super().save_model()
@@ -872,10 +887,15 @@ class InputConfigCC(InputConfig):
     def on_param_value_changed(self):
         super().on_param_value_changed()
         mode = self.mode.currentIndex()
-        en = mode != MODE_SHIFTER
+        max_banks = config['global'].num_banks
+        if mode == MODE_SHIFTER:
+            self.analog.setCurrentIndex(1)
+            for bankIdx in range(max_banks):
+                config['banks'][bankIdx].input_cc[self._index].analog = 0                                  # setear como digital en todos los bancos
+            config['banks'][bankIdx].input_cc[self._index].toggle = self.toggle.currentIndex() == 0
+        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
         self.analog.setEnabled(en)
-
-        self.toggle.setEnabled(self.analog.currentIndex() != 0)		# 0 = Analog
+        self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF))		# 0 = Analog
         #self.toggle.setEnabled(en)
         #WARNING: param does not update grouped widgets values
 
@@ -1211,26 +1231,18 @@ class Form(QFrame):
         
         us_area = QScrollArea()
         lw = InputConfigUS('input_us', self)
-        #config['banks'][bankIdx].input_cc
-        #lw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        #lw.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Ignored)
-        #lw.setBackgroundRole(QPalette.Dark)
         lw.setProperty("parity", "even")
         lw.setMinimumHeight(20)
-        #input_layout.addWidget(lw)
         self.input_us = lw
         #Pre-config banks
         for bankIdx in range(MAX_BANKS):
             config['banks'][bankIdx].input_us[0].mode = MODE_OFF
 
-
         us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         us_area.setWidgetResizable(True)
         us_area.setWidget(lw)
-        #us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Maximum)
-        # us_area.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.MinimumExpanding)
         us_input_layout.addWidget(us_area)
-        us_input_layout.addSpacing(390)
+        us_input_layout.addSpacing(312)
         us_input_layout.addStretch()
 
         #####################
@@ -1247,10 +1259,10 @@ class Form(QFrame):
         addLabelWA(input_layout, _("Input #"))
 
         sa_layout = QVBoxLayout()
-        sa_layout.setSizeConstraint(QLayout.SetMinimumSize)
+        sa_layout.setSizeConstraint(QLayout.SetMaximumSize)
         sa_layout.setSpacing(0)
         saw.setLayout(sa_layout)
-        # saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        saw.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
         ins_area = QScrollArea()
         ins_area.setWidgetResizable(True)
@@ -1270,7 +1282,7 @@ class Form(QFrame):
             self.inputs.append(lw)
             self._last_in_values.append(-THRESHOLD_SELECT)
             sa_layout.addWidget(lw)
-
+        
         ######################
         # Add output widgets #
         ######################
@@ -1280,7 +1292,6 @@ class Form(QFrame):
         output_layout = QVBoxLayout()
         outputs_side.setLayout(output_layout)
         section_splitter.addWidget(outputs_side)
-
 
         # Test grid: removed
         #grid = QGridLayout()
@@ -1295,8 +1306,6 @@ class Form(QFrame):
         #		gbtn.setFixedSize(10, 10)
         #		grid.addWidget(gbtn, x, y)
         #output_layout.addWidget(gridw)
-
-
 
         addLabelWA(output_layout, _("Output #"))
 
@@ -1480,6 +1489,7 @@ class Form(QFrame):
         self.txt_log.append(_("Starting Dump. Please don't disconnect the usb cable or turn off the device"))
         time.sleep(0.2)
         self.save_model()
+        max_banks = config['global'].num_banks        
 
         stuff = (
             ("Ultrasound", [self.input_us]),
@@ -1488,10 +1498,10 @@ class Form(QFrame):
         )
         warnings = 0
         errors = 0
-
+            
         for name, lst in stuff:
-            for i, w in enumerate(lst):
-                if w.alert_txt is not None:
+            for i, w in enumerate(lst): 
+                if w.alert_txt is not None :
                     self.txt_log.append("{0} #{1}: {2}".format(name, i, w.alert_txt))
                     errors += 1
 
