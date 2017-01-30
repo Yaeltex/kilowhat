@@ -109,9 +109,10 @@ midiin.ignore_types(False, True, True)        # Sysex enabled
  #   0xD0     Channel Pressure
  #   0xE0     Pitch bend
  #   0xF0     Sys ex (non-musical commands)
-MIDI_NOTE_OFF    = 0x80
-MIDI_NOTE_ON    = 0x90
-MIDI_CC            = 0xb0
+MIDI_NOTE_OFF           = 0x80
+MIDI_NOTE_ON            = 0x90
+MIDI_CC                 = 0xb0
+MIDI_PROGRAM_CHANGE     = 0xc0
 
 if False:
     note_on = [0x90, 60, 112] # channel 1, middle C, velocity 112
@@ -970,7 +971,12 @@ class Form(QFrame):
     inputs = []
     input_us = None
     current_bank = 0
-
+    prev_param = 0
+    nrpn_param_coarse = 0
+    nrpn_param_complete = 0
+    nrpn_val_coarse = 0
+    nrpn_val_complete = 0
+    
     _last_in_values = []
 
     pressedKeys = set()
@@ -1581,7 +1587,6 @@ class Form(QFrame):
     def processCommand(self, cmd):
         print("Received command")
         print(cmd)
-        #self.txt_log.append("MIDI RECEIVED: " + str(cmd))
 
         #TODO: make packets static once
         if cmd == sysex.make_sysex_packet(sysex.CONFIG_ACK, []):
@@ -1591,18 +1596,46 @@ class Form(QFrame):
         if cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
             self.txt_log.append(_("Dump OK"))
             return
-
-        type_chn, param, value = cmd
+        
+        if cmd[0] == MIDI_PROGRAM_CHANGE:
+            type_chn, param = cmd
+            value = 0
+        else:
+            type_chn, param, value = cmd
+            
         cmd_type = type_chn & 0xf0
         chn = type_chn & 0xf
-
+        
         # MIDI Monitor log
         if cmd_type == MIDI_CC:
-            self.midi_monitor.append(_("CC") + " " + str(param) + " " + str(value))
+            if param == 101 and self.prev_param != 101:
+                self.prev_param = 101
+                self.nrpn_param_coarse = value
+                return
+            elif param == 100 and self.prev_param == 101:
+                self.prev_param = 100
+                self.nrpn_param_complete = self.nrpn_param_coarse << 7 | value
+                return
+            elif param == 6 and self.prev_param == 100:
+                self.prev_param = 6
+                self.nrpn_val_coarse = value
+                return
+            elif param == 38 and self.prev_param == 6:
+                self.prev_param = 0
+                self.nrpn_val_complete = self.nrpn_val_coarse << 7 | value
+                self.midi_monitor.append("NRPN " + str(self.nrpn_param_complete) + " " + str(self.nrpn_val_complete))
+                return
+            else:    
+                prev_param = 0
+                self.midi_monitor.append(_("CC") + " " + str(param) + " " + str(value))
+                
         elif cmd_type == MIDI_NOTE_ON:
-            self.midi_monitor.append(_("Note") + " " + str(param) + " " + str(value))
+            self.midi_monitor.append("Note On " + str(param) + " " + str(value))
         elif cmd_type == MIDI_NOTE_OFF:
-            self.midi_monitor.append(_("Note") + " " + str(param) + " " + str(value))
+            self.midi_monitor.append("Note Off " + str(param) + " " + str(value))
+        elif cmd_type == MIDI_PROGRAM_CHANGE:
+            self.midi_monitor.append("Program Change " + str(param)) 
+            return
         else:
             self.midi_monitor.append(_("MIDI message not supported"))
   
@@ -1614,7 +1647,6 @@ class Form(QFrame):
             if param < len(self.inputs):
                 if cmd_type == MIDI_NOTE_OFF:    #Force note-off to value = 0
                     value = 0
-
                 target = self.inputs[param]
         
         if target is not None:                
@@ -1650,6 +1682,7 @@ class Form(QFrame):
             self.txt_log.append(_("ERROR IN: ") + str(e))
 
     prev_selected = None
+    
     def select(self, widget):
         """ 
             Widget simple select (from scratch)

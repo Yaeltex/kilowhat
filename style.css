@@ -46,8 +46,6 @@ QLineEdit {
     margin-right: 0;*/
 }
 
-
-
 QComboBox::down-arrow {
 	image: url('assets/cbarrow.png');
 }
