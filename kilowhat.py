@@ -794,12 +794,13 @@ class InputConfig(ConfigWidget):
 
     def on_param_value_changed(self):
         #TODO: Shifter lock in to banks
+        global form
         alertParam = False
         glob = config['global'];
         mode = self.mode.currentIndex()
         param = self.param.value()
         max_banks = config['global'].num_banks
-
+        
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
             self.setAlert(_("Note/CC param {0} outside valid range 0-127").format(param))
@@ -837,9 +838,13 @@ class InputConfig(ConfigWidget):
         self.min.setEnabled(en)
         self.max.setEnabled(en)
         self.channel.setEnabled(en)
-
-        self.min.setIncrement(127 if mode == MODE_NRPN else 1)
-        self.max.setIncrement(127 if mode == MODE_NRPN else 1)
+        
+        self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
+        self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
+        
+        self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
+        self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
+        self.max.setValue(16383 if mode == MODE_NRPN else 127)
 
         stylesheetProp(self.param, "alert", alertParam)
 
@@ -865,7 +870,7 @@ class InputConfigCC(InputConfig):
         self.addwl(_("Press"), pt, 6)		# Changes for regular input (pot, slider) and ultrasound config
 
         self.analog.currentIndexChanged.connect(lambda: self.update_grouped_widgets("a/d"))
-        #self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
+        self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
         
         #After super __init__ is called
         ad.currentIndexChanged.connect(self.on_param_value_changed)
@@ -1608,6 +1613,7 @@ class Form(QFrame):
         
         # MIDI Monitor log
         if cmd_type == MIDI_CC:
+            # NRPN Message parser
             if param == 101 and self.prev_param != 101:
                 self.prev_param = 101
                 self.nrpn_param_coarse = value
