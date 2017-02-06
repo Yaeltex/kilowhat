@@ -7,10 +7,12 @@ PACKET_SIZE = 57
 
 _packets_info = ["null", "CONFIG_MODE", "CONFIG_ACK", "DUMP_TO_HW"]
 
-CONFIG_MODE	= 1			# PC->hw : Activate monitor mode
-CONFIG_ACK	= 2			# HW->pc : Acknowledge the config mode
-DUMP_TO_HW	= 3			# PC->hw : Partial EEPROM dump from PC
-DUMP_OK		= 4			# HW->pc : Ack from dump properly saved
+CONFIG_MODE	    = 1			# PC->hw : Activate monitor mode
+CONFIG_ACK	    = 2			# HW->pc : Acknowledge the config mode
+DUMP_TO_HW	    = 3			# PC->hw : Partial EEPROM dump from PC
+DUMP_OK		    = 4			# HW->pc : Ack from dump properly saved
+EXIT_CONFIG     = 5			# HW->pc : Deactivate monitor mode
+EXIT_CONFIG_ACK = 6			# HW->pc : Ack from exit config mode
 
 
 def make_sysex_packet(ptype, data):

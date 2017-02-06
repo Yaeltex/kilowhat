@@ -237,6 +237,8 @@ class MemoryWidget(QWidget):
         self.outs.setStyleSheet("QSpinBox { font-size: 10pt }")
         self.test = QLabel()        #Never added
         self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.config_mode = QCheckBox()
+        self.config_mode.setStyleSheet("QCheckBox { font-size: 10pt }")
 
         grid = QGridLayout()
         grid.setHorizontalSpacing(15)
@@ -255,7 +257,7 @@ class MemoryWidget(QWidget):
             .newLine()
         h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
-        h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_(" ")).newLine()
+        h.label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=small).label(_("Config Mode")).widget(self.config_mode,width=tiny).newLine()
 
         # Config widgets
         self.output_matrix.addItems([_("Normal"), _("Matrix")])
@@ -280,6 +282,9 @@ class MemoryWidget(QWidget):
         self.banks.valueChanged.connect(self.on_param_value_changed)
         self.ins.valueChanged.connect(self.on_param_value_changed)
         self.outs.valueChanged.connect(self.on_param_value_changed)
+        self.config_mode.stateChanged.connect(self.on_config_mode_press)
+        
+        self.config_mode.setChecked(True)
 
         # Reset (TODO: done by the Form or here?)
         print("MemoryWidget() reset")
@@ -372,6 +377,14 @@ class MemoryWidget(QWidget):
             self.parent().refresh_in_outs()
             pass
 
+    def on_config_mode_press(self):
+        if self.config_mode.isChecked():
+            midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
+            return
+        else:
+            midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
+            return
+        
     def on_param_value_changed(self):
         print("MemoryWidget() on_param_value_changed")
 
@@ -1597,6 +1610,10 @@ class Form(QFrame):
         if cmd == sysex.make_sysex_packet(sysex.CONFIG_ACK, []):
             self.txt_log.append(_("ACK Received. Kilomux connected"))
             return
+            
+        if cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG_ACK, []):
+            self.txt_log.append(_("Arduino is not in config mode anymore"))
+            return
 
         if cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
             self.txt_log.append(_("Dump OK"))
@@ -1629,18 +1646,18 @@ class Form(QFrame):
             elif param == 38 and self.prev_param == 6:
                 self.prev_param = 0
                 self.nrpn_val_complete = self.nrpn_val_coarse << 7 | value
-                self.midi_monitor.append("NRPN " + str(self.nrpn_param_complete) + " " + str(self.nrpn_val_complete))
+                self.midi_monitor.append(str(chn+1) + " NRPN " + str(self.nrpn_param_complete) + " " + str(self.nrpn_val_complete))
                 return
             else:    
                 prev_param = 0
-                self.midi_monitor.append(_("CC") + " " + str(param) + " " + str(value))
+                self.midi_monitor.append(str(chn+1) + " CC " + str(param) + " " + str(value))
                 
         elif cmd_type == MIDI_NOTE_ON:
-            self.midi_monitor.append("Note On " + str(param) + " " + str(value))
+            self.midi_monitor.append(str(chn+1) + " Note On " + str(param) + " " + str(value))
         elif cmd_type == MIDI_NOTE_OFF:
-            self.midi_monitor.append("Note Off " + str(param) + " " + str(value))
+            self.midi_monitor.append(str(chn+1) + " Note Off " + str(param) + " " + str(value))
         elif cmd_type == MIDI_PROGRAM_CHANGE:
-            self.midi_monitor.append("Program Change " + str(param)) 
+            self.midi_monitor.append(str(chn+1) + " Program Change " + str(param)) 
             return
         else:
             self.midi_monitor.append(_("MIDI message not supported"))
