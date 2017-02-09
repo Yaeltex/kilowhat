@@ -18,11 +18,12 @@ QSpinBox:down-arrow {
 	image: url('assets/cbarrow.png');
 }
 
-QSpinBox:!enabled, QCheckBox:!enabled, QLineEdit:!enabled, QComboBox:!enabled
+QTextEdit:!enabled, QSpinBox:!enabled, QCheckBox:!enabled, QLineEdit:!enabled, QComboBox:!enabled
 {
      color:#101010;
      background-color: #303030
 }
+
 /*
 *::focus {
     background-color: #503000
@@ -70,10 +71,6 @@ QWidget[selection="true"] {
     border: 2px solid #D46344;
 }
 
-.ConfigWidget {
-
-}
-
 QPushButton#DumpBtn {
     color: #FFF12C;
 }
@@ -86,8 +83,6 @@ QPushButton#TestAll {
     color: #D46344;
     font-weight: bold;
 }
-
-
 
 QTabBar::tab:selected {
     border: 1px solid #FFF12C;
@@ -102,11 +97,15 @@ QTabBar::tab {
 
 QTabBar#inout::tab {
     background-color: #505050;
-    margin: 4px 4px 0px 4px;
     padding: 8px 8px 20px 8px;
     /*padding-right: 4px;*/
 }
-
+QTabBar#inout::tab:selected {
+    border-style: solid;
+	border-color: #FFF12C;
+	border-width: 1px 1px 0px 1px ;
+    /*padding-right: 4px;*/
+}
 
 
 QPushButton {
@@ -122,9 +121,17 @@ QPushButton::pressed {
     border-bottom: 1px solid #c0c0c0;
     border-right: 1px solid #c0c0c0;
 }
+QGridLayout#MemWidget {
+	border: 2px solid gray;
+}
 
 #BankLine {
-    border: 1px solid gray;
+	border-style: solid;
+	border-color: gray;
+	border-width: 0px 0px 1px 0px ;
+    /*border: 1px solid gray;*/
+	margin: 0px;
+	padding: 0px;
 }
 
 QWidget#LogArea {
@@ -132,6 +139,9 @@ QWidget#LogArea {
 }
 #MidiMonitor {
     width: 100px;
+}
+#MidiMonitorConfigCB {
+    margin: 30px;
 }
 
 /*QComboBox::drop-down {
