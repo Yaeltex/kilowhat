@@ -45,7 +45,7 @@ class Bank:
 
 
 class OutputData:
-    note = 0
+    param = 0
     channel = 0
     blink_min = 42
     blink_max = 84
@@ -58,14 +58,14 @@ class OutputData:
     #BLINK-MAX(7)
     def get_sysex(self):
         return [(1 if self.blink else 0) | ((1 if self.shifter else 0) << 1) | ((self.channel-1 & 0xf) << 3),\
-            self.note & 0x7f, self.blink_min & 0x7f, self.blink_max & 0x7f]
+            self.param & 0x7f, self.blink_min & 0x7f, self.blink_max & 0x7f]
 
     def set_sysex(self, msg):
         assert(len(msg) == len(self.get_bytes()))
         self.blink = msg[0] & 1 == 1
         self.shifter = (msg[0]>>1 & 1) == 1
         self.channel = (msg[0] >> 3 & 0xf) + 1                  # channel is 1-16 but sysex uses 0-15
-        self.note = msg[1] & 0x7f
+        self.param = msg[1] & 0x7f
         self.blink_min = msg[2] & 0x7f
         self.blink_max = msg[3] & 0x7f
 

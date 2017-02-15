@@ -62,7 +62,7 @@ QLabel#alert {
 }
 
 *[parity="even"], *[parity="even"] QLabel, *[parity="even"] QCheckBox {
-    background-color: #181818;
+    background-color: #1F1F1F;
 }
 *[selection="true"], *[selection="true"] QLabel {
     /*background-color: #7f3f11;*/
@@ -127,7 +127,7 @@ QGridLayout#MemWidget {
 
 #BankLine {
 	border-style: solid;
-	border-color: gray;
+	border-color: #505050;
 	border-width: 0px 0px 1px 0px ;
     /*border: 1px solid gray;*/
 	margin: 0px;
@@ -142,6 +142,12 @@ QWidget#LogArea {
 }
 #MidiMonitorConfigCB {
     margin: 30px;
+}
+#InputLayout{
+	
+}
+#OutputLayout{
+	
 }
 
 /*QComboBox::drop-down {

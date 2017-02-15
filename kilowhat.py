@@ -180,6 +180,9 @@ class GridHelper:
         if width is not None:
             w.setFixedWidth(width)
         self._grid.addWidget(w, self._y, self._x, spany, spanx, align)
+        if(w.metaObject().className() == "QSpinBox"):    
+            w.setFixedHeight(25)
+        
         w.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         self._skip()
         return self
@@ -282,8 +285,6 @@ class MemoryWidget(QWidget):
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
         h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).widget(self.btn_apply, spanx=2, width=small).newLine()       
         
-        
-        
         # Config widgets
         self.output_matrix.addItems([_("Normal"), _("Matrix")])
         for item in memory.HARDWARE:
@@ -319,7 +320,7 @@ class MemoryWidget(QWidget):
         print("Reloading MIDI ports")
         form.txt_log.clear()
         form.txt_log.append(_("Welcome to Kilowhat!"))
-        form.config_mode.setChecked(False)
+        form.config_modeCB.setChecked(False)
         ports = midiin.get_ports()
         print(ports)
         self.cmi.clear() # Clear items of the ComboBox
@@ -453,17 +454,12 @@ class MemoryWidget(QWidget):
         max_banks = config['global'].num_banks
         
         for i, w in enumerate(form.inputs): 
-            mode = w.mode.currentIndex()
-            param = w.param.value()
-            w.alertParam = False
-            if mode == MODE_SHIFTER and param >= max_banks:
-               w.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
-               w.alertParam = True
-            elif mode == MODE_SHIFTER and param < max_banks and w.alert_txt is not None:
-               w.setAlert(None) 
-               w.alertParam = False
+            w.on_param_value_changed()
             
-            stylesheetProp(w.param, "alert", w.alertParam)
+        for i, w in enumerate(form.outputs): 
+            w.on_param_value_changed()
+            
+        #TODO: cue main widget to rebuild tabs and such
         #TODO: cue main widget to rebuild tabs and such
  
     def copy_values_from(self, origin):
@@ -539,7 +535,7 @@ class ConfigWidget(QWidget):
         self.lbl_alert = QLabel()
         self.lbl_alert.setObjectName("alert")
         #self.lbl_alert.setText("Esto es una alerta.")
-        #if index % 2 == 0:
+        
         self.lbl_alert.setVisible(False)
         v_layout.addWidget(self.lbl_alert)
 
@@ -552,9 +548,9 @@ class ConfigWidget(QWidget):
         self._color_timer = timer
 
         self.setAutoFillBackground(True)
-
+        
+        #self.setMinimumHeight(40)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
-
 
     def model(self):
         return getattr(config['banks'][self.bank], self._model_name)[self._index]
@@ -571,8 +567,9 @@ class ConfigWidget(QWidget):
         self.setStyleSheet(self.styleSheet())
 
     def select(self):
-        stylesheetProp(self, "selection", True)
-        self.setStyleSheet(self.styleSheet())
+        if not isinstance(self, InputConfigUS):
+            stylesheetProp(self, "selection", True)
+            self.setStyleSheet(self.styleSheet())
         # self.setFocus()
     
     def update_grouped_widgets(self, value):
@@ -598,8 +595,10 @@ class OutputConfig(ConfigWidget):
         number.installEventFilter(self)
 
         self.test = self.add(QPushButton(_("Test")))
-        self.test.setStyleSheet("QPushButton { font-size: 10pt }")
-        self.test.setFixedWidth(70)
+        self.test.setStyleSheet("QPushButton { font-size: 9pt; margin: 2px; padding: 2px }")
+        self.test.setFixedWidth(80)
+        self.test.setFixedHeight(22)
+        #self.test.setAlignment(Qt.AlignVCenter)
         self.test.pressed.connect(self.on_test_press)
         self.test.released.connect(self.on_test_release)
         #self.monitor = add(QLabel())
@@ -611,29 +610,35 @@ class OutputConfig(ConfigWidget):
         #self.mode = addwl(_("Mode"), QComboBox())
         #self.mode.addItems((_("Note"), _("CC"), _("NRPN")))
 
+        self.h_layout.addSpacing(20)
+        
+        self.shifter = self.addwl(_("Shifter"), QCheckBox())
+        self.shifter.setChecked(False)
+        self.shifter.stateChanged.connect(self.on_param_value_changed)
+        self.shifter.stateChanged.connect(lambda: self.update_grouped_widgets("shifter") )
+        
+        self.h_layout.addSpacing(-50)
+        
         noteSB = QSpinBox()
         noteSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.param = self.addwl(_("Param"), noteSB)
         self.param.setRange(0, 127)
-
+        self.param.valueChanged.connect(self.on_param_value_changed)
+        
+        self.h_layout.addSpacing(10)
+        
         chanSB = QSpinBox()
         chanSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.channel = self.addwl(_("Channel"), chanSB)
         self.channel.setRange(1, 16)
         self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel") )
-
-        self.h_layout.addSpacing(30)
-        self.shifter = self.addwl(_("Shifter"), QCheckBox())
-        self.shifter.setChecked(False)
-        #self.shifter.stateChanged.connect(self.on_param_value_changed)
-        #self.shifter.stateChanged.connect(lambda: self.update_grouped_widgets("blink"))
         
-        self.h_layout.addSpacing(30)
+        self.h_layout.addSpacing(50)
         self.blink = self.addwl(_("Intermitent"), QCheckBox())
         self.blink.stateChanged.connect(self.on_param_value_changed)
         self.blink.stateChanged.connect(lambda: self.update_grouped_widgets("blink"))
         
-        self.h_layout.addSpacing(-30)
+        self.h_layout.addSpacing(-60)
         minSB = QSpinBox()
         minSB.setStyleSheet("QLabel { font-size: 10pt }")
         self.min = self.addwl(_("Min."), minSB)
@@ -648,13 +653,65 @@ class OutputConfig(ConfigWidget):
         self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max") )
 
     def on_param_value_changed(self):
-        en = self.blink.isChecked()
+        global form
+        glob = config['global'];
+        alertParam = False
+        repeated = False
+        is_shifter = self.shifter.isChecked()
+        param = self.param.value()
+        max_banks = config['global'].num_banks
+        
+        if is_shifter and max_banks == 1:
+            alertParam = True
+            self.setAlert(_("There is no use for a shifter, if you only have one bank").format(param, max_banks-1))        
+        elif is_shifter and param >= max_banks:
+            alertParam = True
+            self.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
+        else:
+            if is_shifter:
+                repeated = False
+                for bankIdx in range(MAX_BANKS):
+                    config['banks'][bankIdx].output[self._index].shifter = True                         # si es shifter en un banco, lo es en todos
+                    config['banks'][bankIdx].output[self._index].param = param                               # copiar parametro de shifter en todos los bancos
+
+                for i, w in enumerate(self.window().outputs):
+                    if self._index != i and i < glob.num_outputs:
+                        if w.shifter.isChecked() and w.param.value() == param:
+                            self.setAlert(_("Shifter param repeated({0})").format(param))
+                            w.setAlert(_("Shifter param repeated({0})").format(param))
+                            alertParam = True
+                            repeated = True  
+                            w.alertParam = True
+                            w.repeated = True  
+                            stylesheetProp(w.param, "alert", w.alertParam)
+                        else:   
+                            w.alertParam = False
+                            w.repeated = False
+                            stylesheetProp(w.param, "alert", w.alertParam)
+                            w.setAlert(None)
+            else:
+                for bankIdx in range(MAX_BANKS):
+                    if config['banks'][bankIdx].output[self._index].shifter == True:
+                        config['banks'][bankIdx].output[self._index].shifter = False
+                            
+        if not repeated and not alertParam:
+            self.setAlert(None)
+        
+        #HACK: Refresh everything just in case
+        #self.window().call_on_param_value_changed_on_outputs()
+        
+        en = self.blink.isChecked() and (not self.shifter.isChecked())
         self.min.setEnabled(en)
         self.max.setEnabled(en)
         
+        en = not self.shifter.isChecked()
+        self.channel.setEnabled(en)
+        
+        stylesheetProp(self.param, "alert", alertParam)
+        
     def load_model(self):
         model = self.model()
-        self.param.setValue(model.note)
+        self.param.setValue(model.param)
         self.channel.setValue(model.channel)
         self.min.setValue(model.blink_min)
         self.max.setValue(model.blink_max)
@@ -663,7 +720,7 @@ class OutputConfig(ConfigWidget):
 
     def save_model(self):
         model = self.model()
-        model.note = self.param.value()
+        model.param = self.param.value()
         model.channel = self.channel.value()
         model.blink_min = self.min.value()
         model.blink_max = self.max.value()
@@ -671,27 +728,37 @@ class OutputConfig(ConfigWidget):
         model.shifter = self.shifter.isChecked()
 
     def on_test_press(self):
+        global form
         print("Test btn press")
         if self.current_test is not None:
             return
         self.save_model()
         m = self.model()
-        self.current_test = m.channel, m.note
-        print("Press CH{0} N{1}".format(m.channel, m.note))
-        midi_send((MIDI_NOTE_ON | m.channel-1, m.note, 0x7f))
+        if form.config_mode:
+            self.current_test = 1, self._index
+            midi_send((MIDI_NOTE_ON | 0, self._index, 0x7f))
+        else:    
+            self.current_test = m.channel, m.param
+            midi_send((MIDI_NOTE_ON | m.channel-1, m.param, 0x7f))
+        print("Press CH{0} N{1}".format(m.channel, m.param))
 
 
     def on_test_release(self):
         channel, note = self.current_test
         print("Release CH{0} N{1}".format(channel, note))
-
-        midi_send((MIDI_NOTE_OFF | channel-1, note, 0))
+        
+        if form.config_mode:
+            midi_send((MIDI_NOTE_OFF | channel, note, 0))
+        else:
+            midi_send((MIDI_NOTE_OFF | channel-1, note, 0))
         self.current_test = None
     
     def copy_values_from(self, origin, value="all"):
         # print("Updating output widget ", self._index)
         if value=="blink":
             self.blink.setChecked( origin.blink.isChecked() )
+        elif value=="shifter":
+            self.shifter.setChecked( origin.shifter.isChecked() )
         elif value=="channel":
             self.channel.setValue( origin.channel.value() )
         elif value=="min":
@@ -833,6 +900,9 @@ class InputConfig(ConfigWidget):
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
             self.setAlert(_("Note/CC param {0} outside valid range 0-127").format(param))
+        elif mode == MODE_SHIFTER and max_banks == 1:
+            alertParam = True
+            self.setAlert(_("There is no use for a shifter, if you only have one bank").format(param, max_banks-1))            
         elif mode == MODE_SHIFTER and param >= max_banks:
             alertParam = True
             self.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
@@ -859,10 +929,10 @@ class InputConfig(ConfigWidget):
             
             if not repeated:
                 self.setAlert(None)
-
+                
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
-
+        
         en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
         self.min.setEnabled(en)
         self.max.setEnabled(en)
@@ -936,14 +1006,14 @@ class InputConfigCC(InputConfig):
 
     def copy_values_from(self, origin, value="all"):
         print("Updating input widget ", self._index)
-        if value=="all":
-            super().copy_values_from(origin)
-            self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
-            self.analog.setCurrentIndex( origin.analog.currentIndex() ) # A/D
-            self.toggle.setCurrentIndex( origin.toggle.currentIndex() )
+        #if value=="all":
+            #super().copy_values_from(origin)
+            #self.mode.setCurrentIndex( origin.mode.currentIndex() ) #TODO: ver on_param_value_changed
+            #self.analog.setCurrentIndex( origin.analog.currentIndex() ) # A/D
+            #self.toggle.setCurrentIndex( origin.toggle.currentIndex() )
             # self.pot = origin.pot
             # self.on_param_value_changed()
-        elif value=="monitor":
+        if value=="monitor":
             self.enable_monitor.setChecked( origin.enable_monitor.isChecked() )
         elif value=="a/d":
             self.analog.setCurrentIndex( origin.analog.currentIndex() )
@@ -1034,7 +1104,9 @@ class Form(QFrame):
     pressedKeys = set()
     
     multiple_edition_mode = False
-
+    
+    config_mode = False
+    
     testing = None
     def on_test_all_press(self):
         to_test = []
@@ -1042,8 +1114,10 @@ class Form(QFrame):
         for i in range(0, config['global'].num_outputs):
             self.outputs[i].save_model()
             m = self.outputs[i].model()
-
-            to_test.append((m.channel-1, m.note))
+            if self.config_mode:
+                to_test.append((0, i))
+            else:
+                to_test.append((m.channel-1, m.param))
 
         for tuple in to_test:
             midi_send((MIDI_NOTE_ON | tuple[0], tuple[1], value))
@@ -1061,18 +1135,31 @@ class Form(QFrame):
     #    for i in self.inputs + self.outputs + [self.input_us]:
     #        i.channel.setValue(self.set_chan_channel.value())
 
-    _reentry = 0
+    _reentry_inputs = 0
     def call_on_param_value_changed_on_inputs(self):
-        if self._reentry > 0:
+        if self._reentry_inputs > 0:
             return
 
-        self._reentry += 1
-        print("Refreshing alerts")
+        self._reentry_inputs += 1
+        #print("Refreshing alerts")
 
         for w in self.inputs:
             w.on_param_value_changed()
 
-        self._reentry -= 1
+        self._reentry_inputs -= 1
+    
+    # _reentry_outputs = 0
+    # def call_on_param_value_changed_on_outputs(self):
+        # if self._reentry_outputs > 0:
+            # return
+
+        # self._reentry_outputs += 1
+        # #print("Refreshing alerts")
+
+        # for w in self.outputs:
+            # w.on_param_value_changed()
+
+        # self._reentry_outputs -= 1
         
     def __init__(self, parent=None):
         print("Form()  B Form init")
@@ -1145,7 +1232,7 @@ class Form(QFrame):
         lsh_w4 = None
 
         link = QLabel()
-        link.setText(_("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">Ayuda</a>"))
+        link.setText("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">" + _("Help") + "</a>")
         link.setStyleSheet("QLabel { font-size: 10pt }")
         link.setTextInteractionFlags(Qt.TextBrowserInteraction)
         link.setTextFormat(Qt.RichText)
@@ -1192,7 +1279,7 @@ class Form(QFrame):
         layout_bank_line.setContentsMargins(9,0,9,1)
         widget_bank_line.setObjectName("BankLine")
         #widget_bank_line.setStyleSheet(".QWidget { border: 1px solid white }")
-        
+        layout_bank_line.setAlignment(Qt.AlignLeft)
         widget_bank_line.setLayout(layout_bank_line)
         #master_layout.addLayout(layout_bank_line)
         master_layout.addWidget(widget_bank_line)
@@ -1205,6 +1292,7 @@ class Form(QFrame):
         # self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
         self.tabs_inout.setStyleSheet("QTabBar { font-size: 10pt }")
         self.tabs_inout.setUsesScrollButtons(False)
+        #self.tabs_inout.setAlignment(Qt.AlignLeft)
         self.tabs_inout.setBackgroundRole(QPalette.Dark)		#HACK: to hide bottom line
         self.tabs_inout.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         
@@ -1221,6 +1309,7 @@ class Form(QFrame):
         self.tabs = QTabBar()
         self.tabs.setStyleSheet("QTabBar { font-size: 10pt }")
         self.tabs.setUsesScrollButtons(False)
+        #self.tabs.setAlignment(Qt.AlignLeft)
         self.tabs.setBackgroundRole(QPalette.Dark)        #HACK: to hide bottom line     
         self.tabs.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         layout_bank_line.addWidget(self.tabs)
@@ -1255,7 +1344,7 @@ class Form(QFrame):
         self.us_frame = QFrame()
         us_side = self.us_frame
         us_layout = QVBoxLayout()
-        input_layout = us_layout
+        us_layout.setObjectName("USLayout")
         us_side.setLayout(us_layout)
         section_layout.addWidget(us_side)
         
@@ -1266,11 +1355,10 @@ class Form(QFrame):
         us_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         us_layout.addWidget(us_area)
         us_layout.addSpacing(312)
-        #us_layout.addStretch()
         
         lw = InputConfigUS('input_us', self)
         lw.setProperty("parity", "even")
-        lw.setMinimumHeight(25)
+        #lw.setMinimumHeight(40)
         self.input_us = lw
         #Pre-config banks
         for bankIdx in range(MAX_BANKS):
@@ -1286,7 +1374,8 @@ class Form(QFrame):
         self.inputs_frame = QFrame()
         inputs_side = self.inputs_frame
         input_layout = QVBoxLayout()
-        input_layout.setSizeConstraint(QLayout.SetMaximumSize)
+        input_layout.setObjectName("InputLayout")
+        #input_layout.setSizeConstraint(QLayout.SetMaximumSize)
         inputs_side.setLayout(input_layout)
         section_layout.addWidget(inputs_side)
         
@@ -1311,6 +1400,7 @@ class Form(QFrame):
 
             lw = InputConfigCC('input_cc', i, self)
             lw.load_model()
+            #lw.setMinimumHeight(40)
             if i % 2 == 0:
                 lw.setProperty("parity", "even")	#For stylesheets
             self.inputs.append(lw)
@@ -1323,7 +1413,8 @@ class Form(QFrame):
         self.outputs_frame = QFrame()
         outputs_side = self.outputs_frame
         output_layout = QVBoxLayout()
-        output_layout.setSizeConstraint(QLayout.SetMaximumSize)
+        output_layout.setObjectName("OutputLayout")
+        #output_layout.setSizeConstraint(QLayout.SetMaximumSize)
         outputs_side.setLayout(output_layout)
         section_layout.addWidget(outputs_side)
         
@@ -1368,8 +1459,6 @@ class Form(QFrame):
         self.test_all_velocity.setValue(64)
         self.test_all_velocity.setMinimum(0)
         self.test_all_velocity.setMaximum(0x7f)
-        
-        #self.test_all_velocity.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         test_all_layout.addWidget(self.test_all_velocity)
 
@@ -1385,12 +1474,16 @@ class Form(QFrame):
 
             lw = OutputConfig('output', i)
             lw.load_model()
+            #lw.setMinimumHeight(40)
+            #lw.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
             #lw.param.setValue(i)
             if i % 2 == 0:
                 lw.setProperty("parity", "even")	#For stylesheets
             self.outputs.append(lw)
             sa_layout.addWidget(lw)
         ###############
+        #Hack to let the outputs window load with full size
+        self.change_views_inout_tab(1)
         #Default view: inputs
         self.change_views_inout_tab(0)
         
@@ -1400,17 +1493,20 @@ class Form(QFrame):
         self.refresh_in_outs()
         
         master_layout.addStretch(1)
+        
         config_mode_layout = QHBoxLayout()
         config_mode_layout.setAlignment(Qt.AlignBottom)
         config_mode_layout.setObjectName("MidiMonitorConfigCB")
         
-        self.config_mode = QCheckBox(_("Config Mode"))
-        self.config_mode.setStyleSheet("QCheckBox { font-size: 10pt }")
-        self.config_mode.clicked.connect(self.on_config_mode_press)
+        self.config_modeCB = QCheckBox(_("Config Mode"))
+        self.config_modeCB.setStyleSheet("QCheckBox { font-size: 10pt }")
+        self.config_modeCB.clicked.connect(self.on_config_mode_press)
         
         config_mode_layout.addStretch()
         config_mode_layout.addStretch()
-        config_mode_layout.addWidget(self.config_mode)
+        
+        config_mode_layout.addWidget(self.config_modeCB)
+        
         config_mode_layout.addSpacing(13)
         
         #master_layout.addSpacing(50)
@@ -1430,7 +1526,8 @@ class Form(QFrame):
         self.txt_log.setMaximumHeight(120)
         log_layout.addWidget(self.txt_log)
         self.txt_log.append(_("Welcome to Kilowhat!"))
-        #self.txt_log.append(str(layout_bank_line.contentsMargins()))
+        #self.txt_log.append(str(self.inputs[2].height()))
+        #self.txt_log.append(str(self.outputs[2].height()))
         ###########################               
         self.midi_monitor = MonitorTextEdit()
         self.midi_monitor.setObjectName("MidiMonitor")
@@ -1521,10 +1618,12 @@ class Form(QFrame):
             w.save_model()
     
     def on_config_mode_press(self):
-        if self.config_mode.isChecked():
+        if self.config_modeCB.isChecked():
+            self.config_mode = True
             midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
             return
         else:
+            self.config_mode = False
             midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
             return
         
@@ -1629,8 +1728,8 @@ class Form(QFrame):
         #TODO: make packets static once
         if cmd == sysex.make_sysex_packet(sysex.CONFIG_ACK, []):
             self.txt_log.append(_("ACK Received. Kilomux connected"))
-            if not self.config_mode.isChecked():
-                self.config_mode.setChecked(True)
+            if not self.config_modeCB.isChecked():
+                self.config_modeCB.setChecked(True)
             return
             
         if cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG_ACK, []):
@@ -1639,7 +1738,7 @@ class Form(QFrame):
 
         if cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
             self.txt_log.append(_("Dump OK"))
-            self.config_mode.setChecked(False)
+            self.config_modeCB.setChecked(False)
             return
         
         if cmd[0] == MIDI_PROGRAM_CHANGE:
@@ -1652,7 +1751,7 @@ class Form(QFrame):
         chn = type_chn & 0xf
         
         # MIDI Monitor log
-        if not self.config_mode.isChecked():
+        if not self.config_modeCB.isChecked():
             if cmd_type == MIDI_CC:
                 # NRPN Message parser
                 if param == 101 and self.prev_param != 101:
@@ -1689,7 +1788,7 @@ class Form(QFrame):
                 self.midi_monitor.append(_("MIDI message not supported"))
   
         target = None
-        if self.config_mode.isChecked():
+        if self.config_modeCB.isChecked():
             if chn == MONITOR_CHAN_US:
                 target = self.input_us
             else:
