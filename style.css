@@ -122,7 +122,7 @@ QPushButton::pressed {
     border-right: 1px solid #c0c0c0;
 }
 QGridLayout#MemWidget {
-	border: 2px solid gray;
+	border: 2px solid #505050;
 }
 
 #BankLine {
@@ -143,12 +143,7 @@ QWidget#LogArea {
 #MidiMonitorConfigCB {
     margin: 30px;
 }
-#InputLayout{
-	
-}
-#OutputLayout{
-	
-}
+
 
 /*QComboBox::drop-down {
     background: transparent

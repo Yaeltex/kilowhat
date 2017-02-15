@@ -254,7 +254,7 @@ class MemoryWidget(QWidget):
         mem_layout = QVBoxLayout()
         
         self.label_config = QLabel(_("General configuration"))
-        self.label_config.setStyleSheet("QLabel { font-size: 12pt ; padding-bottom: 5px; border-bottom: 1px solid gray; }")
+        self.label_config.setStyleSheet("QLabel { font-size: 12pt ; padding-bottom: 5px; border-bottom: 1px solid #505050; }")
         self.label_config.setAlignment(Qt.AlignLeft)
         
         mem_layout.addWidget(self.label_config)
@@ -1108,6 +1108,7 @@ class Form(QFrame):
     config_mode = False
     
     testing = None
+    
     def on_test_all_press(self):
         to_test = []
         value = self.test_all_velocity.value()
@@ -1258,19 +1259,20 @@ class Form(QFrame):
         lsh.widget(btn, width=lsh_w2)
         lsh.newLine()
 
-        btn = QPushButton(_("Dump to Arduino"))
-        btn.setStyleSheet("QPushButton { font-size: 10pt }")
-        btn.setObjectName("DumpBtn")
+        btnDump = QPushButton(_("Dump to Arduino"))
+        btnDump.setStyleSheet("QPushButton { font-size: 10pt }")
+        btnDump.setObjectName("DumpBtn")
         #btn.setIcon(QIcon("test.png"))
-        btn.setIconSize(QSize(24,24))
+        btnDump.setIconSize(QSize(24,24))
         #btn.setStyleSheet("text-align: right;")
 
-        btn.pressed.connect(self.on_dump_sysex_press)
-        btn.released.connect(self.on_dump_sysex_release)
+        btnDump.pressed.connect(self.on_dump_sysex_press)
+        btnDump.released.connect(self.on_dump_sysex_release)
 
-        load_save_layout.addWidget(btn)
-        lsh.widget(btn, spanx=2, width=lsh_w)
+        load_save_layout.addWidget(btnDump)
+        lsh.widget(btnDump, spanx=2, width=lsh_w)
         lsh.newLine()
+        self.buttonDump = btnDump
         
         master_layout.addStretch(1)
 
@@ -1554,6 +1556,13 @@ class Form(QFrame):
         with open('style.css', 'r') as style_file:
             self.setStyleSheet(style_file.read())
 
+    def keyPressEvent(self, e):
+        modifiers = QApplication.keyboardModifiers()
+        if modifiers == Qt.ControlModifier:
+            if e.key() == Qt.Key_U:
+                self.on_dump_sysex_press()
+                self.on_dump_sysex_release()
+                
     def on_change_tab_bank(self):
         if self.current_bank != self.tabs.currentIndex():
             self.current_bank = self.tabs.currentIndex()
