@@ -100,6 +100,7 @@ QTabBar#inout::tab {
     padding: 8px 8px 20px 8px;
     /*padding-right: 4px;*/
 }
+
 QTabBar#inout::tab:selected {
     border-style: solid;
 	border-color: #FFF12C;

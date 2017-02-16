@@ -319,6 +319,8 @@ class MemoryWidget(QWidget):
         global form
         print("Reloading MIDI ports")
         form.txt_log.clear()
+        form.midi_monitor.clear()
+        form.midi_monitor.append(_("MIDI Monitor")) 
         form.txt_log.append(_("Welcome to Kilowhat!"))
         form.config_modeCB.setChecked(False)
         ports = midiin.get_ports()
@@ -394,6 +396,8 @@ class MemoryWidget(QWidget):
 
         form.txt_log.clear()
         form.txt_log.append(_("Welcome to Kilowhat!"))
+        form.midi_monitor.clear()
+        form.midi_monitor.append(_("MIDI Monitor")) 
         self.reopen_ports()
 
     def raise_changed_memory_event(self):
@@ -881,6 +885,7 @@ class InputConfig(ConfigWidget):
         self.max.setValue(model.max)
 
     def save_model(self):
+        global form
         model = self.model()
         model.channel = self.channel.value()
         model.mode = self.mode.currentIndex()
@@ -943,7 +948,7 @@ class InputConfig(ConfigWidget):
         
         self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
         self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
-        self.max.setValue(16383 if mode == MODE_NRPN else 127)
+        self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
 
@@ -1231,14 +1236,6 @@ class Form(QFrame):
         lsh_w2 = None
         lsh_w3 = None
         lsh_w4 = None
-
-        link = QLabel()
-        link.setText("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">" + _("Help") + "</a>")
-        link.setStyleSheet("QLabel { font-size: 10pt }")
-        link.setTextInteractionFlags(Qt.TextBrowserInteraction)
-        link.setTextFormat(Qt.RichText)
-        link.setOpenExternalLinks(True)
-        lsh.widget(link, spanx=2, align=Qt.AlignRight).newLine()
     
         lsh.label(_("Config file description"), spanx=2, align=Qt.AlignCenter).newLine()
         self.description = QLineEdit()
@@ -1274,6 +1271,14 @@ class Form(QFrame):
         lsh.newLine()
         self.buttonDump = btnDump
         
+        link = QLabel()
+        link.setText("<a href=\"http://wiki.yaeltex.com.ar/index.php?title=Kilowhat\" style=\"color: yellow;\">" + _("Help") + "</a>")
+        link.setStyleSheet("QLabel { font-size: 10pt; padding-right: 3px; }")
+        link.setTextInteractionFlags(Qt.TextBrowserInteraction)
+        link.setTextFormat(Qt.RichText)
+        link.setOpenExternalLinks(True)
+        lsh.widget(link, spanx=2, align=Qt.AlignRight).newLine()
+        
         master_layout.addStretch(1)
 
         widget_bank_line = PaintWidget()
@@ -1308,14 +1313,14 @@ class Form(QFrame):
         layout_bank_line.addStretch()
         layout_bank_line.addStretch()
         
-        self.tabs = QTabBar()
-        self.tabs.setStyleSheet("QTabBar { font-size: 10pt }")
-        self.tabs.setUsesScrollButtons(False)
-        #self.tabs.setAlignment(Qt.AlignLeft)
-        self.tabs.setBackgroundRole(QPalette.Dark)        #HACK: to hide bottom line     
-        self.tabs.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        layout_bank_line.addWidget(self.tabs)
-        self.tabs.currentChanged.connect(self.on_change_tab_bank)
+        self.tabs_banks = QTabBar()
+        self.tabs_banks.setStyleSheet("QTabBar { font-size: 10pt }")
+        self.tabs_banks.setUsesScrollButtons(False)
+        #self.tabs_banks.setAlignment(Qt.AlignLeft)
+        self.tabs_banks.setBackgroundRole(QPalette.Dark)        #HACK: to hide bottom line     
+        self.tabs_banks.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        layout_bank_line.addWidget(self.tabs_banks)
+        self.tabs_banks.currentChanged.connect(self.on_change_tab_bank)
         self.refresh_tabs()
         
         #################################################
@@ -1558,14 +1563,47 @@ class Form(QFrame):
 
     def keyPressEvent(self, e):
         modifiers = QApplication.keyboardModifiers()
+        max_banks = config['global'].num_banks
         if modifiers == Qt.ControlModifier:
-            if e.key() == Qt.Key_U:
+            if e.key() == Qt.Key_D:
                 self.on_dump_sysex_press()
                 self.on_dump_sysex_release()
-                
+            elif e.key() == Qt.Key_S:
+                self.on_save_file()
+            elif e.key() == Qt.Key_L:
+                self.on_load_file()
+        else:
+            if e.key() == Qt.Key_E:
+                if self.tabs_inout.currentIndex() != 0:
+                    self.tabs_inout.setCurrentIndex(0)
+            elif e.key() == Qt.Key_S:
+                if self.tabs_inout.currentIndex() != 1:
+                    self.tabs_inout.setCurrentIndex(1)
+            elif e.key() == Qt.Key_D:
+                if self.tabs_inout.currentIndex() != 2:
+                    self.tabs_inout.setCurrentIndex(2)
+            elif e.key() == Qt.Key_0:
+                if self.tabs_banks.currentIndex() != 0:
+                    self.tabs_banks.setCurrentIndex(0)
+            elif e.key() == Qt.Key_1 and max_banks > 0:
+                if self.tabs_banks.currentIndex() != 1:
+                    self.tabs_banks.setCurrentIndex(1)
+            elif e.key() == Qt.Key_2 and max_banks > 1:
+                if self.tabs_banks.currentIndex() != 2:
+                    self.tabs_banks.setCurrentIndex(2)
+            elif e.key() == Qt.Key_3 and max_banks > 2:
+                if self.tabs_banks.currentIndex() != 3:
+                    self.tabs_banks.setCurrentIndex(3)
+            elif e.key() == Qt.Key_4 and max_banks > 3:
+                if self.tabs_banks.currentIndex() != 4:
+                    self.tabs_banks.setCurrentIndex(4)
+            elif e.key() == Qt.Key_5 and max_banks > 4:
+                if self.tabs_banks.currentIndex() != 5:
+                    self.tabs_banks.setCurrentIndex(5)
+                    
     def on_change_tab_bank(self):
-        if self.current_bank != self.tabs.currentIndex():
-            self.current_bank = self.tabs.currentIndex()
+        if self.current_bank != self.tabs_banks.currentIndex():
+            self.current_bank = self.tabs_banks.currentIndex()
             print(self.current_bank)
             with wait_cursor():
                 self.change_views_bank(self.current_bank)
@@ -1603,11 +1641,11 @@ class Form(QFrame):
 
     def refresh_tabs(self):
         nbanks = config['global'].num_banks
-        for i in range(self.tabs.count(), nbanks):
-            self.tabs.addTab(_("Bank {0}").format(i))
+        for i in range(self.tabs_banks.count(), nbanks):
+            self.tabs_banks.addTab(_("Bank {0}").format(i))
 
-        while self.tabs.count() > nbanks:
-            self.tabs.removeTab(nbanks)
+        while self.tabs_banks.count() > nbanks:
+            self.tabs_banks.removeTab(nbanks)
 
     def refresh_in_outs(self):
         gd = config['global'] # type: GlobalData
@@ -1702,9 +1740,9 @@ class Form(QFrame):
                 config = config2
                 self.current_bank = 0
                 self.current_inout_tab = 0
-                self.load_model()
                 self.refresh_tabs()
                 self.refresh_in_outs()
+                self.load_model()
             file.close()
         except Exception as e:
             QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
