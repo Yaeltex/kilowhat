@@ -4,6 +4,7 @@
 
 import sys
 import datetime
+import os
 
 # Debug mode: python kilowhat.py -d
 DEBUG = False
@@ -473,7 +474,8 @@ class MemoryWidget(QWidget):
 class ConfigWidget(QWidget):
     alert_txt = None
     multiple_edition_mode = False
-
+    _first_time = True
+    
     def setAlert(self, txt_or_none):
         self.alert_txt = txt_or_none
         if txt_or_none is not None:
@@ -665,6 +667,10 @@ class OutputConfig(ConfigWidget):
         param = self.param.value()
         max_banks = config['global'].num_banks
         
+        if self._first_time:
+            self._first_time = False
+            return
+        
         if is_shifter and max_banks == 1:
             alertParam = True
             self.setAlert(_("There is no use for a shifter, if you only have one bank").format(param, max_banks-1))        
@@ -700,7 +706,7 @@ class OutputConfig(ConfigWidget):
                             
         if not repeated and not alertParam:
             self.setAlert(None)
-        
+            
         #HACK: Refresh everything just in case
         #self.window().call_on_param_value_changed_on_outputs()
         
@@ -805,9 +811,11 @@ class QSpinBoxHack(QSpinBox):
     #	print(args)
 
 class InputConfig(ConfigWidget):
+    _prev_mode = MODE_OFF
+    
     def __init__(self, model_name, index, parent=None):
         super(InputConfig, self).__init__(model_name, index, parent)
-
+        
         self._index = index
         
         self.number = self.add(QLabel(str(index)))
@@ -877,6 +885,7 @@ class InputConfig(ConfigWidget):
         super().show_feedback()
 
     def load_model(self):
+        global form
         model = self.model()
         self.channel.setValue(model.channel)
         self.mode.setCurrentIndex(model.mode)
@@ -885,7 +894,6 @@ class InputConfig(ConfigWidget):
         self.max.setValue(model.max)
 
     def save_model(self):
-        global form
         model = self.model()
         model.channel = self.channel.value()
         model.mode = self.mode.currentIndex()
@@ -902,6 +910,10 @@ class InputConfig(ConfigWidget):
         param = self.param.value()
         max_banks = config['global'].num_banks
         
+        if self._first_time:
+            self._first_time = False
+            return
+        
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
             self.setAlert(_("Note/CC param {0} outside valid range 0-127").format(param))
@@ -913,11 +925,7 @@ class InputConfig(ConfigWidget):
             self.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
         else:
             repeated = False
-            if mode == MODE_SHIFTER:
-                for bankIdx in range(MAX_BANKS):
-                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER                         # si es shifter en un banco, lo es en todos
-                    config['banks'][bankIdx].input_cc[self._index].param = param                               # copiar parametro de shifter en todos los bancos
-
+            if mode == MODE_SHIFTER:                
                 for i, w in enumerate(self.window().inputs):
                     if self._index != i and i < glob.num_inputs_norm:
                         if w.mode.currentIndex() == MODE_SHIFTER and w.param.value() == param:
@@ -925,11 +933,16 @@ class InputConfig(ConfigWidget):
                             alertParam = True
                             repeated = True
                             break
-            else:
+                            
+                for bankIdx in range(max_banks):
+                    config['banks'][bankIdx].input_cc[self._index].mode = MODE_SHIFTER
+                    config['banks'][bankIdx].input_cc[self._index].param = param
+                    
+            elif self._prev_mode == MODE_SHIFTER:
                 for bankIdx in range(MAX_BANKS):
                     if config['banks'][bankIdx].input_cc[self._index].mode == MODE_SHIFTER:
                         config['banks'][bankIdx].input_cc[self._index].mode = mode
-                        break
+                        
             #print(self.window())
             
             if not repeated:
@@ -951,6 +964,8 @@ class InputConfig(ConfigWidget):
         self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
+        
+        self._prev_mode = mode
 
     def show_value(self, value):
         self.monitor.setText("({0})".format(value))
@@ -998,6 +1013,7 @@ class InputConfigCC(InputConfig):
         super().on_param_value_changed()
         mode = self.mode.currentIndex()
         max_banks = config['global'].num_banks
+            
         if mode == MODE_SHIFTER:
             self.analog.setCurrentIndex(1)
             for bankIdx in range(max_banks):
@@ -1237,6 +1253,10 @@ class Form(QFrame):
         lsh_w3 = None
         lsh_w4 = None
     
+        self.label_file = QLabel("File")
+        self.label_file.setStyleSheet("QLabel { font-size: 10pt ; font-style: italic;}")
+        lsh.widget(self.label_file, spanx=2, align=Qt.AlignLeft).newLine()
+        
         lsh.label(_("Config file description"), spanx=2, align=Qt.AlignCenter).newLine()
         self.description = QLineEdit()
         #self.description.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Ignored)
@@ -1673,8 +1693,7 @@ class Form(QFrame):
             self.config_mode = False
             midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
             return
-        
-        
+            
     def on_dump_sysex_press(self):
         self.txt_log.append(_("Starting Dump. Please don't disconnect the usb cable or turn off the device"))
         time.sleep(0.2)
@@ -1722,27 +1741,45 @@ class Form(QFrame):
 
     def load_model(self):
         self.description.setText(config['file']['desc'])
-        for w in [self.memory_widget, self.input_us] + self.inputs + self.outputs:
+        for w in [self.memory_widget, self.input_us] + self.outputs:
+            w._first_time = True
             w.load_model()
+        
+        for w in self.inputs:
+            w._first_time = True
+            w.mode.currentIndexChanged.disconnect(w.on_param_value_changed)
+            w.param.valueChanged.disconnect(w.on_param_value_changed)
+            w.analog.currentIndexChanged.disconnect(w.on_param_value_changed)
+            w.toggle.currentIndexChanged.disconnect(w.on_param_value_changed)
+            w.load_model()
+            w.param.valueChanged.connect(w.on_param_value_changed)
+            w.analog.currentIndexChanged.connect(w.on_param_value_changed)
+            w.toggle.currentIndexChanged.connect(w.on_param_value_changed)
+            w.mode.currentIndexChanged.connect(w.on_param_value_changed)    
 
     def load_file(self, fileName, automatic = False):
         try:
             file = open(fileName, 'rb')
             global config
             config2 = pickle.load(file)
+                
             file_ver = config2['file_ver'] if 'file_ver' in config2 else 0
+            
+            self.label_file.setText(os.path.basename(fileName))
+            
             if file_ver != PROTOCOL_VERSION:
                 if not automatic:
                     QMessageBox.warning(self, _('Error'),
                                         _('Invalid version of kwt configuration file "{0}"\nVersion {1} should be {2} ')
                                         .format(fileName, file_ver, PROTOCOL_VERSION))
             else:
-                config = config2
+                config = config2       
                 self.current_bank = 0
                 self.current_inout_tab = 0
                 self.refresh_tabs()
                 self.refresh_in_outs()
                 self.load_model()
+                
             file.close()
         except Exception as e:
             QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
@@ -1969,9 +2006,14 @@ import platform
 if platform.system() == "Windows":
     print("Win workaround task-bar icons")
     import ctypes
-    myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
+    from ctypes import wintypes
+    lpBuffer = wintypes.LPWSTR()
+    AppUserModelID = ctypes.windll.shell32.GetCurrentProcessExplicitAppUserModelID
+    AppUserModelID(ctypes.cast(ctypes.byref(lpBuffer), wintypes.LPWSTR))
+    appid = lpBuffer.value
+    ctypes.windll.kernel32.LocalFree(lpBuffer)
+    if appid is not None:
+        print(appid)
 
 print("Creating form")
 
