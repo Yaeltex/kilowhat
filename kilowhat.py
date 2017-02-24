@@ -158,11 +158,11 @@ def send_sysex_dump():
 
 
 # TODO: stuff is a list of a list with widgets, layouts and tuples for cellspan (w/l, spanx, spany)
-def grid_create(grid:QGridLayout, stuff):
-    for row in stuff:
-        for elem in row:
-            if isinstance(elem, QWidget):
-                grid.addWidget(elem)
+#def grid_create(grid:QGridLayout, stuff):
+#    for row in stuff:
+#        for elem in row:
+#            if isinstance(elem, QWidget):
+#                grid.addWidget(elem)
 
 class GridHelper:
     _x = 0
@@ -1575,11 +1575,18 @@ class Form(QFrame):
 
         self.load_model()        # Load defaults in case automatic file loading fails
 
-        if os.path.isfile(FILE_AUTOMATIC):
-            self.load_file(FILE_AUTOMATIC, True)
+        if platform.system() == "Linux":
+            if os.path.isfile(FILE_AUTOMATIC):
+                self.load_file(FILE_AUTOMATIC, True)
 
-        with open('style.css', 'r') as style_file:
-            self.setStyleSheet(style_file.read())
+            with open('style-linux.css', 'r') as style_file:
+                self.setStyleSheet(style_file.read())
+        else:
+            if os.path.isfile(FILE_AUTOMATIC):
+                self.load_file(FILE_AUTOMATIC, True)
+
+            with open('style.css', 'r') as style_file:
+                self.setStyleSheet(style_file.read())
 
     def keyPressEvent(self, e):
         modifiers = QApplication.keyboardModifiers()
