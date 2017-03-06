@@ -5,6 +5,7 @@
 
 #from lang import _
 import lang
+import configparser
 from math import floor
 
 MODE_OFF    = 0
@@ -16,9 +17,17 @@ MODE_SHIFTER= 5
 MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
 MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
 
-MAX_INPUTS_CC    = 32
-MAX_OUTPUTS        = 64
-MAX_BANKS         = 6
+config = configparser.ConfigParser()
+configFilePath = r'configIO.txt'
+config.readfp(open(configFilePath))
+
+MAX_INPUTS_CC = int(config.get('IO Config', 'maxInputsCC'))
+MAX_OUTPUTS = int(config.get('IO Config', 'maxOutputs'))
+MAX_BANKS = int(config.get('IO Config', 'maxBanks'))
+
+#MAX_INPUTS_CC    = 32
+#MAX_OUTPUTS        = 64
+#MAX_BANKS         = 6
 
 class GlobalData:
     output_matrix = False

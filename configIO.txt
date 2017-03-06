@@ -1,0 +1,4 @@
+[IO Config]
+maxInputsCC = 32
+maxOutputs = 64
+maxBanks = 6
