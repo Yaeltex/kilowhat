@@ -58,9 +58,9 @@ $ sudo port select --set pip pip34
 
 $ sudo pip install virtualenv
 
-# Probar con el terminal si reconoce el comando "virtualenv"
+\# Probar con el terminal si reconoce el comando "virtualenv"
 
-# Si no funciona porque no encuentra el comando virtualenv, hacer
+\# Si no funciona porque no encuentra el comando virtualenv, hacer
 
 $ sudo pip install virtualenv
 
@@ -90,40 +90,39 @@ $ python setup.py install
 
 $ brew install cmake
 
-# Lo siguiente instala qt5 y no sirve
+\# Lo siguiente instala qt5 y no sirve
 
 $ brew install qt
 
-# No funciona tampoco compilar desde los fuentes, tira un error de linker
+\# No funciona tampoco compilar desde los fuentes, tira un error de linker
 
-# Instalar con MacPorts
+\# Instalar con MacPorts
 
 $ sudo port install qt4-mac
 
-#
 \# Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
 
-# No funciona, no encuentra qmake
+\# Lo siguiente no funciona, no encuentra qmake
 
 $ pip install PySide -v # version 1.2.4
 
-# Descargar los fuentes de PySide
+\# Descargar los fuentes de PySide
 
 $ wget https://pypi.python.org/packages/source/P/PySide/PySide-1.2.4.tar.gz
 
-# Extraer
+\# Extraer
 
 $ tar -xvzf PySide-1.2.4.tar.gz
 
-# Moverse al directorio extraído
+\# Moverse al directorio extraído
 
 $ cd PySide-1.2.4
 
-# Generar el wheel, indicando el directorio de qmake
+\# Generar el wheel, indicando el directorio de qmake
 
 $ python setup.py bdist_wheel --qmake="/opt/local/libexec/qt4/bin/qmake"
 
-# Instalar el wheel
+\# Instalar el wheel
 
 $ sudo pip install dist/PySide-1.2.4-cp34-cp34m-macosx_10_11_x86_64.whl -v
 
