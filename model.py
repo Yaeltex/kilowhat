@@ -18,7 +18,7 @@ MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("S
 MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
 
 config = configparser.ConfigParser()
-configFilePath = r'configIO.txt'
+configFilePath = r’ioconfig.txt'
 config.readfp(open(configFilePath))
 
 MAX_INPUTS_CC = int(config.get('IO Config', 'maxInputsCC'))
