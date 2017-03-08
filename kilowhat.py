@@ -1990,7 +1990,7 @@ print("Starting App")
 app = QApplication(sys.argv)
 
 print("Set Icon")
-app.setWindowIcon(QIcon("assets/icon.png"))
+app.setWindowIcon(QIcon("assets/icon.icns"))
 
 def set_my_font():
         try:
