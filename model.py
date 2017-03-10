@@ -14,16 +14,27 @@ MODE_CC        = 2
 MODE_NRPN    = 3
 MODE_PC     = 4
 MODE_SHIFTER= 5
-MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
-MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
 
-config = configparser.ConfigParser()
+configFile = configparser.ConfigParser()
 configFilePath = r'ioconfig.txt'
-config.readfp(open(configFilePath))
+configFile.readfp(open(configFilePath))
 
-MAX_INPUTS_CC = int(config.get('IO Config', 'maxInputsCC'))
-MAX_OUTPUTS = int(config.get('IO Config', 'maxOutputs'))
-MAX_BANKS = int(config.get('IO Config', 'maxBanks'))
+miniblock = configFile.get('YTX Config', 'miniblock')
+miniblock = 1 if miniblock == "yes" else 0
+
+if miniblock:
+    MAX_INPUTS_CC = 36
+    MAX_OUTPUTS = 64
+    MAX_BANKS = 4
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"))
+    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC]
+else:
+    MAX_INPUTS_CC = 32
+    MAX_OUTPUTS = 64
+    MAX_BANKS = 6
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
+    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
+
 
 #MAX_INPUTS_CC    = 32
 #MAX_OUTPUTS        = 64

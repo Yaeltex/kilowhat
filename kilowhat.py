@@ -5,6 +5,7 @@
 import sys
 import datetime
 import os
+import configparser
 
 # Debug mode: python kilowhat.py -d
 DEBUG = False
@@ -60,6 +61,12 @@ LED_OUTPUT_MATRIX = 1
 
 import plat
 form = None
+configFile = configparser.ConfigParser()
+configFilePath = r'ioconfig.txt'
+configFile.readfp(open(configFilePath))
+
+miniblock = configFile.get('YTX Config', 'miniblock')
+miniblock = 1 if miniblock == "yes" else 0
 
 config = {
       'file_ver': PROTOCOL_VERSION
@@ -251,7 +258,11 @@ class MemoryWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.btn_apply = QPushButton(_("Apply changes"))
         self.btn_apply.setStyleSheet("QPushButton { font-size: 10pt; }")
-       
+        
+        self.midi_thruCB = QCheckBox(_("<- MIDI THRU ->"))
+        self.midi_thruCB.setStyleSheet("QCheckBox { font-size: 10pt }")
+        
+        
         mem_layout = QVBoxLayout()
         
         self.label_config = QLabel(_("General configuration"))
@@ -282,7 +293,7 @@ class MemoryWidget(QWidget):
             .label(_("Set banks")).widget(self.banks, width=tiny)\
             .newLine()
         h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
-        h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
+        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
         h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).widget(self.btn_apply, spanx=2, width=small).newLine()       
         
@@ -310,6 +321,7 @@ class MemoryWidget(QWidget):
         self.ins.valueChanged.connect(self.on_param_value_changed)
         self.outs.valueChanged.connect(self.on_param_value_changed)
         self.btn_apply.pressed.connect(lambda: self.save_model())
+        self.midi_thruCB.clicked.connect(self.on_midi_thru_press)
 
         # Reset (TODO: done by the Form or here?)
         print("MemoryWidget() reset")
@@ -406,6 +418,15 @@ class MemoryWidget(QWidget):
             self.parent().refresh_tabs()
             self.parent().refresh_in_outs()
             pass
+     
+    def on_midi_thru_press(self):
+        global form
+        if self.midi_thruCB.isChecked():
+            form.midi_thru = True
+            return
+        else:
+            form.midi_thru = False
+            return
             
     def on_param_value_changed(self):
         print("MemoryWidget() on_param_value_changed")
@@ -620,9 +641,12 @@ class OutputConfig(ConfigWidget):
         
         self.shifter = self.addwl(_("Shifter"), QCheckBox())
         self.shifter.setChecked(False)
-        self.shifter.stateChanged.connect(self.on_param_value_changed)
-        self.shifter.stateChanged.connect(lambda: self.update_grouped_widgets("shifter") )
-        
+        if not miniblock:
+            self.shifter.stateChanged.connect(self.on_param_value_changed)
+            self.shifter.stateChanged.connect(lambda: self.update_grouped_widgets("shifter") )
+        else:
+            self.shifter.toggled.connect(self.checkbox_disabled)
+            
         self.h_layout.addSpacing(-50)
         
         noteSB = QSpinBox()
@@ -658,6 +682,14 @@ class OutputConfig(ConfigWidget):
         self.max.setValue(127)
         self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max") )
 
+    def checkbox_disabled(self):
+        if self.shifter.isChecked():
+            self.shifter.setChecked(False)
+            return
+        else:
+            self.shifter.setChecked(False)
+            return
+            
     def on_param_value_changed(self):
         global form
         glob = config['global'];
@@ -1114,6 +1146,7 @@ class Form(QFrame):
     inputs = []
     input_us = None
     current_bank = 0
+    current_inout_tab = 0
     prev_param = 0
     nrpn_param_coarse = 0
     nrpn_param_complete = 0
@@ -1127,6 +1160,7 @@ class Form(QFrame):
     multiple_edition_mode = False
     
     config_mode = False
+    midi_thru = False
     
     testing = None
     
@@ -1327,7 +1361,8 @@ class Form(QFrame):
         
         self.tabs_inout.addTab(_("Inputs"))
         self.tabs_inout.addTab(_("Outputs"))
-        self.tabs_inout.addTab(_("Distance sensor"))
+        if not miniblock:
+            self.tabs_inout.addTab(_("Distance sensor"))
         self.tabs_inout.currentChanged.connect(self.on_change_tab_inout)
         
         layout_bank_line.addStretch()
@@ -1493,32 +1528,41 @@ class Form(QFrame):
         sa_layout.addWidget(test_all_widget)
         test_all_widget.setLayout(test_all_layout)
         #################################################
-
-        for i in range(0, MAX_OUTPUTS):
+        
+        max_outs = 4 if miniblock else MAX_OUTPUTS
+        
+        for i in range(0, max_outs):
             #For each config, pre-config banks
             for bankIdx in range(MAX_BANKS):
                 config['banks'][bankIdx].output[i].note = i
 
             lw = OutputConfig('output', i)
             lw.load_model()
-            #lw.setMinimumHeight(40)
-            #lw.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
-            #lw.param.setValue(i)
+            
             if i % 2 == 0:
                 lw.setProperty("parity", "even")	#For stylesheets
             self.outputs.append(lw)
             sa_layout.addWidget(lw)
+            
+        if miniblock:
+            sa_layout.addSpacing(123)
+            self.memory_widget.banks.setEnabled(False)
+            self.memory_widget.ins.setEnabled(False)
+            self.memory_widget.outs.setEnabled(False)
+            self.memory_widget.hardware.setEnabled(False)
+            self.memory_widget.output_matrix.setEnabled(False)
+            self.memory_widget.btn_apply.setEnabled(False)
+        ###############
+        
+        #end in/out/sensor tab config
         ###############
         #Hack to let the outputs window load with full size
         self.change_views_inout_tab(1)
         #Default view: inputs
         self.change_views_inout_tab(0)
         
-        #end in/out/sensor tab config
-        ###############
-
         self.refresh_in_outs()
-        
+       
         master_layout.addStretch(1)
         
         config_mode_layout = QHBoxLayout()
@@ -1661,7 +1705,7 @@ class Form(QFrame):
             self.inputs_frame.hide()
             self.outputs_frame.show() #load outputs 
             self.us_frame.hide()
-        else:
+        elif not miniblock:
             self.inputs_frame.hide()
             self.outputs_frame.hide()
             self.us_frame.show() #load ultrasonic
@@ -1690,7 +1734,7 @@ class Form(QFrame):
 
         for w in [self.memory_widget, self.input_us] + self.inputs + self.outputs:
             w.save_model()
-    
+            
     def on_config_mode_press(self):
         if self.config_modeCB.isChecked():
             self.config_mode = True
@@ -1789,7 +1833,8 @@ class Form(QFrame):
                 
             file.close()
         except Exception as e:
-            QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
+            time.sleep(0.1)
+            #QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def save_file(self, fileName):
         try:
@@ -1799,7 +1844,8 @@ class Form(QFrame):
                 pickle.dump(config, file)
                 file.close()
         except Exception as e:
-            QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
+            time.sleep(0.1)
+            #QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def on_save_file(self):
         # TODO: Check if it was saved!
@@ -1868,7 +1914,6 @@ class Form(QFrame):
                     
             elif cmd_type == MIDI_NOTE_ON:
                 self.midi_monitor.append(str(chn+1) + " Note On " + str(param) + " " + str(value))
-                midi_send((MIDI_NOTE_ON | chn, param, value))
             elif cmd_type == MIDI_NOTE_OFF:
                 self.midi_monitor.append(str(chn+1) + " Note Off " + str(param) + " " + str(value))
                 midi_send((MIDI_NOTE_ON | chn, param, value))
@@ -1877,7 +1922,10 @@ class Form(QFrame):
                 return      # to prevent error unpacking only 2 bytes
             else:
                 self.midi_monitor.append(_("MIDI message not supported"))
-  
+        
+        if self.midi_thru:
+            midi_send((cmd_type | chn, param, value))  # MIDI THRU
+                    
         target = None
         if self.config_modeCB.isChecked():
             if chn == MONITOR_CHAN_US:

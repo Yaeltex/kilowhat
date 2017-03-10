@@ -8,7 +8,7 @@ Usage:
 from setuptools import setup
 
 APP = ['kilowhat.py']
-DATA_FILES = [('', ['assets']), ('', ['locales']), ('', ['style.css']), ('', ['ioconfig.txt'])]
+DATA_FILES = [('', ['assets']),('', ['templates']), ('', ['locales']), ('', ['style.css']), ('', ['ioconfig.txt'])]
 OPTIONS = {'argv_emulation': True}
 
 setup(
