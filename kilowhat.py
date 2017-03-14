@@ -27,6 +27,7 @@ import time
 import os
 import os.path
 import pickle
+#import numpy as np
 from pprint import pprint
 
 import sysex
@@ -75,6 +76,8 @@ config = {
     , 'banks': [Bank() for __ in range(memory.MAX_BANKS) ]
 }
 
+nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 131, 139, 148, 157, 168, 178, 190, 202, 225, 243, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 544, 579, 616, 655, 697, 742, 789, 839, 893, 950, 1011, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
+     
 def midi_send(msg):
     print("midi_send() ", msg)
     global form
@@ -164,6 +167,7 @@ def send_sysex_dump():
         print("Exception", e)
 
 
+        
 # TODO: stuff is a list of a list with widgets, layouts and tuples for cellspan (w/l, spanx, spany)
 #def grid_create(grid:QGridLayout, stuff):
 #    for row in stuff:
@@ -892,22 +896,31 @@ class InputConfig(ConfigWidget):
         self.channel.setRange(1, 16)
         self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel"))
         
-        minSB = QSpinBoxHack()
-        minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
-        self.min = self.addwl(_("Min."), minSB)
-        self.min.setRange(0, 127)
+        #minSB = QSpinBoxHack()
+        #minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
+        minCB = QComboBox()
+        self.min = self.addwl(_("Min."), minCB)
+        for labelIdx in range(len((nrpn_min_max))):
+            self.min.addItem(str(nrpn_min_max[labelIdx]))
+        
+        #self.min.setRange(0, 127)
 
-        self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min"))
+        #self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min"))
 
-        maxSB = QSpinBoxHack()
-        maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
-        self.max = self.addwl(_("Max."), maxSB)
-        self.max.setRange(0, 127)
-        #self.max.valueChanged.connect(self.on_max_value_changed)
+        #maxSB = QSpinBoxHack()
+        #maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
+        maxCB = QComboBox()
+        self.max = self.addwl(_("Max."), maxCB)
+        for labelIdx in range(len(nrpn_min_max)):
+            self.max.addItem(str(nrpn_min_max[labelIdx]))
+        
+        #self.max.setRange(0, 127)
+        
+        ###self.max.valueChanged.connect(self.on_max_value_changed)
 
-        self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max"))
+        #self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max"))
 
-        self.max.setValue(127)
+        #self.max.setValue(127)
 
         #TODO: On any change: save model? <- NO
 
@@ -921,16 +934,16 @@ class InputConfig(ConfigWidget):
         self.channel.setValue(model.channel)
         self.mode.setCurrentIndex(model.mode)
         self.param.setValue(model.param)
-        self.min.setValue(model.min)
-        self.max.setValue(model.max)
+        self.min.setCurrentIndex(model.min)
+        self.max.setCurrentIndex(model.max)
 
     def save_model(self):
         model = self.model()
         model.channel = self.channel.value()
         model.mode = self.mode.currentIndex()
         model.param = self.param.value()
-        model.min = self.min.value()
-        model.max = self.max.value()
+        model.min = self.min.currentIndex()
+        model.max = self.max.currentIndex()
 
     def on_param_value_changed(self):
         #TODO: Shifter lock in to banks
@@ -987,12 +1000,12 @@ class InputConfig(ConfigWidget):
         self.max.setEnabled(en)
         self.channel.setEnabled(en)
         
-        self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
+        #self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
         #self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
         
-        self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
+        #self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
         #self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
-        #self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
+        ####self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
         
