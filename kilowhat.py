@@ -390,7 +390,6 @@ class MemoryWidget(QWidget):
                 midiout.open_port(cmo_i)
                 #TODO: Unflag as correct device
                 print("Send CONFIG_MODE sysex")
-                midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
             except Exception as e:
                 print('Error al abrir puerto de salida {0}: {1}'.format(cmo_i, e))
                 if form:
@@ -406,12 +405,12 @@ class MemoryWidget(QWidget):
     def change_midi_out(self, index):
         print("Open OUT {0}".format(index))
         global form
-
         form.txt_log.clear()
         form.txt_log.append(_("Welcome to Kilowhat!"))
         form.midi_monitor.clear()
         form.midi_monitor.append(_("MIDI Monitor")) 
         self.reopen_ports()
+        midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
 
     def raise_changed_memory_event(self):
         with wait_cursor():
@@ -993,7 +992,7 @@ class InputConfig(ConfigWidget):
         
         self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
         self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
-        self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
+        #self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
         

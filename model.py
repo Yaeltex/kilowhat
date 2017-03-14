@@ -31,7 +31,7 @@ if miniblock:
 else:
     MAX_INPUTS_CC = 32
     MAX_OUTPUTS = 64
-    MAX_BANKS = 6
+    MAX_BANKS = 8
     MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
     MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
 
