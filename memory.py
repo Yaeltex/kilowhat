@@ -1,3 +1,4 @@
+
 from model import *
 import configparser
 KILOMUX_OVERHEAD = 1            #Overhead bytes
@@ -14,8 +15,8 @@ DATA_SIZE = {
 }
 
 assert DATA_SIZE['global'] == 16
-assert DATA_SIZE['input_us'] == 9
-assert DATA_SIZE['input_cc'] == 6
+assert DATA_SIZE['input_us'] == 11
+assert DATA_SIZE['input_cc'] == 8
 assert DATA_SIZE['output'] == 4
 
 configFile = configparser.ConfigParser()

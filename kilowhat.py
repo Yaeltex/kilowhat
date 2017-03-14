@@ -988,10 +988,10 @@ class InputConfig(ConfigWidget):
         self.channel.setEnabled(en)
         
         self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
+        #self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
         
         self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
+        #self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
         #self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
