@@ -107,16 +107,15 @@ class InputData:
         #    self.param >> 7 & 0x7f, self.param & 0x7f,  (self.min>>7) & 0x7f if self.mode == MODE_NRPN else self.min,\
         #                                                (self.max>>7) & 0x7f if self.mode == MODE_NRPN else self.max]
         return [(self.mode&0x7) | (self.channel-1 & 0xf) << 3,\
-            self.param >> 7 & 0x7f, self.param & 0x7f,  self.min >> 7 & 0x7f, self.min & 0x7f,\
-                                                        self.max >> 7 & 0x7f, self.max & 0x7f]
+            self.param >> 7 & 0x7f, self.param & 0x7f,  self.min, self.max]
 
     def set_sysex(self, msg):
         assert(len(msg) == len(self.get_bytes()))
         self.mode = msg[0] >> 1 & 0x7
         self.channel = (msg[0] >> 3 & 0xf) + 1                  # +1 because channel is 1-16 but protocol uses 0-15
         self.param = msg[1] & 0x7f | (msg[2] & 0x7f) << 7
-        self.min = msg[3] & 0x7f | (msg[4] & 0x7f) << 7
-        self.max = msg[5] & 0x7f | (msg[6] & 0x7f) << 7
+        self.min = msg[3]
+        self.max = msg[4]
 
 
 class InputDataCC(InputData):

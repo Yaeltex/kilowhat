@@ -76,7 +76,7 @@ config = {
     , 'banks': [Bank() for __ in range(memory.MAX_BANKS) ]
 }
 
-nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 131, 139, 148, 157, 168, 178, 190, 202, 225, 243, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 544, 579, 616, 655, 697, 742, 789, 839, 893, 950, 1011, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
+nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 131, 139, 148, 157, 168, 178, 190, 202, 225, 243, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 544, 579, 616, 655, 697, 742, 789, 839, 893, 950, 1023, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
      
 def midi_send(msg):
     print("midi_send() ", msg)
@@ -1000,6 +1000,15 @@ class InputConfig(ConfigWidget):
         self.max.setEnabled(en)
         self.channel.setEnabled(en)
         
+        if mode == MODE_NRPN:
+            for index in range(len(nrpn_min_max)):
+                self.min.setItemText(index, str(nrpn_min_max[index]))
+                self.max.setItemText(index, str(nrpn_min_max[index]))
+        else:
+            for index in range(len(nrpn_min_max)):
+                self.min.setItemText(index, str(index))
+                self.max.setItemText(index, str(index))
+                
         #self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
         #self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
         
@@ -1474,6 +1483,7 @@ class Form(QFrame):
 
             lw = InputConfigCC('input_cc', i, self)
             lw.load_model()
+                
             #lw.setMinimumHeight(40)
             if i % 2 == 0:
                 lw.setProperty("parity", "even")	#For stylesheets
@@ -1818,7 +1828,12 @@ class Form(QFrame):
             w.param.valueChanged.connect(w.on_param_value_changed)
             w.analog.currentIndexChanged.connect(w.on_param_value_changed)
             w.toggle.currentIndexChanged.connect(w.on_param_value_changed)
-            w.mode.currentIndexChanged.connect(w.on_param_value_changed)    
+            w.mode.currentIndexChanged.connect(w.on_param_value_changed) 
+            if w.mode.currentIndex() == MODE_NRPN:
+                for index in range(len(nrpn_min_max)):
+                    w.min.setItemText(index, str(nrpn_min_max[index]))
+                    w.max.setItemText(index, str(nrpn_min_max[index]))
+                self.txt_log.append(str(w._index) + " is NRPN. Min is " + str(nrpn_min_max[w.min.currentIndex()]) + " and Max is " + str(nrpn_min_max[w.max.currentIndex()]))
 
     def load_file(self, fileName, automatic = False):
         try:
@@ -1846,7 +1861,7 @@ class Form(QFrame):
             file.close()
         except Exception as e:
             time.sleep(0.1)
-            #QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
+            QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def save_file(self, fileName):
         try:
@@ -1855,9 +1870,10 @@ class Form(QFrame):
                 self.save_model()
                 pickle.dump(config, file)
                 file.close()
+                self.label_file.setText(os.path.basename(fileName))
         except Exception as e:
             time.sleep(0.1)
-            #QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
+            QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def on_save_file(self):
         # TODO: Check if it was saved!
