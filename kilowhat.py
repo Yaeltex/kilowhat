@@ -1805,7 +1805,12 @@ class Form(QFrame):
             w.param.valueChanged.connect(w.on_param_value_changed)
             w.analog.currentIndexChanged.connect(w.on_param_value_changed)
             w.toggle.currentIndexChanged.connect(w.on_param_value_changed)
-            w.mode.currentIndexChanged.connect(w.on_param_value_changed)    
+            w.mode.currentIndexChanged.connect(w.on_param_value_changed) 
+
+            w.min.setRange(0, 16383 if w.mode.currentIndex() == MODE_NRPN else 127)
+            w.min.setSingleStep(128 if w.mode.currentIndex() == MODE_NRPN else 1)
+            w.max.setRange(0, 16383 if w.mode.currentIndex() == MODE_NRPN else 127)
+            w.max.setSingleStep(128 if w.mode.currentIndex() == MODE_NRPN else 1)
 
     def load_file(self, fileName, automatic = False):
         try:
@@ -1828,12 +1833,11 @@ class Form(QFrame):
                 self.current_inout_tab = 0
                 self.refresh_tabs()
                 self.refresh_in_outs()
-                self.load_model()
-                
+                self.load_model()              
             file.close()
         except Exception as e:
             time.sleep(0.1)
-            #QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
+            QMessageBox.warning(self, _('Error'), _('Error opening kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def save_file(self, fileName):
         try:
@@ -1842,16 +1846,16 @@ class Form(QFrame):
                 self.save_model()
                 pickle.dump(config, file)
                 file.close()
+                self.label_file.setText(os.path.basename(fileName))
         except Exception as e:
             time.sleep(0.1)
-            #QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
+            QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
 
     def on_save_file(self):
         # TODO: Check if it was saved!
         fileName, __ = QFileDialog.getSaveFileName(self, _("Save kwt configuration file"),  filter = _("kwt file (*.kwt)"))
         if not fileName:
             return
-
         try:
             self.save_file(fileName)
         finally:
