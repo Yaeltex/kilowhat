@@ -228,6 +228,7 @@ class PaintWidget(QWidget):
 
 
 class MemoryWidget(QWidget):
+    firstTimePorts = True
     def __init__(self, parent):
         print("MemoryWidget() parent ctor")
         super().__init__(parent)
@@ -410,7 +411,11 @@ class MemoryWidget(QWidget):
         form.midi_monitor.clear()
         form.midi_monitor.append(_("MIDI Monitor")) 
         self.reopen_ports()
-        midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
+        #Send Sysex - CONFIG_MODE
+        if not firstTimePorts:
+            midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
+        else:
+            firstTimePorts = False
 
     def raise_changed_memory_event(self):
         with wait_cursor():
