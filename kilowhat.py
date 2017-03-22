@@ -1121,6 +1121,11 @@ class InputConfigUS(InputConfig):
         self.dist_min.setEnabled(en)
         self.dist_max.setEnabled(en)
 
+class MyQGridLayout(QGridLayout):
+    def __init__(self, parent = None):
+        QGridLayout.__init__(self, parent) 
+        self.maximumSize = 250
+        
 class MonitorTextEdit(QTextEdit):
     def __init__(self, parent = None):
         QTextEdit.__init__(self, parent) 
@@ -1265,12 +1270,15 @@ class Form(QFrame):
         #layout_top.addLayout(layout_config)
         
         layout_top.addStretch() # space between
-
+        
+        widget_save = QWidget()
+        widget_save.setMaximumWidth(400)
         load_save_layout = QGridLayout()
-        load_save_layout.setSizeConstraint(QLayout.SetMaximumSize)
-        layout_top.addLayout(load_save_layout)
+        #load_save_layout.setSizeConstraint(QLayout.SetMaximumSize)
+        widget_save.setLayout(load_save_layout)
+        layout_top.addWidget(widget_save)
         lsh = GridHelper(load_save_layout)
-
+        
         print("Form() logo.png")
 
         lsh.pic("assets/logo.png", spanx=2, align=Qt.AlignRight).newLine()
