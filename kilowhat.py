@@ -1025,7 +1025,7 @@ class InputConfigCC(InputConfig):
 
         pt = QComboBox()
         pt.setStyleSheet("QComboBox {font-size: 10pt}")
-        pt.setMinimumWidth(100)
+        pt.setMinimumWidth(120)
         pt.addItems((_("Toggle"), _("Momentary")))
 
         self.toggle = pt		# Changes for regular input (pot, slider) and ultrasound config
