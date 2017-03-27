@@ -45,7 +45,7 @@ COLOR_TIMEOUT = 500                        # ms. Background coloring timeout
 
 # Midi
 POLL_INTERVAL = 10                        # ms. Midi in polling interval
-THRESHOLD_SELECT = 16                    # Delta threshold for selecting (coloring background and ensuring is visible in scroll area)
+THRESHOLD_SELECT = 3                    # Delta threshold for selecting (coloring background and ensuring is visible in scroll area)
 MONITOR_CHAN_US = 15                    # Ultra sound channel monitoring
 
 # Files
@@ -159,7 +159,7 @@ def send_sysex_dump():
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
             print("Sleep 0.5 seg")
-            time.sleep(0.3)
+            time.sleep(0.5)
     except Exception as e:
         print("Exception", e)
 
@@ -410,12 +410,17 @@ class MemoryWidget(QWidget):
         form.txt_log.append(_("Welcome to Kilowhat!"))
         form.midi_monitor.clear()
         form.midi_monitor.append(_("MIDI Monitor")) 
+        midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
         self.reopen_ports()
         #Send Sysex - CONFIG_MODE
-        if not firstTimePorts:
+        pNameIn = midiin.get_port_name(index)
+        pNameOut = midiout.get_port_name(index)
+        if not pNameIn == pNameOut: 
+            #form.midi_monitor.append("Send CONFIG")
             midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
         else:
-            firstTimePorts = False
+            #form.midi_monitor.append("First Time")
+            self.firstTimePorts = False
 
     def raise_changed_memory_event(self):
         with wait_cursor():
@@ -987,10 +992,13 @@ class InputConfig(ConfigWidget):
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
         
-        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
+        en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
         self.min.setEnabled(en)
         self.max.setEnabled(en)
-        self.channel.setEnabled(en)
+        self.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
+        
+        en2 = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
+        self.param.setEnabled(en2)
         
         self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
         self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
@@ -1055,10 +1063,13 @@ class InputConfigCC(InputConfig):
             for bankIdx in range(max_banks):
                 config['banks'][bankIdx].input_cc[self._index].analog = 0                                  # setear como digital en todos los bancos
             config['banks'][bankIdx].input_cc[self._index].toggle = self.toggle.currentIndex() == 0
-        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
-        self.analog.setEnabled(en)
-        self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF))		# 0 = Analog
-        #self.toggle.setEnabled(en)
+        elif mode == MODE_PC_MINUS or mode == MODE_PC_PLUS:
+            self.analog.setCurrentIndex(1)
+            self.toggle.setCurrentIndex(0)
+        
+        self.param.setEnabled(not (mode == MODE_PC and self.analog.currentIndex() == 0))
+        self.analog.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))      
+        self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))		
         #WARNING: param does not update grouped widgets values
 
     def copy_values_from(self, origin, value="all"):
@@ -1101,11 +1112,15 @@ class InputConfigUS(InputConfig):
         self.number.setText("")
 
         self.mode.setCurrentIndex(MODE_OFF);
+        
 
         self.dist_min = self.addwl(_("Min. Dist."), self.dist_min)
         self.dist_max = self.addwl(_("Max. Dist."), self.dist_max)
 
-        self.mode.removeItem(self.mode.count()-1)
+        self.mode.removeItem(MODE_SHIFTER);
+        self.mode.removeItem(MODE_PC_PLUS);
+        self.mode.removeItem(MODE_PC);
+        self.mode.removeItem(MODE_PC_MINUS);
 
     def save_model(self):
         super().save_model()
@@ -1136,10 +1151,10 @@ class MonitorTextEdit(QTextEdit):
         QTextEdit.__init__(self, parent) 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        copyAction = menu.addAction("Copy")
-        selAllAction = menu.addAction("Select all")
+        copyAction = menu.addAction(_("Copy"))
+        selAllAction = menu.addAction(_("Select all"))
         separator = menu.addSeparator()
-        clearAction = menu.addAction("Clear")
+        clearAction = menu.addAction(_("Clear"))
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if action == clearAction:
             self.clear()
@@ -1819,11 +1834,25 @@ class Form(QFrame):
             w.analog.currentIndexChanged.connect(w.on_param_value_changed)
             w.toggle.currentIndexChanged.connect(w.on_param_value_changed)
             w.mode.currentIndexChanged.connect(w.on_param_value_changed) 
-
-            w.min.setRange(0, 16383 if w.mode.currentIndex() == MODE_NRPN else 127)
-            w.min.setSingleStep(128 if w.mode.currentIndex() == MODE_NRPN else 1)
-            w.max.setRange(0, 16383 if w.mode.currentIndex() == MODE_NRPN else 127)
-            w.max.setSingleStep(128 if w.mode.currentIndex() == MODE_NRPN else 1)
+            
+            #refresh some stuff
+            mode = w.mode.currentIndex()
+            w.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            w.min.setSingleStep(128 if mode == MODE_NRPN else 1)
+            w.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            w.max.setSingleStep(128 if mode == MODE_NRPN else 1)
+            
+            en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
+            w.min.setEnabled(en)
+            w.max.setEnabled(en)
+            w.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
+            
+            en2 = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and w.analog.currentIndex() == 0))
+            w.param.setEnabled(en2)
+            
+            en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
+            w.analog.setEnabled(en)      
+            w.toggle.setEnabled(not (w.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))
 
     def load_file(self, fileName, automatic = False):
         try:
@@ -1859,7 +1888,6 @@ class Form(QFrame):
                 self.save_model()
                 pickle.dump(config, file)
                 file.close()
-                self.label_file.setText(os.path.basename(fileName))
         except Exception as e:
             time.sleep(0.1)
             QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
@@ -1871,6 +1899,7 @@ class Form(QFrame):
             return
         try:
             self.save_file(fileName)
+            self.label_file.setText(os.path.basename(fileName))
         finally:
             self.save_file(FILE_RECOVER)
 
@@ -1894,7 +1923,7 @@ class Form(QFrame):
             self.config_modeCB.setChecked(False)
             return
         
-        if cmd[0] == MIDI_PROGRAM_CHANGE:
+        if cmd[0] >= MIDI_PROGRAM_CHANGE and cmd[0] <= MIDI_PROGRAM_CHANGE|0xF :
             type_chn, param = cmd
             value = 0
         else:
@@ -1958,10 +1987,11 @@ class Form(QFrame):
 
             target.show_value((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(value))
             last_value = self._last_in_values[param]
+            #self.txt_log.append("Param " + str(param) + " Value " + str(value) + " Last value: " + str(self._last_in_values[param]))
             if abs(last_value - value) > THRESHOLD_SELECT:
                 self._last_in_values[param] = value
-
-                if target.enable_monitor.isChecked() and target.mode.currentIndex() != MODE_OFF:
+                
+                if target.enable_monitor.isChecked():
                     target.show_feedback()
                     ancestor = target.parent()
                     while ancestor is not None:

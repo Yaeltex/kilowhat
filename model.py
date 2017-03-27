@@ -8,12 +8,14 @@ import lang
 import configparser
 from math import floor
 
-MODE_OFF    = 0
-MODE_NOTE    = 1
-MODE_CC        = 2
-MODE_NRPN    = 3
-MODE_PC     = 4
-MODE_SHIFTER= 5
+MODE_OFF        = 0
+MODE_NOTE       = 1
+MODE_CC         = 2
+MODE_NRPN       = 3
+MODE_PC_MINUS   = 4
+MODE_PC         = 5
+MODE_PC_PLUS    = 6
+MODE_SHIFTER    = 7
 
 configFile = configparser.ConfigParser()
 configFilePath = r'ioconfig.txt'
@@ -26,14 +28,14 @@ if miniblock:
     MAX_INPUTS_CC = 36
     MAX_OUTPUTS = 64
     MAX_BANKS = 4
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"))
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"), _("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"))
     MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC]
 else:
     MAX_INPUTS_CC = 32
     MAX_OUTPUTS = 64
     MAX_BANKS = 8
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
-    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _("Shifter"))
+    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC_MINUS, MODE_PC, MODE_PC_PLUS, MODE_SHIFTER]
 
 
 #MAX_INPUTS_CC    = 32
