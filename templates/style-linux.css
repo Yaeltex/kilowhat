@@ -12,28 +12,41 @@ QPushButton {
 
 /*1.03*/
 QSpinBox:up-arrow {
-    image: url('assets/arrowup.png');
+	image: url('assets/arrowup.png');
 }
 QSpinBox:down-arrow {
-    image: url('assets/cbarrow.png');
+	image: url('assets/cbarrow.png');
 }
-
-QComboBox::down-arrow {
-    image: url('assets/cbarrow.png');
-}
-
 
 QTextEdit:!enabled, QSpinBox:!enabled, QCheckBox:!enabled, QLineEdit:!enabled, QComboBox:!enabled
 {
      color:#101010;
      background-color: #303030
 }
-
-/*
-*::focus {
-    background-color: #503000
+QComboBox:on
+{
+     color:#FFF;
+     background-color: #111111
 }
-*/
+
+QComboBox:drop-down
+{
+     color: white;
+     background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #202020, stop: 0.1 #151515, stop: 0.5 #101010, stop: 0.9 #050505, stop: 1 #000);
+}
+QComboBox
+{
+    subcontrol-origin: padding;
+    subcontrol-position: top left;
+    color: white;
+    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #202020, stop: 0.1 #151515, stop: 0.5 #101010, stop: 0.9 #050505, stop: 1 #000);
+    border-style: solid;
+    border: 1px solid gray;
+    border-radius: 1;
+    padding: 1px 0px 1px 20px;
+}
+
+
 /* Borders per control */
 QTabWidget, QCheckBox {
     border: 0px
@@ -41,7 +54,7 @@ QTabWidget, QCheckBox {
 QSplitter {
     border: 1px solid gray
 }
-QComboBox, QLineEdit, QSpinBox, QTextEdit {
+QLineEdit, QSpinBox, QTextEdit {
     /*border: 1px solid #262324;*/
     border: 1px solid gray;
 }
@@ -50,6 +63,10 @@ QLineEdit {
     margin: 2px;
     /*margin-left: 0;
     margin-right: 0;*/
+}
+
+QComboBox::down-arrow {
+	image: url('assets/cbarrow.png');
 }
 
 /* Specific customizations */

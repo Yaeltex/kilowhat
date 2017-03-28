@@ -10,14 +10,57 @@ QPushButton {
     margin: 2px;
 }
 
-/*1.03*/
+/*1.03
 QSpinBox:up-arrow {
-    image: url('assets/arrowup.png');
+    image: url('assets/arrowup_mac.png');
 }
 QSpinBox:down-arrow {
-    image: url('assets/cbarrow.png');
+    image: url('assets/cbarrow_mac.png');
+}
+*/
+QSpinBox::down-button  {
+    subcontrol-origin: margin;
+    subcontrol-position: bottom right;
+
+    width: 16px;
+    height: 10px;
+    border-width: 1px;
+    border-color:white;
 }
 
+QSpinBox::down-arrow  {
+    image: url('assets/cbarrow.png');
+/*
+    min-width: 8px;
+    min-height: 8px;
+    max-width: 8px;
+    max-height: 8px;
+    height: 8px;
+    width: 8px;
+*/
+}
+
+QSpinBox::up-button  {
+    subcontrol-origin: margin;
+    subcontrol-position: top right;
+
+    width: 16px;
+    height: 10px;
+    border-width: 1px;
+    border-color: white;
+}
+
+QSpinBox::up-arrow  {
+    image: url('assets/arrowup.png');
+/*
+    min-width: 6px;
+    min-height: 6px;
+    max-width: 6px;
+    max-height: 6px;
+    height: 6px;
+    width: 6px;
+*/
+}
 QComboBox::down-arrow {
     image: url('assets/cbarrow.png');
 }
@@ -104,8 +147,8 @@ QTabBar#inout::tab {
 
 QTabBar#inout::tab:selected {
     border-style: solid;
-	border-color: #FFF12C;
-	border-width: 1px 1px 0px 1px ;
+    border-color: #FFF12C;
+    border-width: 1px 1px 0px 1px ;
     /*padding-right: 4px;*/
 }
 
@@ -124,16 +167,16 @@ QPushButton::pressed {
     border-right: 1px solid #c0c0c0;
 }
 QGridLayout#MemWidget {
-	border: 2px solid #505050;
+    border: 2px solid #505050;
 }
 
 #BankLine {
-	border-style: solid;
-	border-color: #505050;
-	border-width: 0px 0px 1px 0px ;
+    border-style: solid;
+    border-color: #505050;
+    border-width: 0px 0px 1px 0px ;
     /*border: 1px solid gray;*/
-	margin: 0px;
-	padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 QWidget#LogArea {

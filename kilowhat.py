@@ -997,8 +997,8 @@ class InputConfig(ConfigWidget):
         self.max.setEnabled(en)
         self.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
         
-        en2 = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
-        self.param.setEnabled(en2)
+        en = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and self.analog.currentIndex() == 0))
+        self.param.setEnabled(en)
         
         self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
         self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
@@ -1069,7 +1069,6 @@ class InputConfigCC(InputConfig):
             self.analog.setCurrentIndex(1)
             self.toggle.setCurrentIndex(0)
         
-        self.param.setEnabled(not (mode == MODE_PC and self.analog.currentIndex() == 0))
         self.analog.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))      
         self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))		
         #WARNING: param does not update grouped widgets values
@@ -1654,11 +1653,17 @@ class Form(QFrame):
 
             with open('style-linux.css', 'r') as style_file:
                 self.setStyleSheet(style_file.read())
+        elif platform.system() == "Darwin":
+            if os.path.isfile(FILE_AUTOMATIC):
+                self.load_file(FILE_AUTOMATIC, True)
+
+            with open('style-mac.css', 'r') as style_file:
+                self.setStyleSheet(style_file.read())
         else:
             if os.path.isfile(FILE_AUTOMATIC):
                 self.load_file(FILE_AUTOMATIC, True)
 
-            with open('style.css', 'r') as style_file:
+            with open('style-win.css', 'r') as style_file:
                 self.setStyleSheet(style_file.read())
 
     def keyPressEvent(self, e):
@@ -1849,8 +1854,8 @@ class Form(QFrame):
             w.max.setEnabled(en)
             w.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
             
-            en2 = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and w.analog.currentIndex() == 0))
-            w.param.setEnabled(en2)
+            en = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and w.analog.currentIndex() == 0))
+            w.param.setEnabled(en)
             
             en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
             w.analog.setEnabled(en)      
