@@ -413,8 +413,8 @@ class MemoryWidget(QWidget):
         midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
         self.reopen_ports()
         #Send Sysex - CONFIG_MODE
-        pNameIn = midiin.get_port_name(index)
-        pNameOut = midiout.get_port_name(index)
+        pNameIn = midiin.get_port_name(abs(index))
+        pNameOut = midiout.get_port_name(abs(index))
         if not pNameIn == pNameOut: 
             #form.midi_monitor.append("Send CONFIG")
             midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))

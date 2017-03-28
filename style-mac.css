@@ -61,6 +61,7 @@ QSpinBox::up-arrow  {
     width: 6px;
 */
 }
+
 QComboBox::down-arrow {
     image: url('assets/cbarrow.png');
 }
