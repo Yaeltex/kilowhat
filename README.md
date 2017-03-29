@@ -2,7 +2,8 @@
 
 Software de configuración por SysEx de Yaeltex.
  
-Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
+* Ultimo release
+* Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
 
 ## Dependencias multiplataforma paso a paso
 
@@ -24,14 +25,14 @@ Python version: 3.4.5
 
 * Asegurarse de instalar también las Command Line Tools (ver Xcode -> Preferences -> Downloads)
 
-  *$ xcode-select --install
+  $ xcode-select --install
 
 * Instalar brew
 
-  *   *$ ruby -e "  *$(curl -fsSL
+  *   $ ruby -e "  $(curl -fsSL
 https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-  *$ brew install wget
+  $ brew install wget
 
 * WARNING: Intentar instalar python vía brew instala py3.5 y pip install PySide no es compatible (hasta py3.4)
 
@@ -44,123 +45,123 @@ Opciones con problemas:
 
 * Instalar mac ports https://guide.macports.org/
 
-  *$ wget https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.11-ElCapitan.pkg
+  $ wget https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.11-ElCapitan.pkg
 
-  *$ sudo port install python34
+  $ sudo port install python34
 
-  *$ sudo port install py34-readline
+  $ sudo port install py34-readline
 
-  *$ sudo port install py34-pip
+  $ sudo port install py34-pip
 
-  *$ sudo port select --set pip pip34
+  $ sudo port select --set pip pip34
 
 * virtualenv
 
-  *$ sudo pip install virtualenv
+  $ sudo pip install virtualenv
 
 * Probar con el terminal si reconoce el comando "virtualenv"
 
 * Si no funciona porque no encuentra el comando virtualenv, hacer
 
-  *$ sudo pip install virtualenv
+  $ sudo pip install virtualenv
 
-  *$ sudo /usr/bin/easy_install virtualenv
+  $ sudo /usr/bin/easy_install virtualenv
 
-  *$ virtualenv -p python3.4 yaeltex-py3.4.5
+  $ virtualenv -p python3.4 yaeltex-py3.4.5
 
-  *$ source yaeltex-py3.4.5/bin/activate
+  $ source yaeltex-py3.4.5/bin/activate
 
 * RtMidi
 
-  *$ brew install rtmidi # lib en c
+  $ brew install rtmidi # lib en c
 
 * (@yaeltex-py3.4.5) rtmidi bindings para py versión python-rtmidi-0.5b1
 
 * la 1.0.0 problema con threads
 
-  *$ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
+  $ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
 
-  *$ unzip python-rtmidi-0.5b1.zip
+  $ unzip python-rtmidi-0.5b1.zip
 
-  *$ cd python-rtmidi-0.5b1
+  $ cd python-rtmidi-0.5b1
 
-  *$ python setup.py install
+  $ python setup.py install
 
 * cmake
 
-  *$ brew install cmake
+  $ brew install cmake
 
 * Lo siguiente instala qt5 y no sirve
 
-  *$ brew install qt
+  $ brew install qt
 
 * No funciona tampoco compilar desde los fuentes, tira un error de linker
 
 * Instalar con MacPorts
 
-  *$ sudo port install qt4-mac
+  $ sudo port install qt4-mac
 
 * Pyside (demora, compila los bindings para qt, el -v verbose para ver paso a paso)
 
 * Lo siguiente no funciona, no encuentra qmake
 
-  *$ pip install PySide -v # version 1.2.4
+  $ pip install PySide -v # version 1.2.4
 
 * Descargar los fuentes de PySide
 
-  *$ wget https://pypi.python.org/packages/source/P/PySide/PySide-1.2.4.tar.gz
+  $ wget https://pypi.python.org/packages/source/P/PySide/PySide-1.2.4.tar.gz
 
 * Extraer
 
-  *$ tar -xvzf PySide-1.2.4.tar.gz
+  $ tar -xvzf PySide-1.2.4.tar.gz
 
 * Moverse al directorio extraído
 
-  *$ cd PySide-1.2.4
+  $ cd PySide-1.2.4
 
 * Generar el wheel, indicando el directorio de qmake
 
-  *$ python setup.py bdist_wheel --qmake="/opt/local/libexec/qt4/bin/qmake"
+  $ python setup.py bdist_wheel --qmake="/opt/local/libexec/qt4/bin/qmake"
 
 * Instalar el wheel
 
-  *$ sudo pip install dist/PySide-1.2.4-cp34-cp34m-macosx_10_11_x86_64.whl -v
+  $ sudo pip install dist/PySide-1.2.4-cp34-cp34m-macosx_10_11_x86_64.whl -v
 
 * Patchear pyside: cpython, shiboken, qtcore, qtgui fix
 
-  *$ export ENV_PATH=~/Virtualenvs/yaeltex-env-py3.4/lib/python3.4/site-packages/PySide/
+  $ export ENV_PATH=~/Virtualenvs/yaeltex-env-py3.4/lib/python3.4/site-packages/PySide/
 
-  *$ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib   *$ENV_PATH/libpyside.cpython-34m.1.2.dylib   *$ENV_PATH/QtCore.so 
+  $ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib   $ENV_PATH/libpyside.cpython-34m.1.2.dylib   $ENV_PATH/QtCore.so 
 
 
 * pyside, libshiboken and qtcore fix
 
-  *$ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    *$ENV_PATH/libshiboken.cpython-34m.1.2.dylib   *$ENV_PATH/QtCore.so 
+  $ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    $ENV_PATH/libshiboken.cpython-34m.1.2.dylib   $ENV_PATH/QtCore.so 
 
 
-  *$ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    *$ENV_PATH/libshiboken.cpython-34m.1.2.dylib   *$ENV_PATH/libpyside.cpython-34m.1.2.dylib 
+  $ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    $ENV_PATH/libshiboken.cpython-34m.1.2.dylib   $ENV_PATH/libpyside.cpython-34m.1.2.dylib 
 
 
-  *$ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib   *$ENV_PATH/libpyside.cpython-34m.1.2.dylib   *$ENV_PATH/QtGui.so  
+  $ sudo install_name_tool -change @rpath/libpyside.cpython-34m.1.2.dylib   $ENV_PATH/libpyside.cpython-34m.1.2.dylib   $ENV_PATH/QtGui.so  
 
 
-  *$ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    *$ENV_PATH/libshiboken.cpython-34m.1.2.dylib   *$ENV_PATH/QtGui.so
+  $ sudo install_name_tool -change @rpath/libshiboken.cpython-34m.1.2.dylib    $ENV_PATH/libshiboken.cpython-34m.1.2.dylib   $ENV_PATH/QtGui.so
 
 
 * py2app (bundle build)
 
 * Instalar py2app con bug fix working with a newer version of ModuleGraph
 
-  *$ pip install -U git+https://github.com/metachris/py2app.git@master
+  $ pip install -U git+https://github.com/metachris/py2app.git@master
 
 
 * Construir bundle
 
-  *$ python setup_mac.py py2app
+  $ python setup_mac.py py2app
 
 
 ###Detalle de versiones (pip y brew list)
-(yaeltex-py3.4.5)  *$ brew list --versions
+(yaeltex-py3.4.5)  $ brew list --versions
 
 autoconf 2.69
 
@@ -177,7 +178,7 @@ readline 7.0
 rtmidi 2.1.1
 
 
-(yaeltex-py3.4.5)  *$ pip list
+(yaeltex-py3.4.5)  $ pip list
 altgraph (0.12)
 macholib (1.7)
 modulegraph (0.12.1)
@@ -199,26 +200,26 @@ Bajar https://www.python.org/ftp/python/3.4.0/python-3.4.0.amd64.msi e instalar 
 ### VirtualEnv
 * Abrir una consola (cmd)
 
-  *$ pip install penv
+  $ pip install penv
 
 
 * Crear virtualenv
 
-  *$ python -m venv yaeltex-env-py3.4
+  $ python -m venv yaeltex-env-py3.4
 
 
 * activar
 
-  *$ yaeltex-env-py3.4\Scripts\activate.bat
+  $ yaeltex-env-py3.4\Scripts\activate.bat
 
 
 ### cython
 
-  *$ pip install Cython
+  $ pip install Cython
 
 ### setuptools
 
-  *$ pip install -U setuptools
+  $ pip install -U setuptools
 
 ### rtmidi 
 
@@ -226,13 +227,13 @@ Bajar https://www.python.org/ftp/python/3.4.0/python-3.4.0.amd64.msi e instalar 
 
 *Lo siguiente no funciona, tampoco la versión 0.5b
 
-  *$ pip install python_rtmidi 
+  $ pip install python_rtmidi 
 
 *Hay que compilar la librería
 
-  *$ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
+  $ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
 
-  *$ unzip python-rtmidi-1.0.0rc1.zip
+  $ unzip python-rtmidi-1.0.0rc1.zip
 
 Compilar rtmidi con Visual Studio 2015 Community Edition no funciona. Hay que instalar el Visual C++ 2010 Express de la siguiente forma:
 * Bajar e instalar http://download.microsoft.com/download/1/D/9/1D9A6C0E-FC89-43EE-9658-B9F0E3A76983/vc_web.exe
@@ -249,11 +250,11 @@ http://haypo-notes.readthedocs.io/python.html#build-a-python-wheel-package-on-wi
 
 * activar
 
-  *$ yaeltex-env-py3.4\Scripts\activate.bat
+  $ yaeltex-env-py3.4\Scripts\activate.bat
 
-  *$ cd python-rtmidi-1.0.0rc1.zip
+  $ cd python-rtmidi-1.0.0rc1.zip
 
-(@Yaeltex-env-py3.4)  *$ python setup.py install
+(@Yaeltex-env-py3.4)  $ python setup.py install
 
 ### PySide y Qt
 
@@ -265,38 +266,38 @@ http://haypo-notes.readthedocs.io/python.html#build-a-python-wheel-package-on-wi
 
 * Probar instalar PySide con pip
 
-  *$ pip install -U PySide
+  $ pip install -U PySide
 
 * Si no funciona, bajar PySide como wheel precompilado http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyside
 
-  *$ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none-win_amd64.whl
+  $ wget http://www.lfd.uci.edu/~gohlke/pythonlibs/dp2ng7en/PySide-1.2.2-cp34-none-win_amd64.whl
 
-(@Yaeltex-env-py3.4)  *$ pip install PySide-1.2.2-cp34-none-win_amd64.whl
+(@Yaeltex-env-py3.4)  $ pip install PySide-1.2.2-cp34-none-win_amd64.whl
 
 
 ### PyInstaller
 
-  *$ pip install PyInstaller
+  $ pip install PyInstaller
 
 * Si no funca porque pywin32 no se instala correctamente vía pip en windows 10, upgradear pip con la siguiente linea
 
-  *$ python -m pip install --upgrade pip
+  $ python -m pip install --upgrade pip
 
 * Luego repetir pip install
 
-  *$ pip install PyInstaller
+  $ pip install PyInstaller
 
 * Si nada de lo anterior funciona, probar entonces instalar este último vía wheel
 
-  *$ wget https://pypi.python.org/packages/8f/da/36439654abd8f39bcad0664c68674a41b838ca902da440defde17abbeade/pypiwin32-219-cp34-none-win_amd64.whl#md5=110e2769da6659c270b8e6e4595155eb
+  $ wget https://pypi.python.org/packages/8f/da/36439654abd8f39bcad0664c68674a41b838ca902da440defde17abbeade/pypiwin32-219-cp34-none-win_amd64.whl#md5=110e2769da6659c270b8e6e4595155eb
 
-  *$ pip install pypiwin32-219-cp34-none-win_amd64.whl
+  $ pip install pypiwin32-219-cp34-none-win_amd64.whl
 
-(@Yaeltex-env-py3.4)  *$ pip install PyInstaller
+(@Yaeltex-env-py3.4)  $ pip install PyInstaller
 
 ### Bundle en Windows
 
-(@Yaeltex-env-py3.4)  *$ python -m PyInstaller kwt_win.spec
+(@Yaeltex-env-py3.4)  $ python -m PyInstaller kwt_win.spec
 
 
 ### Detalle de versiones (pip list)
@@ -332,101 +333,101 @@ Testeado en Ubuntu 16.04.1 y 14.04
 * Python 3.4.0 (versión original)
 Nota: hay que bajar y compilar la versión 3.4.0 porque en los repositorios esta la 3.5 que por lo menos en este momento no es compatible con PySide compilado vía pip “only these python versions are supported: [(2, 6), (2, 7), (3, 2), (3, 3), (3, 4)]”
 
-  *$ wget https://www.python.org/ftp/python/3.4.0/Python-3.4.0.tgz
+  $ wget https://www.python.org/ftp/python/3.4.0/Python-3.4.0.tgz
 
-  *$ tar -xf Python-3.4.0.tgz
+  $ tar -xf Python-3.4.0.tgz
 
-  *$ cd Python-3.4.0
+  $ cd Python-3.4.0
 
-  *$ sudo apt-get install build-essential
+  $ sudo apt-get install build-essential
 
 * Activar zlib y ssl
 
-  *$ sudo apt-get install zlib1g-dev libssl-dev
+  $ sudo apt-get install zlib1g-dev libssl-dev
 
-  *$ vi /Modules/Setup
+  $ vi /Modules/Setup
 
 Descomentar las líneas:
 
-zlib zlibmodule.c -I  *$(prefix)/include -L  *$(exec_prefix)/lib -lz
+zlib zlibmodule.c -I  $(prefix)/include -L  $(exec_prefix)/lib -lz
 
 SSL=/usr/local/ssl
 _ssl _ssl.c \
-   -DUSE_SSL -I  *$(SSL)/include -I  *$(SSL)/include/openssl \
-   -L  *$(SSL)/lib -lssl -lcrypto
+   -DUSE_SSL -I  $(SSL)/include -I  $(SSL)/include/openssl \
+   -L  $(SSL)/lib -lssl -lcrypto
 
 * Enable shared para poder compilar pyside al instalar vía pip
 
-  *$ ./configure --enable-shared
+  $ ./configure --enable-shared
 
-  *$ make -j3
+  $ make -j3
 
-  *$ sudo make install
+  $ sudo make install
 
-  *$ export LD_LIBRARY_PATH=/usr/local/lib 
+  $ export LD_LIBRARY_PATH=/usr/local/lib 
 
 * Para que lo anterior sea permanente, editar .bashrc y agregar la línea
 
-  *$ vi ~/.bashrc
-   Agregar al final: export LD_LIBRARY_PATH=  *$LD_LIBRARY_PATH:/usr/local/lib
+  $ vi ~/.bashrc
+   Agregar al final: export LD_LIBRARY_PATH=  $LD_LIBRARY_PATH:/usr/local/lib
 
 * Virtualenv:
 
-  *$ sudo apt install virtualenv
+  $ sudo apt install virtualenv
 
-  *$ virtualenv -p python3.4 yaeltex-env
+  $ virtualenv -p python3.4 yaeltex-env
 
-  *$ source yaeltex-env/bin/activate
+  $ source yaeltex-env/bin/activate
 
 * (@yaeltex-env) rtmidi:
 
-  *$ sudo apt install librtmidi-dev # y dependencias
+  $ sudo apt install librtmidi-dev # y dependencias
 
-  *$ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
+  $ wget https://pypi.python.org/packages/70/00/4245aedfa5d352cdb086b3a7f329e0446bd13995d2ef69fe3c2a46ca6cee/python-rtmidi-1.0.0rc1.zip#md5=f490ee1a6f8b8e83da3632fe42a203c3
 
-  *$ unzip python-rtmidi-1.0.0rc1.zip
+  $ unzip python-rtmidi-1.0.0rc1.zip
 
-  *$ cd python-rtmidi-1.0.0rc1
+  $ cd python-rtmidi-1.0.0rc1
 
-  *$ python setup.py install
+  $ python setup.py install
 
 * (@yaeltex-env) pyside
 
-  *$ sudo apt install cmake
+  $ sudo apt install cmake
 
-  *$ sudo apt-get install qt4-qmake qt-sdk
+  $ sudo apt-get install qt4-qmake qt-sdk
 
-  *$ sudo apt-get install libxml++2.6-dev libxslt1-dev
+  $ sudo apt-get install libxml++2.6-dev libxslt1-dev
 
-  *$ pip install sphinx
+  $ pip install sphinx
 
-  *$ pip install pyside
+  $ pip install pyside
 
 ## B. Módo mixto virtualenv + apt-get (python 3.5) (recomendado):
 
-  *$ sudo apt install virtualenv
+  $ sudo apt install virtualenv
 
-  *$ virtualenv -p python3.5 yaeltex-env
+  $ virtualenv -p python3.5 yaeltex-env
 
-  *$ source yaeltex-env/bin/activate
+  $ source yaeltex-env/bin/activate
 
 * (@yaeltex-env) rtmidi:
 
-  *$ sudo apt install librtmidi-dev
+  $ sudo apt install librtmidi-dev
 
-  *$ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
+  $ wget https://pypi.python.org/packages/6f/39/f7f52c432d4dd95d27703608af11818d99db0b2163cec88958efcf7c10cf/python-rtmidi-0.5b1.zip#md5=dba5808d78c843254455efb147fe87b2
 
-  *$ unzip python-rtmidi-0.5b1.zip
+  $ unzip python-rtmidi-0.5b1.zip
 
-  *$ cd python-rtmidi-0.5b1/
+  $ cd python-rtmidi-0.5b1/
 
-  *$ sudo python setup.py install
+  $ sudo python setup.py install
 
 * (@yaeltex-env) pyside
 
-  *$ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
+  $ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
 
-  *$ ln -s /usr/lib/python3/dist-packages/PySide/ yaeltex-env/lib/python3.5/site-packages/
+  $ ln -s /usr/lib/python3/dist-packages/PySide/ yaeltex-env/lib/python3.5/site-packages/
 
 
 
@@ -435,24 +436,24 @@ _ssl _ssl.c \
 
 * Sin virtual-env y python3.5 (dependencias en el sistema)
 
-  *$ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
+  $ sudo apt-get install python3-pyside.qtgui python3-pyside.qtcore
 
-  *$ sudo pip3 install python_rtmidi # o bajando zip y compilando
+  $ sudo pip3 install python_rtmidi # o bajando zip y compilando
 
 
 * Ejecutar
 
-  *$ python kilowhat.py #o python3 si no se esta en el virtualenv
+  $ python kilowhat.py #o python3 si no se esta en el virtualenv
 
 
 * PyInstaller
 
-  *$ pip3 install pyinstaller
+  $ pip3 install pyinstaller
 
 
 * Armar bundle para distribución:
 
-  *$ python -m PyInstaller kwt_linux.spec
+  $ python -m PyInstaller kwt_linux.spec
 
 
 ### Detalle de versiones (pip list)
