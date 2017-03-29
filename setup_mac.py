@@ -14,9 +14,10 @@ from setuptools import setup
 
 APP = ['kilowhat.py']
 DATA_FILES = [('', ['assets']),('', ['templates']), ('', ['locales']), ('', ['style-mac.css']), ('', ['ioconfig.txt'])]
-OPTIONS = {'argv_emulation': True}
+OPTIONS = { 'iconfile':'assets/icon.icns','argv_emulation': True}
 
 setup(
+	name="Kilowhat",
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
