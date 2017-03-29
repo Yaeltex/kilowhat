@@ -2,7 +2,7 @@
 
 Software de configuración por SysEx de Yaeltex.
  
-* Ultimo release
+* [Ultimo release https://github.com/Yaeltex/kilowhat/releases/tag/v0.9.0]
 * Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
 
 ## Dependencias multiplataforma paso a paso
