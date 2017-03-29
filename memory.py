@@ -1,3 +1,8 @@
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX - 2016
+# Revisions by Hernan Ordiales and Franco Grassano - 2016/2017
+###################################################################################
+
 from model import *
 import configparser
 KILOMUX_OVERHEAD = 1            #Overhead bytes

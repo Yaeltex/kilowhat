@@ -296,7 +296,7 @@ $ pip install pypiwin32-219-cp34-none-win_amd64.whl
 
 ### Bundle en Windows
 
-(@Yaeltex-env-py3.4)$ python -m PyInstaller kmgui_win.spec
+(@Yaeltex-env-py3.4)$ python -m PyInstaller kwt_win.spec
 
 
 ### Detalle de versiones (pip list)
