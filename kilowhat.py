@@ -1,6 +1,7 @@
-############################################
-# Code by Martin Sebastian Wain for YAELTEX #
-#############################################
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX - 2016
+# Revisions by Hernan Ordiales and Franco Grassano - 2016/2017
+###################################################################################
 
 import sys
 import datetime
@@ -38,7 +39,7 @@ import memory
 
 # General
 TITLE = "Kilowhat"
-VERSION = "v1.07"
+VERSION = "v0.9"
 
 # User interface
 COLOR_TIMEOUT = 500                        # ms. Background coloring timeout
@@ -247,7 +248,7 @@ class MemoryWidget(QWidget):
 
         #Create controls
         self.output_matrix = QComboBox()
-        self.output_matrix.setStyleSheet("QComboBox { font-size: 10pt }")
+        self.output_matrix.setStyleSheet("QComboBox { padding-left: 5px; font-size: 10pt }")
         self.hardware = QComboBox()
         self.hardware.setStyleSheet("QComboBox { font-size: 10pt }")
         self.banks = QSpinBox()
@@ -1114,6 +1115,8 @@ class InputConfigUS(InputConfig):
 
         self.mode.setCurrentIndex(MODE_OFF);
         
+        self.dist_min.valueChanged.connect(self.on_param_value_changed)
+        self.dist_max.valueChanged.connect(self.on_param_value_changed)
 
         self.dist_min = self.addwl(_("Min. Dist."), self.dist_min)
         self.dist_max = self.addwl(_("Max. Dist."), self.dist_max)
@@ -1137,10 +1140,16 @@ class InputConfigUS(InputConfig):
 
     def on_param_value_changed(self):
         super().on_param_value_changed()
-        mode = self.mode.currentIndex()
-        en = mode != MODE_SHIFTER
-        self.dist_min.setEnabled(en)
-        self.dist_max.setEnabled(en)
+        min = self.dist_min.value()
+        max = self.dist_max.value()
+        alertParam = False
+        
+        if min > max-10:
+            self.setAlert(_("MAX value should be at lease 10cm greater than MIN value"))
+            alertParam = True
+            
+        stylesheetProp(self.dist_min, "alert", alertParam)
+        stylesheetProp(self.dist_max, "alert", alertParam)
 
 class MyQGridLayout(QGridLayout):
     def __init__(self, parent = None):
