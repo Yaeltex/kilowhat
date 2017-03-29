@@ -294,8 +294,8 @@ class MemoryWidget(QWidget):
         h.label(_("MIDI ports")).widget(cmi, spanx=2, width=tiny).widget(cmo, spanx=1, width=tiny)\
             .label(_("Set banks")).widget(self.banks, width=tiny)\
             .newLine()
-        h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
-        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
+        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
+        h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
         h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).widget(self.btn_apply, spanx=2, width=small).newLine()       
         

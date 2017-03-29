@@ -1,6 +1,6 @@
 #Kilowhat
 
-Software de configuración por SysEx de Yaeltex.
+Software de configuración por SysEx de Yaeltex / SysEx configuration software by Yaeltex.
  
 Wiki: http://wiki.yaeltex.com.ar/index.php?title=Kilowhat
 
