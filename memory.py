@@ -1,6 +1,6 @@
 ###################################################################################
-# Original code by Martin Sebastian Wain for YAELTEX - 2016
-# Revisions by Hernan Ordiales and Franco Grassano - 2016/2017
+# Original code by Martin Sebastian Wain for YAELTEX 
+# Revisions by Hernan Ordiales and Franco Grassano
 ###################################################################################
 
 from model import *

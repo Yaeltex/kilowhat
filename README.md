@@ -297,7 +297,7 @@ http://haypo-notes.readthedocs.io/python.html#build-a-python-wheel-package-on-wi
 
 ### Bundle en Windows
 
-(@Yaeltex-env-py3.4)  $ python -m PyInstaller kwt_win.spec
+(@Yaeltex-env-py3.4)$ python -m PyInstaller kwt_win.spec
 
 
 ### Detalle de versiones (pip list)
