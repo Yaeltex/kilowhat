@@ -1,6 +1,0 @@
-Instalar extensiones
-
-
-* MIDI library: arduino_midi_library-master.zip http://playground.arduino.cc/Main/MIDILibrary
-* Yaeltex library: KilowhatLib.zip
-* EEPROMex (desde el Library Manager) (http://playground.arduino.cc/Code/EEPROMex)
