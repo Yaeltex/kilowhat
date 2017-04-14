@@ -76,6 +76,9 @@ config = {
     , 'banks': [Bank() for __ in range(memory.MAX_BANKS) ]
 }
 
+nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 128, 139, 148, 157, 168, 178, 190, 202, 225, 254, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 512, 552, 616, 655, 697, 742, 789, 839, 893, 950, 1023, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
+
+
 def midi_send(msg):
     print("midi_send() ", msg)
     global form
@@ -873,7 +876,7 @@ class InputConfig(ConfigWidget):
 
         self.enable_monitor = self.addwl(_("Monitor"), QCheckBox())
         self.enable_monitor.setChecked(True)
-        self.monitor.installEventFilter(self)
+        self.enable_monitor.installEventFilter(self)
 
         self.enable_monitor.stateChanged.connect(lambda: self.update_grouped_widgets("monitor"))
         
@@ -903,22 +906,25 @@ class InputConfig(ConfigWidget):
         self.channel.setRange(1, 16)
         self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel"))
         
-        minSB = QSpinBoxHack()
-        minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
-        self.min = self.addwl(_("Min."), minSB)
-        self.min.setRange(0, 127)
+        minCB = QComboBox()
+        minCB.setMinimumWidth(65)
+        self.min = self.addwl(_("Min."), minCB)
+        self.min.installEventFilter(self)
+        for labelIdx in range(len((nrpn_min_max))):
+            self.min.addItem(str(nrpn_min_max[labelIdx]))
 
-        self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min"))
+        self.min.currentIndexChanged.connect(lambda: self.update_grouped_widgets("min"))
 
-        maxSB = QSpinBoxHack()
-        maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
-        self.max = self.addwl(_("Max."), maxSB)
-        self.max.setRange(0, 127)
-        #self.max.valueChanged.connect(self.on_max_value_changed)
+        maxCB = QComboBox()
+        maxCB.setMinimumWidth(65)
+        self.max = self.addwl(_("Max."), maxCB)
+        self.max.installEventFilter(self)
+        for labelIdx in range(len(nrpn_min_max)):
+            self.max.addItem(str(nrpn_min_max[labelIdx]))
 
-        self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max"))
+        self.max.currentIndexChanged.connect(lambda: self.update_grouped_widgets("max"))
 
-        self.max.setValue(127)
+        self.max.setCurrentIndex(127)
 
         #TODO: On any change: save model? <- NO
 
@@ -932,16 +938,16 @@ class InputConfig(ConfigWidget):
         self.channel.setValue(model.channel)
         self.mode.setCurrentIndex(model.mode)
         self.param.setValue(model.param)
-        self.min.setValue(model.min)
-        self.max.setValue(model.max)
+        self.min.setCurrentIndex(model.min)
+        self.max.setCurrentIndex(model.max)
 
     def save_model(self):
         model = self.model()
         model.channel = self.channel.value()
         model.mode = self.mode.currentIndex()
         model.param = self.param.value()
-        model.min = self.min.value()
-        model.max = self.max.value()
+        model.min = self.min.currentIndex()
+        model.max = self.max.currentIndex()
 
     def on_param_value_changed(self):
         #TODO: Shifter lock in to banks
@@ -952,9 +958,9 @@ class InputConfig(ConfigWidget):
         param = self.param.value()
         max_banks = config['global'].num_banks
         
-        if self._first_time:
-            self._first_time = False
-            return
+        # if self._first_time:
+            # self._first_time = False
+            # return
         
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
@@ -1001,12 +1007,14 @@ class InputConfig(ConfigWidget):
         en = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and self.analog.currentIndex() == 0))
         self.param.setEnabled(en)
         
-        self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
-        
-        self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
-        #self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
+        if mode == MODE_NRPN:
+            for index in range(len(nrpn_min_max)):
+                self.min.setItemText(index, str(nrpn_min_max[index]))
+                self.max.setItemText(index, str(nrpn_min_max[index]))
+        else:
+            for index in range(len(nrpn_min_max)):
+                self.min.setItemText(index, str(index))
+                self.max.setItemText(index, str(index))
 
         stylesheetProp(self.param, "alert", alertParam)
         
@@ -1850,13 +1858,18 @@ class Form(QFrame):
             w.analog.currentIndexChanged.connect(w.on_param_value_changed)
             w.toggle.currentIndexChanged.connect(w.on_param_value_changed)
             w.mode.currentIndexChanged.connect(w.on_param_value_changed) 
+            if w.mode.currentIndex() == MODE_NRPN:
+                for index in range(len(nrpn_min_max)):
+                    w.min.setItemText(index, str(nrpn_min_max[index]))
+                    w.max.setItemText(index, str(nrpn_min_max[index]))
+                #self.txt_log.append(str(w._index) + " is NRPN. Min is " + str(nrpn_min_max[w.min.currentIndex()]) + " and Max is " + str(nrpn_min_max[w.max.currentIndex()]))
             
             #refresh some stuff
             mode = w.mode.currentIndex()
-            w.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
-            w.min.setSingleStep(128 if mode == MODE_NRPN else 1)
-            w.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
-            w.max.setSingleStep(128 if mode == MODE_NRPN else 1)
+            # w.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            # w.min.setSingleStep(128 if mode == MODE_NRPN else 1)
+            # w.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            # w.max.setSingleStep(128 if mode == MODE_NRPN else 1)
             
             en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
             w.min.setEnabled(en)
