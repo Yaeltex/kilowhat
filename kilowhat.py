@@ -162,8 +162,8 @@ def send_sysex_dump():
             midi_send(pkt)
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
-            print("Sleep 0.5 seg")
-            time.sleep(0.5)
+            print("Sleep 0.3 seg")
+            time.sleep(0.3)
     except Exception as e:
         print("Exception", e)
 
