@@ -1,6 +1,7 @@
-############################################
-# Code by Martin Sebastian Wain for YAELTEX #
-#############################################
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX 
+# Revisions by Hernan Ordiales and Franco Grassano
+###################################################################################
 
 import sys
 import datetime
@@ -27,7 +28,6 @@ import time
 import os
 import os.path
 import pickle
-#import numpy as np
 from pprint import pprint
 
 import sysex
@@ -39,14 +39,14 @@ import memory
 
 # General
 TITLE = "Kilowhat"
-VERSION = "v1.07"
+VERSION = "v0.9"
 
 # User interface
 COLOR_TIMEOUT = 500                        # ms. Background coloring timeout
 
 # Midi
 POLL_INTERVAL = 10                        # ms. Midi in polling interval
-THRESHOLD_SELECT = 16                    # Delta threshold for selecting (coloring background and ensuring is visible in scroll area)
+THRESHOLD_SELECT = 3                    # Delta threshold for selecting (coloring background and ensuring is visible in scroll area)
 MONITOR_CHAN_US = 15                    # Ultra sound channel monitoring
 
 # Files
@@ -76,8 +76,9 @@ config = {
     , 'banks': [Bank() for __ in range(memory.MAX_BANKS) ]
 }
 
-nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 131, 139, 148, 157, 168, 178, 190, 202, 225, 243, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 544, 579, 616, 655, 697, 742, 789, 839, 893, 950, 1023, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
-     
+nrpn_min_max = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 31, 33, 35, 38, 40, 43, 45, 48, 51, 55, 58, 62, 66, 70, 75, 79, 85, 90, 96, 102, 108, 115, 127, 128, 139, 148, 157, 168, 178, 190, 202, 225, 254, 255, 275, 293, 312, 331, 353, 375, 399, 425, 452, 481, 511, 512, 552, 616, 655, 697, 742, 789, 839, 893, 950, 1023, 1075, 1144, 1217, 1295, 1378, 1466, 1559, 1659, 1765, 1877, 1997, 2125, 2261, 2405, 2558, 2722, 2896, 3081, 3277, 3487, 3709, 3946, 4198, 4466, 4751, 5055, 5377, 5721, 6086, 6474, 6888, 7328, 7795, 8293, 8823, 9386, 9985, 10623, 11301, 12022, 12790, 13606, 14475, 15399, 16383] 
+
+
 def midi_send(msg):
     print("midi_send() ", msg)
     global form
@@ -162,12 +163,11 @@ def send_sysex_dump():
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
             print("Sleep 0.5 seg")
-            time.sleep(0.3)
+            time.sleep(0.5)
     except Exception as e:
         print("Exception", e)
 
 
-        
 # TODO: stuff is a list of a list with widgets, layouts and tuples for cellspan (w/l, spanx, spany)
 #def grid_create(grid:QGridLayout, stuff):
 #    for row in stuff:
@@ -232,6 +232,7 @@ class PaintWidget(QWidget):
 
 
 class MemoryWidget(QWidget):
+    firstTimePorts = True
     def __init__(self, parent):
         print("MemoryWidget() parent ctor")
         super().__init__(parent)
@@ -250,7 +251,7 @@ class MemoryWidget(QWidget):
 
         #Create controls
         self.output_matrix = QComboBox()
-        self.output_matrix.setStyleSheet("QComboBox { font-size: 10pt }")
+        self.output_matrix.setStyleSheet("QComboBox { padding-left: 5px; font-size: 10pt }")
         self.hardware = QComboBox()
         self.hardware.setStyleSheet("QComboBox { font-size: 10pt }")
         self.banks = QSpinBox()
@@ -296,8 +297,8 @@ class MemoryWidget(QWidget):
         h.label(_("MIDI ports")).widget(cmi, spanx=2, width=tiny).widget(cmo, spanx=1, width=tiny)\
             .label(_("Set banks")).widget(self.banks, width=tiny)\
             .newLine()
-        h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
-        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
+        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
+        h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
         h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).widget(self.btn_apply, spanx=2, width=small).newLine()       
         
@@ -413,8 +414,17 @@ class MemoryWidget(QWidget):
         form.txt_log.append(_("Welcome to Kilowhat!"))
         form.midi_monitor.clear()
         form.midi_monitor.append(_("MIDI Monitor")) 
+        midi_send(sysex.make_sysex_packet(sysex.EXIT_CONFIG, []))
         self.reopen_ports()
-        midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
+        #Send Sysex - CONFIG_MODE
+        pNameIn = midiin.get_port_name(abs(index))
+        pNameOut = midiout.get_port_name(abs(index))
+        if not pNameIn == pNameOut: 
+            #form.midi_monitor.append("Send CONFIG")
+            midi_send(sysex.make_sysex_packet(sysex.CONFIG_MODE, []))
+        else:
+            #form.midi_monitor.append("First Time")
+            self.firstTimePorts = False
 
     def raise_changed_memory_event(self):
         with wait_cursor():
@@ -866,7 +876,7 @@ class InputConfig(ConfigWidget):
 
         self.enable_monitor = self.addwl(_("Monitor"), QCheckBox())
         self.enable_monitor.setChecked(True)
-        self.monitor.installEventFilter(self)
+        self.enable_monitor.installEventFilter(self)
 
         self.enable_monitor.stateChanged.connect(lambda: self.update_grouped_widgets("monitor"))
         
@@ -896,31 +906,25 @@ class InputConfig(ConfigWidget):
         self.channel.setRange(1, 16)
         self.channel.valueChanged.connect(lambda: self.update_grouped_widgets("channel"))
         
-        #minSB = QSpinBoxHack()
-        #minSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
         minCB = QComboBox()
+        minCB.setMinimumWidth(65)
         self.min = self.addwl(_("Min."), minCB)
+        self.min.installEventFilter(self)
         for labelIdx in range(len((nrpn_min_max))):
             self.min.addItem(str(nrpn_min_max[labelIdx]))
-        
-        #self.min.setRange(0, 127)
 
-        #self.min.valueChanged.connect(lambda: self.update_grouped_widgets("min"))
+        self.min.currentIndexChanged.connect(lambda: self.update_grouped_widgets("min"))
 
-        #maxSB = QSpinBoxHack()
-        #maxSB.setStyleSheet("QSpinBoxHack { font-size: 10pt }")
         maxCB = QComboBox()
+        maxCB.setMinimumWidth(65)
         self.max = self.addwl(_("Max."), maxCB)
+        self.max.installEventFilter(self)
         for labelIdx in range(len(nrpn_min_max)):
             self.max.addItem(str(nrpn_min_max[labelIdx]))
-        
-        #self.max.setRange(0, 127)
-        
-        ###self.max.valueChanged.connect(self.on_max_value_changed)
 
-        #self.max.valueChanged.connect(lambda: self.update_grouped_widgets("max"))
+        self.max.currentIndexChanged.connect(lambda: self.update_grouped_widgets("max"))
 
-        #self.max.setValue(127)
+        self.max.setCurrentIndex(127)
 
         #TODO: On any change: save model? <- NO
 
@@ -954,9 +958,9 @@ class InputConfig(ConfigWidget):
         param = self.param.value()
         max_banks = config['global'].num_banks
         
-        if self._first_time:
-            self._first_time = False
-            return
+        # if self._first_time:
+            # self._first_time = False
+            # return
         
         if (mode == MODE_NOTE or mode == MODE_CC or mode == MODE_PC) and param > 127:
             alertParam = True
@@ -995,10 +999,13 @@ class InputConfig(ConfigWidget):
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
         
-        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
+        en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
         self.min.setEnabled(en)
         self.max.setEnabled(en)
-        self.channel.setEnabled(en)
+        self.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
+        
+        en = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and self.analog.currentIndex() == 0))
+        self.param.setEnabled(en)
         
         if mode == MODE_NRPN:
             for index in range(len(nrpn_min_max)):
@@ -1008,13 +1015,6 @@ class InputConfig(ConfigWidget):
             for index in range(len(nrpn_min_max)):
                 self.min.setItemText(index, str(index))
                 self.max.setItemText(index, str(index))
-                
-        #self.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        #self.min.setSingleStep(128 if mode == MODE_NRPN else 1)
-        
-        #self.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
-        #self.max.setSingleStep(128 if mode == MODE_NRPN else 1)
-        ####self.max.setValue((self.max.value()<<7) if mode == MODE_NRPN else self.max.value())
 
         stylesheetProp(self.param, "alert", alertParam)
         
@@ -1028,11 +1028,13 @@ class InputConfigCC(InputConfig):
 
         ad = QComboBox()
         ad.setStyleSheet("QComboBox {font-size: 10pt}")
+        ad.setMinimumWidth(80)
         ad.addItems((_("Analog"), _("Digital")))
         self.analog = ad
 
         pt = QComboBox()
         pt.setStyleSheet("QComboBox {font-size: 10pt}")
+        pt.setMinimumWidth(120)
         pt.addItems((_("Toggle"), _("Momentary")))
 
         self.toggle = pt		# Changes for regular input (pot, slider) and ultrasound config
@@ -1072,10 +1074,12 @@ class InputConfigCC(InputConfig):
             for bankIdx in range(max_banks):
                 config['banks'][bankIdx].input_cc[self._index].analog = 0                                  # setear como digital en todos los bancos
             config['banks'][bankIdx].input_cc[self._index].toggle = self.toggle.currentIndex() == 0
-        en = not (mode == MODE_SHIFTER or mode == MODE_OFF)
-        self.analog.setEnabled(en)
-        self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF))		# 0 = Analog
-        #self.toggle.setEnabled(en)
+        elif mode == MODE_PC_MINUS or mode == MODE_PC_PLUS:
+            self.analog.setCurrentIndex(1)
+            self.toggle.setCurrentIndex(0)
+        
+        self.analog.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))      
+        self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))		
         #WARNING: param does not update grouped widgets values
 
     def copy_values_from(self, origin, value="all"):
@@ -1118,11 +1122,17 @@ class InputConfigUS(InputConfig):
         self.number.setText("")
 
         self.mode.setCurrentIndex(MODE_OFF);
+        
+        self.dist_min.valueChanged.connect(self.on_param_value_changed)
+        self.dist_max.valueChanged.connect(self.on_param_value_changed)
 
         self.dist_min = self.addwl(_("Min. Dist."), self.dist_min)
         self.dist_max = self.addwl(_("Max. Dist."), self.dist_max)
 
-        self.mode.removeItem(self.mode.count()-1)
+        self.mode.removeItem(MODE_SHIFTER);
+        self.mode.removeItem(MODE_PC_PLUS);
+        self.mode.removeItem(MODE_PC);
+        self.mode.removeItem(MODE_PC_MINUS);
 
     def save_model(self):
         super().save_model()
@@ -1138,20 +1148,31 @@ class InputConfigUS(InputConfig):
 
     def on_param_value_changed(self):
         super().on_param_value_changed()
-        mode = self.mode.currentIndex()
-        en = mode != MODE_SHIFTER
-        self.dist_min.setEnabled(en)
-        self.dist_max.setEnabled(en)
+        min = self.dist_min.value()
+        max = self.dist_max.value()
+        alertParam = False
+        
+        if min > max-10:
+            self.setAlert(_("MAX value should be at lease 10cm greater than MIN value"))
+            alertParam = True
+            
+        stylesheetProp(self.dist_min, "alert", alertParam)
+        stylesheetProp(self.dist_max, "alert", alertParam)
 
+class MyQGridLayout(QGridLayout):
+    def __init__(self, parent = None):
+        QGridLayout.__init__(self, parent) 
+        self.maximumSize = 250
+        
 class MonitorTextEdit(QTextEdit):
     def __init__(self, parent = None):
         QTextEdit.__init__(self, parent) 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        copyAction = menu.addAction("Copy")
-        selAllAction = menu.addAction("Select all")
+        copyAction = menu.addAction(_("Copy"))
+        selAllAction = menu.addAction(_("Select all"))
         separator = menu.addSeparator()
-        clearAction = menu.addAction("Clear")
+        clearAction = menu.addAction(_("Clear"))
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if action == clearAction:
             self.clear()
@@ -1287,12 +1308,15 @@ class Form(QFrame):
         #layout_top.addLayout(layout_config)
         
         layout_top.addStretch() # space between
-
+        
+        widget_save = QWidget()
+        widget_save.setMaximumWidth(400)
         load_save_layout = QGridLayout()
-        load_save_layout.setSizeConstraint(QLayout.SetMaximumSize)
-        layout_top.addLayout(load_save_layout)
+        #load_save_layout.setSizeConstraint(QLayout.SetMaximumSize)
+        widget_save.setLayout(load_save_layout)
+        layout_top.addWidget(widget_save)
         lsh = GridHelper(load_save_layout)
-
+        
         print("Form() logo.png")
 
         lsh.pic("assets/logo.png", spanx=2, align=Qt.AlignRight).newLine()
@@ -1483,7 +1507,6 @@ class Form(QFrame):
 
             lw = InputConfigCC('input_cc', i, self)
             lw.load_model()
-                
             #lw.setMinimumHeight(40)
             if i % 2 == 0:
                 lw.setProperty("parity", "even")	#For stylesheets
@@ -1647,11 +1670,17 @@ class Form(QFrame):
 
             with open('style-linux.css', 'r') as style_file:
                 self.setStyleSheet(style_file.read())
+        elif platform.system() == "Darwin":
+            if os.path.isfile(FILE_AUTOMATIC):
+                self.load_file(FILE_AUTOMATIC, True)
+
+            with open('style-mac.css', 'r') as style_file:
+                self.setStyleSheet(style_file.read())
         else:
             if os.path.isfile(FILE_AUTOMATIC):
                 self.load_file(FILE_AUTOMATIC, True)
 
-            with open('style.css', 'r') as style_file:
+            with open('style-win.css', 'r') as style_file:
                 self.setStyleSheet(style_file.read())
 
     def keyPressEvent(self, e):
@@ -1833,7 +1862,26 @@ class Form(QFrame):
                 for index in range(len(nrpn_min_max)):
                     w.min.setItemText(index, str(nrpn_min_max[index]))
                     w.max.setItemText(index, str(nrpn_min_max[index]))
-                self.txt_log.append(str(w._index) + " is NRPN. Min is " + str(nrpn_min_max[w.min.currentIndex()]) + " and Max is " + str(nrpn_min_max[w.max.currentIndex()]))
+                #self.txt_log.append(str(w._index) + " is NRPN. Min is " + str(nrpn_min_max[w.min.currentIndex()]) + " and Max is " + str(nrpn_min_max[w.max.currentIndex()]))
+            
+            #refresh some stuff
+            mode = w.mode.currentIndex()
+            # w.min.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            # w.min.setSingleStep(128 if mode == MODE_NRPN else 1)
+            # w.max.setRange(0, 16383 if mode == MODE_NRPN else 127)
+            # w.max.setSingleStep(128 if mode == MODE_NRPN else 1)
+            
+            en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
+            w.min.setEnabled(en)
+            w.max.setEnabled(en)
+            w.channel.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF))
+            
+            en = not (mode == MODE_PC_MINUS or mode == MODE_PC_PLUS or (mode == MODE_PC and w.analog.currentIndex() == 0))
+            w.param.setEnabled(en)
+            
+            en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
+            w.analog.setEnabled(en)      
+            w.toggle.setEnabled(not (w.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))
 
     def load_file(self, fileName, automatic = False):
         try:
@@ -1856,8 +1904,7 @@ class Form(QFrame):
                 self.current_inout_tab = 0
                 self.refresh_tabs()
                 self.refresh_in_outs()
-                self.load_model()
-                
+                self.load_model()              
             file.close()
         except Exception as e:
             time.sleep(0.1)
@@ -1870,7 +1917,6 @@ class Form(QFrame):
                 self.save_model()
                 pickle.dump(config, file)
                 file.close()
-                self.label_file.setText(os.path.basename(fileName))
         except Exception as e:
             time.sleep(0.1)
             QMessageBox.warning(self, _('Error'), _('Error writing kwt configuration file "{0}"\n{1}').format(fileName, e))
@@ -1880,9 +1926,9 @@ class Form(QFrame):
         fileName, __ = QFileDialog.getSaveFileName(self, _("Save kwt configuration file"),  filter = _("kwt file (*.kwt)"))
         if not fileName:
             return
-
         try:
             self.save_file(fileName)
+            self.label_file.setText(os.path.basename(fileName))
         finally:
             self.save_file(FILE_RECOVER)
 
@@ -1906,7 +1952,7 @@ class Form(QFrame):
             self.config_modeCB.setChecked(False)
             return
         
-        if cmd[0] == MIDI_PROGRAM_CHANGE:
+        if cmd[0] >= MIDI_PROGRAM_CHANGE and cmd[0] <= MIDI_PROGRAM_CHANGE|0xF :
             type_chn, param = cmd
             value = 0
         else:
@@ -1970,10 +2016,11 @@ class Form(QFrame):
 
             target.show_value((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(value))
             last_value = self._last_in_values[param]
+            #self.txt_log.append("Param " + str(param) + " Value " + str(value) + " Last value: " + str(self._last_in_values[param]))
             if abs(last_value - value) > THRESHOLD_SELECT:
                 self._last_in_values[param] = value
-
-                if target.enable_monitor.isChecked() and target.mode.currentIndex() != MODE_OFF:
+                
+                if target.enable_monitor.isChecked():
                     target.show_feedback()
                     ancestor = target.parent()
                     while ancestor is not None:

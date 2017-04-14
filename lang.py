@@ -1,7 +1,7 @@
-#############################################
-# Code by Martin Sebastian Wain for YAELTEX #
-# contact@2bam.com                     2016 #
-#############################################
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX - 2016
+# Revisions by Hernan Ordiales and Franco Grassano - 2016/2017
+###################################################################################
 
 
 #print("LANG")

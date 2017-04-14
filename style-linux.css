@@ -11,10 +11,51 @@ QPushButton {
 }
 
 /*1.03*/
-QSpinBox:up-arrow {
-	image: url('assets/arrowup.png');
+QSpinBox::down-button  {
+    subcontrol-origin: margin;
+    subcontrol-position: bottom right;
+
+    width: 16px;
+    height: 10px;
+    border-width: 1px;
+    border-color:white;
 }
-QSpinBox:down-arrow {
+
+QSpinBox::down-arrow  {
+    image: url('assets/cbarrow.png');
+/*
+    min-width: 8px;
+    min-height: 8px;
+    max-width: 8px;
+    max-height: 8px;
+    height: 8px;
+    width: 8px;
+*/
+}
+
+QSpinBox::up-button  {
+    subcontrol-origin: margin;
+    subcontrol-position: top right;
+
+    width: 16px;
+    height: 10px;
+    border-width: 1px;
+    border-color: white;
+}
+
+QSpinBox::up-arrow  {
+    image: url('assets/arrowup.png');
+/*
+    min-width: 6px;
+    min-height: 6px;
+    max-width: 6px;
+    max-height: 6px;
+    height: 6px;
+    width: 6px;
+*/
+}
+
+QComboBox::down-arrow {
 	image: url('assets/cbarrow.png');
 }
 
@@ -43,7 +84,7 @@ QComboBox
     border-style: solid;
     border: 1px solid gray;
     border-radius: 1;
-    padding: 1px 0px 1px 20px;
+    padding: 1px 0px 1px 3px;
 }
 
 
@@ -65,9 +106,6 @@ QLineEdit {
     margin-right: 0;*/
 }
 
-QComboBox::down-arrow {
-	image: url('assets/cbarrow.png');
-}
 
 /* Specific customizations */
 *[alert="true"], *[alert="false"] QLabel {

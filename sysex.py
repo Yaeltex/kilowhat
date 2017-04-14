@@ -1,4 +1,7 @@
-
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX - 2016
+# Revisions by Hernan Ordiales and Franco Grassano - 2016/2017
+###################################################################################
 
 # Header to send/receive sysex messages
 HEADER = [ord(ch) for ch in "YTX"]

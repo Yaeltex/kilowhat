@@ -1,19 +1,21 @@
-#############################################
-# Code by Martin Sebastian Wain for YAELTEX #
-# contact@2bam.com                     2016 #
-#############################################
+###################################################################################
+# Original code by Martin Sebastian Wain for YAELTEX 
+# Revisions by Hernan Ordiales and Franco Grassano
+###################################################################################
 
 #from lang import _
 import lang
 import configparser
 from math import floor
 
-MODE_OFF    = 0
-MODE_NOTE    = 1
-MODE_CC        = 2
-MODE_NRPN    = 3
-MODE_PC     = 4
-MODE_SHIFTER= 5
+MODE_OFF        = 0
+MODE_NOTE       = 1
+MODE_CC         = 2
+MODE_NRPN       = 3
+MODE_PC_MINUS   = 4
+MODE_PC         = 5
+MODE_PC_PLUS    = 6
+MODE_SHIFTER    = 7
 
 configFile = configparser.ConfigParser()
 configFilePath = r'ioconfig.txt'
@@ -26,14 +28,14 @@ if miniblock:
     MAX_INPUTS_CC = 36
     MAX_OUTPUTS = 64
     MAX_BANKS = 4
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"))
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"), _("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"))
     MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC]
 else:
     MAX_INPUTS_CC = 32
     MAX_OUTPUTS = 64
     MAX_BANKS = 8
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Program Change"), _("Shifter"))
-    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC, MODE_SHIFTER]
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _("Shifter"))
+    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC_MINUS, MODE_PC, MODE_PC_PLUS, MODE_SHIFTER]
 
 
 #MAX_INPUTS_CC    = 32
@@ -103,9 +105,6 @@ class InputData:
     #MIN(7)
     #MAX(7)
     def get_sysex(self):
-        #return [(self.mode&0x7) | (self.channel-1 & 0xf) << 3,\
-        #    self.param >> 7 & 0x7f, self.param & 0x7f,  (self.min>>7) & 0x7f if self.mode == MODE_NRPN else self.min,\
-        #                                                (self.max>>7) & 0x7f if self.mode == MODE_NRPN else self.max]
         return [(self.mode&0x7) | (self.channel-1 & 0xf) << 3,\
             self.param >> 7 & 0x7f, self.param & 0x7f,  self.min, self.max]
 
