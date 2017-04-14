@@ -39,7 +39,7 @@ import memory
 
 # General
 TITLE = "Kilowhat"
-VERSION = "v0.9"
+VERSION = "v0.9.1"
 
 # User interface
 COLOR_TIMEOUT = 500                        # ms. Background coloring timeout
