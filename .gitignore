@@ -1,5 +1,6 @@
 *.pyc
 *.kwt
+ioconfig.txt
 build/
 dist/
 kmgui_log.txt
