@@ -29,12 +29,12 @@ if miniblock:
     MAX_OUTPUTS = 64
     MAX_BANKS = 4
     MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"), _("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"))
-    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC]
+    MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC_MINUS, MODE_PC, MODE_PC_PLUS]
 else:
     MAX_INPUTS_CC = 32
     MAX_OUTPUTS = 64
     MAX_BANKS = 8
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _("Shifter"))
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _(" Bank shifter"))
     MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC_MINUS, MODE_PC, MODE_PC_PLUS, MODE_SHIFTER]
 
 

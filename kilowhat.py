@@ -182,7 +182,6 @@ class GridHelper:
         self._grid = grid
         #grid.setSizeConstraint(QLayout.SetMaximumSize)
 
-
     def _skip(self):
         # asd = self._grid.itemAtPosition(self._y, self._x)
         while self._grid.itemAtPosition(self._y, self._x) is not None:
@@ -1623,7 +1622,7 @@ class Form(QFrame):
         
         config_mode_layout.addWidget(self.config_modeCB)
         
-        config_mode_layout.addSpacing(13)
+        config_mode_layout.addSpacing(43)
         
         #master_layout.addSpacing(50)
         master_layout.addLayout(config_mode_layout)
@@ -1650,7 +1649,7 @@ class Form(QFrame):
         self.midi_monitor.setReadOnly(True)
         self.midi_monitor.setStyleSheet("QTextEdit {font-size: 10pt}")
         self.midi_monitor.append(_("MIDI Monitor")) 
-        self.midi_monitor.setMaximumWidth(200)
+        self.midi_monitor.setMaximumWidth(230)
         self.midi_monitor.setMinimumHeight(120)
         self.midi_monitor.setMaximumHeight(120)
                 
@@ -1980,19 +1979,19 @@ class Form(QFrame):
                 elif param == 38 and self.prev_param == 6:
                     self.prev_param = 0
                     self.nrpn_val_complete = self.nrpn_val_coarse << 7 | value
-                    self.midi_monitor.append("CH " +  str(chn+1) + " NRPN " + str(self.nrpn_param_complete) + "  " + str(self.nrpn_val_complete))
+                    self.midi_monitor.append("CH " +  str(chn+1) + "  NRPN " + str(self.nrpn_param_complete) + "  " + str(self.nrpn_val_complete))
                     return
                 else:    
                     prev_param = 0
-                    self.midi_monitor.append("CH " + str(chn+1) + " CC " + str(param) + "  " + str(value))
+                    self.midi_monitor.append("CH " + str(chn+1) + "  CC " + str(param) + "  " + str(value))
                     
             elif cmd_type == MIDI_NOTE_ON:
-                self.midi_monitor.append("CH " + str(chn+1) + " Note On " + str(param) + "  " + str(value))
+                self.midi_monitor.append("CH " + str(chn+1) + "  Note On " + str(param) + "  " + str(value))
             elif cmd_type == MIDI_NOTE_OFF:
-                self.midi_monitor.append("CH " + str(chn+1) + " Note Off " + str(param) + "  " + str(value))
+                self.midi_monitor.append("CH " + str(chn+1) + "  Note Off " + str(param) + "  " + str(value))
                 midi_send((MIDI_NOTE_ON | chn, param, value))
             elif cmd_type == MIDI_PROGRAM_CHANGE:
-                self.midi_monitor.append("CH " + str(chn+1) + " Program Change " + str(param)) 
+                self.midi_monitor.append("CH " + str(chn+1) + "  Program Change " + str(param)) 
                 return      # to prevent error unpacking only 2 bytes
             else:
                 self.midi_monitor.append(_("MIDI message not supported"))
