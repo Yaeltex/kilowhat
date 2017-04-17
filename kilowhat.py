@@ -162,8 +162,8 @@ def send_sysex_dump():
             midi_send(pkt)
             #FIXME: send in multiple packets only in Darwin/MacOS
             #if platform.system() == "Darwin":
-            print("Sleep 0.3 seg")
-            time.sleep(0.3)
+            print("Sleep 0.4 seg")
+            time.sleep(0.4)
     except Exception as e:
         print("Exception", e)
 
@@ -1980,19 +1980,19 @@ class Form(QFrame):
                 elif param == 38 and self.prev_param == 6:
                     self.prev_param = 0
                     self.nrpn_val_complete = self.nrpn_val_coarse << 7 | value
-                    self.midi_monitor.append(str(chn+1) + " NRPN " + str(self.nrpn_param_complete) + " " + str(self.nrpn_val_complete))
+                    self.midi_monitor.append("CH " +  str(chn+1) + " NRPN " + str(self.nrpn_param_complete) + "  " + str(self.nrpn_val_complete))
                     return
                 else:    
                     prev_param = 0
-                    self.midi_monitor.append(str(chn+1) + " CC " + str(param) + " " + str(value))
+                    self.midi_monitor.append("CH " + str(chn+1) + " CC " + str(param) + "  " + str(value))
                     
             elif cmd_type == MIDI_NOTE_ON:
-                self.midi_monitor.append(str(chn+1) + " Note On " + str(param) + " " + str(value))
+                self.midi_monitor.append("CH " + str(chn+1) + " Note On " + str(param) + "  " + str(value))
             elif cmd_type == MIDI_NOTE_OFF:
-                self.midi_monitor.append(str(chn+1) + " Note Off " + str(param) + " " + str(value))
+                self.midi_monitor.append("CH " + str(chn+1) + " Note Off " + str(param) + "  " + str(value))
                 midi_send((MIDI_NOTE_ON | chn, param, value))
             elif cmd_type == MIDI_PROGRAM_CHANGE:
-                self.midi_monitor.append(str(chn+1) + " Program Change " + str(param)) 
+                self.midi_monitor.append("CH " + str(chn+1) + " Program Change " + str(param)) 
                 return      # to prevent error unpacking only 2 bytes
             else:
                 self.midi_monitor.append(_("MIDI message not supported"))
