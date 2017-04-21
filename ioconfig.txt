@@ -1,2 +1,2 @@
 [YTX Config]
-miniblock = no
+miniblock = yes

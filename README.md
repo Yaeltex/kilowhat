@@ -5,7 +5,90 @@ Software de configuración por SysEx de Yaeltex.
 * [Último release] (https://github.com/Yaeltex/kilowhat/releases/tag/v0.9.0)
 * [Wiki](http://wiki.yaeltex.com.ar/index.php?title=Kilowhat)
 
-## Dependencias multiplataforma paso a paso
+**Kilowhat** es una herramienta open source desarrollada por Yaeltex, pensada para ser usada con sus productos, para poder configurar interfaces MIDI hechas con el Kilomux Shield para Arduino.
+Funciona mediante el uso del protocolo SysEx, y permite al usuario configurar las entradas y las salidas disponibles en esos dispositivos, para que puedan enviar y recibir mensajes MIDI personalizados.
+
+* Configuración general:
+  * Elige la placa Arduino que estás usando y aprovecha al máximo su memoria.
+  * Elige la cantidad de entradas y salidas que usas en tu aplicación del Kilomux.
+  * Configura hasta 8 bancos diferentes (dependiendo de la placa Arduino y la memoria disponible).
+  * Guarda tus configuraciones y compartelas con la comunidad, o carga configuraciones que hayan compartido otros usuarios.
+
+* Entradas:
+  * Configura las entradas para que envíen distintos tipos de mensajes MIDI, como Notas, CC, NRPN, Program change (estático, +1 o -1) o Shifters (para alternar entre los bancos).
+  * Configura tu entrada como analógica o digital.
+  * Configura tus entradas digitales cómo momentánes o toggle.
+  * Configura los valores mínimo y máximo para los mensajes MIDI que envía cada control, y si quieres incluso puedes invertirlos.
+  * Configura el canal MIDI que envía cada control en forma individual.
+  * Monitorea los mensajes MIDI provenientes de tu dispositivo.
+
+* Control por sensor de ultrasonido:
+  * Configura los mensajes MIDI que envía este control como Nota, CC o NRPN. 
+  * Configura el canal MIDI.
+  * Configura los valores mínimo y máximo para el mensaje MIDI.
+  * Configura la distancia mínima y máxima de sensado.
+
+* Salidas:
+  * Configura el parámetro para que se corresponda con el de un botón asociado, o en forma independiente, para que responda a la Nota que tu elijas.
+  * Prueba las salidas del Kilomux desde la aplicación.
+  * Configura si quieres que la salida sea intermitente o permanente.
+  * Elige si usas tus salidas en forma directa o matricial (con ésta última puedes usar hasta 64 LEDs con tu Kilomux).
+
+* Instalación
+Te proporcionamos los ejecutables para que puedas usar el Kilowhat en el sistema operativo que prefieras (ver al final de éste documento) de forma sencilla. 
+
+* Sistemas operativos soportados
+El Kilowhat está probado y funciona en:
+  ** Mac OS X El Capitan 10.11.6
+  ** Windows 10
+  ** Ubuntu 16.04 LTS
+
+Puede funcionar en otros, si lo pruebas y funciona, por favor avisa a franco@yaeltex.com!
+
+---
+
+First production release with cool features :)
+
+**Kilowhat** is an open source tool developed by Yaeltex, to be used with our products, and meant for configuring MIDI interfaces made with the Kilomux shield.
+It works with the SysEx protocol and it allows the user to configure all the inputs and outputs available in the device, to send and receive custom MIDI messages.
+
+* General configuration:
+  * Select Arduino board and get the most of each.
+  * Choose the number of inputs and outputs that suit your application.
+  * Configure up to 8 banks (depending on the device and memory available).
+  * Save and your configurations and share them with the community, or load configurations made by other users.
+
+* Inputs:
+  * Configure MIDI messages as Note, CC, NRPN, Program change (static, +1 or -1) or Shifter (to switch banks).
+  * Configure as analog or digital.
+  * Configure digital inputs as either momentary or latching (Toggle).
+  * Configure MIN/MAX values for MIDI output, and even invert if desired.
+  * Configure MIDI channel individually.
+  * Monitor MIDI input from device.
+
+* Ultrasonic sensor input:
+  * Configure MIDI message as Note, CC, or NRPN.
+  * Configure MIDI channel.
+  * Configure MIN/MAX value for MIDI output.
+  * Configure min and max sensing distance.
+
+* Outputs:
+  * Configure parameter to match button's and light up at the correct time.
+  * Test outputs by sending MIDI notes.
+  * Configure blink or permanent mode.
+  * Change between Normal or Matrix mode in order to have up to 64 outputs.
+
+* Installation
+We provide the executable files so that you can use Kilowhat in the operating system you normally use (detailed below). Just download and run!
+
+* Tested OS
+Kilowhat has been tested and works in these OS:
+  ** Mac OS X El Capitan 10.11.6
+  ** Windows 10
+  ** Ubuntu 16.04 LTS
+  
+  
+## Dependencias paso a paso para cada plataforma
 
 *Fecha*: 11/2016
 

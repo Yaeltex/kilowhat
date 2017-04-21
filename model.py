@@ -34,7 +34,7 @@ else:
     MAX_INPUTS_CC = 32
     MAX_OUTPUTS = 64
     MAX_BANKS = 8
-    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _(" Bank shifter"))
+    MODE_LABELS = (_("Off"), _("Note"), _("CC"), _("NRPN"),_("Prog. Ch. -1"),_("Prog. Ch."), _("Prog. Ch. +1"), _("Bank shifter"))
     MODE_ENABLED = [MODE_OFF, MODE_NOTE, MODE_CC, MODE_NRPN, MODE_PC_MINUS, MODE_PC, MODE_PC_PLUS, MODE_SHIFTER]
 
 
@@ -45,6 +45,7 @@ else:
 class GlobalData:
     output_matrix = False
     memory_mode = 1024                #memory.HARDWARE[0][1]    # FIXME: MAGIC NUMBER
+    thru = False
     version = 0
     num_banks = 1
     num_inputs_norm = MAX_INPUTS_CC
@@ -56,7 +57,7 @@ class GlobalData:
     def get_sysex(self):
         return [ord('Y'), ord('T'), ord('X'), self.version & 0xff]\
                + [0 for reserved in range(8)]\
-               + [1 if self.output_matrix else 0, self.num_banks, self.num_inputs_norm, self.num_outputs]
+               + [(1 if self.output_matrix else 0) | (2 if self.thru else 0), self.num_banks, self.num_inputs_norm, self.num_outputs]
 
 
 class Bank:

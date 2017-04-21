@@ -263,9 +263,8 @@ class MemoryWidget(QWidget):
         self.btn_apply = QPushButton(_("Apply changes"))
         self.btn_apply.setStyleSheet("QPushButton { font-size: 10pt; }")
         
-        self.midi_thruCB = QCheckBox(_("<- MIDI THRU ->"))
-        self.midi_thruCB.setStyleSheet("QCheckBox { font-size: 10pt }")
-        
+        self.midi_thru_devCB = QCheckBox(_("Enable MIDI THRU"))
+        self.midi_thru_devCB.setStyleSheet("QCheckBox { font-size: 10pt }")
         
         mem_layout = QVBoxLayout()
         
@@ -296,7 +295,7 @@ class MemoryWidget(QWidget):
         h.label(_("MIDI ports")).widget(cmi, spanx=2, width=tiny).widget(cmo, spanx=1, width=tiny)\
             .label(_("Set banks")).widget(self.banks, width=tiny)\
             .newLine()
-        h.label(_(" ")).label(_(" ")).widget(self.midi_thruCB, spanx=2, width=small).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
+        h.label(_(" ")).label(_(" ")).widget(self.midi_thru_devCB, spanx=2, width=small, align=Qt.AlignLeft).label(_("Set inputs")).widget(self.ins, width=tiny).newLine()
         h.label(_(" ")).widget(self.btn_reload_midi, spanx=3, width=small).label(_("LEDS mode")).widget(self.output_matrix, spanx=3, width=tiny).newLine()
         h.label(_("Hardware")).widget(self.hardware, spanx=3, width=small).label(_("Set outputs")).widget(self.outs, width=tiny).newLine()
         h.label(_(" ")).label(_(" ")).label(_(" ")).label(_(" ")).widget(self.btn_apply, spanx=2, width=small).newLine()       
@@ -325,7 +324,7 @@ class MemoryWidget(QWidget):
         self.ins.valueChanged.connect(self.on_param_value_changed)
         self.outs.valueChanged.connect(self.on_param_value_changed)
         self.btn_apply.pressed.connect(lambda: self.save_model())
-        self.midi_thruCB.clicked.connect(self.on_midi_thru_press)
+        self.midi_thru_devCB.clicked.connect(self.on_midi_thru_dev_press)
 
         # Reset (TODO: done by the Form or here?)
         print("MemoryWidget() reset")
@@ -430,14 +429,12 @@ class MemoryWidget(QWidget):
             self.parent().refresh_tabs()
             self.parent().refresh_in_outs()
             pass
-     
-    def on_midi_thru_press(self):
+    
+    def on_midi_thru_dev_press(self):
         global form
-        if self.midi_thruCB.isChecked():
-            form.midi_thru = True
+        if self.midi_thru_devCB.isChecked():  
             return
         else:
-            form.midi_thru = False
             return
             
     def on_param_value_changed(self):
@@ -465,7 +462,7 @@ class MemoryWidget(QWidget):
         model = self.model()
 
         self.output_matrix.setCurrentIndex(config['global'].output_matrix)
-
+        self.midi_thru_devCB.setChecked(config['global'].thru)
         # Workaround: Temporary!
         self.banks.setMaximum(10000)
         self.ins.setMaximum(10000)
@@ -484,6 +481,7 @@ class MemoryWidget(QWidget):
         global form
         model = self.model()
         config['global'].output_matrix = self.output_matrix.currentIndex()
+        config['global'].thru = self.midi_thru_devCB.isChecked()
         model.hardware_mode = self.hardware.itemData(self.hardware.currentIndex())
         model.num_banks = self.banks.value()
         model.num_inputs_norm = self.ins.value()
@@ -791,9 +789,11 @@ class OutputConfig(ConfigWidget):
         if form.config_mode:
             self.current_test = 1, self._index
             midi_send((MIDI_NOTE_ON | 0, self._index, 0x7f))
+            form.midi_monitor.append("O: CH " + str(1) + "  NOTE ON " + str(self._index) + "  " + str(127))
         else:    
             self.current_test = m.channel, m.param
             midi_send((MIDI_NOTE_ON | m.channel-1, m.param, 0x7f))
+            form.midi_monitor.append("O: CH " + str(m.channel) + "  NOTE ON " + str(m.param) + "  " + str(127))
         print("Press CH{0} N{1}".format(m.channel, m.param))
 
 
@@ -802,9 +802,11 @@ class OutputConfig(ConfigWidget):
         print("Release CH{0} N{1}".format(channel, note))
         
         if form.config_mode:
-            midi_send((MIDI_NOTE_OFF | channel, note, 0))
+            midi_send((MIDI_NOTE_OFF | channel-1, note, 0))
+            form.midi_monitor.append("O: CH " + str(channel) + "  NOTE OFF " + str(note) + "  " + str(0))
         else:
             midi_send((MIDI_NOTE_OFF | channel-1, note, 0))
+            form.midi_monitor.append("O: CH " + str(channel) + "  NOTE OFF " + str(note) + "  " + str(0))
         self.current_test = None
     
     def copy_values_from(self, origin, value="all"):
@@ -823,7 +825,9 @@ class OutputConfig(ConfigWidget):
 
 def stylesheetProp(widget, name, value):
     widget.setProperty(name, "true" if value is True else "false" if value is False else value)
-    widget.setStyleSheet(widget.styleSheet())		#Force widget stylesheet reload
+    #widget.setStyleSheet(widget.styleSheet())		# Force widget stylesheet reload  # THis is slow and CPU consuming
+    widget.style().unpolish(widget)                 # Much better way    
+    widget.style().polish(widget)                      
 
 # Subclassed spinbox to show multiplied output in text even if value remains
 class QSpinBoxHack(QSpinBox):
@@ -886,7 +890,6 @@ class InputConfig(ConfigWidget):
             self.mode.addItem(MODE_LABELS[labelIdx])
         self.mode.setCurrentIndex(MODE_NOTE) #Default value
         self.mode.currentIndexChanged.connect(self.on_param_value_changed)
-
         self.mode.currentIndexChanged.connect(lambda: self.update_grouped_widgets("mode"))
         
         paramSB = QSpinBox()
@@ -894,8 +897,6 @@ class InputConfig(ConfigWidget):
         self.param = self.addwl(_("Param"), paramSB);
         self.param.valueChanged.connect(self.on_param_value_changed)
         #WARNING: param does not update grouped widgets values
-        #setWidgetBackground(self.param, Qt.black)
-        #self.param.setToolTip(_("El rango para Notas y CC es de 0 a 127"))
         self.param.setRange(0, pow(2, 14)-1)
         self.param.installEventFilter(self)
 
@@ -908,19 +909,21 @@ class InputConfig(ConfigWidget):
         minCB = QComboBox()
         minCB.setMinimumWidth(65)
         self.min = self.addwl(_("Min."), minCB)
-        self.min.installEventFilter(self)
+        #self.min.installEventFilter(self)
         for labelIdx in range(len((nrpn_min_max))):
             self.min.addItem(str(nrpn_min_max[labelIdx]))
 
+        #self.min.currentIndexChanged.connect(self.on_param_value_changed)
         self.min.currentIndexChanged.connect(lambda: self.update_grouped_widgets("min"))
 
         maxCB = QComboBox()
         maxCB.setMinimumWidth(65)
         self.max = self.addwl(_("Max."), maxCB)
-        self.max.installEventFilter(self)
+        #self.max.installEventFilter(self)
         for labelIdx in range(len(nrpn_min_max)):
             self.max.addItem(str(nrpn_min_max[labelIdx]))
-
+        
+        #self.max.currentIndexChanged.connect(self.on_param_value_changed)
         self.max.currentIndexChanged.connect(lambda: self.update_grouped_widgets("max"))
 
         self.max.setCurrentIndex(127)
@@ -952,6 +955,8 @@ class InputConfig(ConfigWidget):
         #TODO: Shifter lock in to banks
         global form
         alertParam = False
+        alertMinMax = False
+        prevAlertMinMax = False
         glob = config['global'];
         mode = self.mode.currentIndex()
         param = self.param.value()
@@ -970,13 +975,16 @@ class InputConfig(ConfigWidget):
         elif mode == MODE_SHIFTER and param >= max_banks:
             alertParam = True
             self.setAlert(_("Shifter param {0} outside bank range 0-{1}").format(param, max_banks-1))
+        elif self.min.currentIndex() == self.max.currentIndex():
+            self.setAlert(_("Min and Max cannot be identical"))
+            alertMinMax = True
         else:
             repeated = False
             if mode == MODE_SHIFTER:                
                 for i, w in enumerate(self.window().inputs):
                     if self._index != i and i < glob.num_inputs_norm:
                         if w.mode.currentIndex() == MODE_SHIFTER and w.param.value() == param:
-                            self.setAlert(_("Banco de shifter repetido ({0})").format(param))
+                            self.setAlert(_("Bank shifter was already used ({0})").format(param))
                             alertParam = True
                             repeated = True
                             break
@@ -989,14 +997,15 @@ class InputConfig(ConfigWidget):
                 for bankIdx in range(MAX_BANKS):
                     if config['banks'][bankIdx].input_cc[self._index].mode == MODE_SHIFTER:
                         config['banks'][bankIdx].input_cc[self._index].mode = mode
-                        
-            #print(self.window())
             
             if not repeated:
                 self.setAlert(None)
-                
+
+        
+            
         #HACK: Refresh everything just in case
         self.window().call_on_param_value_changed_on_inputs()
+        
         
         en = not (mode == MODE_SHIFTER or mode == MODE_OFF or mode==MODE_PC or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS)
         self.min.setEnabled(en)
@@ -1016,6 +1025,8 @@ class InputConfig(ConfigWidget):
                 self.max.setItemText(index, str(index))
 
         stylesheetProp(self.param, "alert", alertParam)
+        stylesheetProp(self.min, "alert", alertMinMax)        
+        stylesheetProp(self.max, "alert", alertMinMax)        
         
         self._prev_mode = mode
 
@@ -1044,6 +1055,8 @@ class InputConfigCC(InputConfig):
 
         self.analog.currentIndexChanged.connect(lambda: self.update_grouped_widgets("a/d"))
         self.toggle.currentIndexChanged.connect(lambda: self.update_grouped_widgets("press"))
+        self.min.currentIndexChanged.connect(self.on_param_value_changed)
+        self.max.currentIndexChanged.connect(self.on_param_value_changed)
         
         #After super __init__ is called
         ad.currentIndexChanged.connect(self.on_param_value_changed)
@@ -1067,7 +1080,7 @@ class InputConfigCC(InputConfig):
         super().on_param_value_changed()
         mode = self.mode.currentIndex()
         max_banks = config['global'].num_banks
-            
+        
         if mode == MODE_SHIFTER:
             self.analog.setCurrentIndex(1)
             for bankIdx in range(max_banks):
@@ -1080,7 +1093,7 @@ class InputConfigCC(InputConfig):
         self.analog.setEnabled(not (mode == MODE_SHIFTER or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))      
         self.toggle.setEnabled(not (self.analog.currentIndex() == 0 or mode == MODE_OFF or mode == MODE_PC_MINUS or mode == MODE_PC_PLUS))		
         #WARNING: param does not update grouped widgets values
-
+        
     def copy_values_from(self, origin, value="all"):
         print("Updating input widget ", self._index)
         #if value=="all":
@@ -1101,9 +1114,9 @@ class InputConfigCC(InputConfig):
         elif value=="channel":
             self.channel.setValue( origin.channel.value() )
         elif value=="min":
-            self.min.setValue( origin.min.value() )
+            self.min.setCurrentIndex( origin.min.currentIndex() )
         elif value=="max":
-            self.max.setValue( origin.max.value() )
+            self.max.setCurrentIndex( origin.max.currentIndex() )
 
 class InputConfigUS(InputConfig):
     def __init__(self, model_name, parent=None):
@@ -1218,6 +1231,7 @@ class Form(QFrame):
 
         for tuple in to_test:
             midi_send((MIDI_NOTE_ON | tuple[0], tuple[1], value))
+            self.midi_monitor.append("O: CH " + str(tuple[0]+1) + "  NOTE ON " + str(tuple[1]) + "  " + str(value))
 
         self.testing = to_test
 
@@ -1226,6 +1240,7 @@ class Form(QFrame):
             return
         for tuple in self.testing:
             midi_send((MIDI_NOTE_OFF | tuple[0], tuple[1], 0))
+            self.midi_monitor.append("O: CH " + str(tuple[0]+1) + "  NOTE OFF " + str(tuple[1]) + "  " + str(0))
         self.testing = None
 
     #def on_set_bank_channels(self):
@@ -1613,6 +1628,10 @@ class Form(QFrame):
         config_mode_layout.setAlignment(Qt.AlignBottom)
         config_mode_layout.setObjectName("MidiMonitorConfigCB")
         
+        self.midi_thruCB = QCheckBox(_("TEST / MIDI IN -> OUT"))
+        self.midi_thruCB.setStyleSheet("QCheckBox { font-size: 10pt }")
+        self.midi_thruCB.clicked.connect(self.on_midi_thru_press)
+        
         self.config_modeCB = QCheckBox(_("Config Mode"))
         self.config_modeCB.setStyleSheet("QCheckBox { font-size: 10pt }")
         self.config_modeCB.clicked.connect(self.on_config_mode_press)
@@ -1620,10 +1639,12 @@ class Form(QFrame):
         config_mode_layout.addStretch()
         config_mode_layout.addStretch()
         
+        config_mode_layout.addWidget(self.midi_thruCB)
+        config_mode_layout.addSpacing(10)
         config_mode_layout.addWidget(self.config_modeCB)
         
         config_mode_layout.addSpacing(43)
-        
+
         #master_layout.addSpacing(50)
         master_layout.addLayout(config_mode_layout)
         
@@ -1785,6 +1806,14 @@ class Form(QFrame):
         for w in [self.memory_widget, self.input_us] + self.inputs + self.outputs:
             w.save_model()
             
+    def on_midi_thru_press(self):
+        if self.midi_thruCB.isChecked():
+            self.midi_thru = True
+            return
+        else:
+            self.midi_thru = False
+            return
+            
     def on_config_mode_press(self):
         if self.config_modeCB.isChecked():
             self.config_mode = True
@@ -1941,14 +1970,19 @@ class Form(QFrame):
             if not self.config_modeCB.isChecked():
                 self.config_modeCB.setChecked(True)
             return
-            
-        if cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG_ACK, []):
+        elif cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG_ACK, []):
             self.txt_log.append(_("Arduino is not in config mode anymore"))
             return
 
-        if cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
+        elif cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
             self.txt_log.append(_("Dump OK"))
             self.config_modeCB.setChecked(False)
+            return
+        elif cmd == sysex.make_sysex_packet(sysex.CONFIG_MODE, []):
+            return
+        elif cmd == sysex.make_sysex_packet(sysex.DUMP_TO_HW, []):
+            return
+        elif cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG, []):
             return
         
         if cmd[0] >= MIDI_PROGRAM_CHANGE and cmd[0] <= MIDI_PROGRAM_CHANGE|0xF :
@@ -1979,19 +2013,18 @@ class Form(QFrame):
                 elif param == 38 and self.prev_param == 6:
                     self.prev_param = 0
                     self.nrpn_val_complete = self.nrpn_val_coarse << 7 | value
-                    self.midi_monitor.append("CH " +  str(chn+1) + "  NRPN " + str(self.nrpn_param_complete) + "  " + str(self.nrpn_val_complete))
+                    self.midi_monitor.append("I: CH " +  str(chn+1) + "  NRPN " + str(self.nrpn_param_complete) + "  " + str(self.nrpn_val_complete))
                     return
                 else:    
                     prev_param = 0
-                    self.midi_monitor.append("CH " + str(chn+1) + "  CC " + str(param) + "  " + str(value))
-                    
+                    self.midi_monitor.append("I: CH " + str(chn+1) + "  CC " + str(param) + "  " + str(value))
+                # End of NRPN message parser 
             elif cmd_type == MIDI_NOTE_ON:
-                self.midi_monitor.append("CH " + str(chn+1) + "  Note On " + str(param) + "  " + str(value))
+                self.midi_monitor.append("I: CH " + str(chn+1) + "  Note On " + str(param) + "  " + str(value))
             elif cmd_type == MIDI_NOTE_OFF:
-                self.midi_monitor.append("CH " + str(chn+1) + "  Note Off " + str(param) + "  " + str(value))
-                midi_send((MIDI_NOTE_ON | chn, param, value))
+                self.midi_monitor.append("I: CH " + str(chn+1) + "  Note Off " + str(param) + "  " + str(value))
             elif cmd_type == MIDI_PROGRAM_CHANGE:
-                self.midi_monitor.append("CH " + str(chn+1) + "  Program Change " + str(param)) 
+                self.midi_monitor.append("I: CH " + str(chn+1) + "  Program Change " + str(param)) 
                 return      # to prevent error unpacking only 2 bytes
             else:
                 self.midi_monitor.append(_("MIDI message not supported"))
