@@ -1,10 +1,11 @@
 # Kilowhat
 
-Software de configuración por SysEx de Yaeltex.
+Software de configuración por SysEx de Yaeltex. / SysEx configuration tool by Yaeltex
  
-* [Último release] (https://github.com/Yaeltex/kilowhat/releases/tag/v0.9.0)
+* [Último release] (https://github.com/Yaeltex/kilowhat/releases/)
 * [Wiki](http://wiki.yaeltex.com.ar/index.php?title=Kilowhat)
 
+(english below)
 **Kilowhat** es una herramienta open source desarrollada por Yaeltex, pensada para ser usada con sus productos, para poder configurar interfaces MIDI hechas con el Kilomux Shield para Arduino.
 Funciona mediante el uso del protocolo SysEx, y permite al usuario configurar las entradas y las salidas disponibles en esos dispositivos, para que puedan enviar y recibir mensajes MIDI personalizados.
 
