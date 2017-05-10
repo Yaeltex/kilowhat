@@ -67,7 +67,7 @@ configFilePath = r'ioconfig.txt'
 configFile.readfp(open(configFilePath))
 
 miniblock = configFile.get('YTX Config', 'miniblock')
-miniblock = 1 if miniblock == "yes" else 0
+miniblock = 0 if miniblock == "no" else 1
 
 config = {
       'file_ver': PROTOCOL_VERSION
@@ -1973,7 +1973,6 @@ class Form(QFrame):
         elif cmd == sysex.make_sysex_packet(sysex.EXIT_CONFIG_ACK, []):
             self.txt_log.append(_("Arduino is not in config mode anymore"))
             return
-
         elif cmd == sysex.make_sysex_packet(sysex.DUMP_OK, []):
             self.txt_log.append(_("Dump OK"))
             self.config_modeCB.setChecked(False)
@@ -1994,6 +1993,9 @@ class Form(QFrame):
         cmd_type = type_chn & 0xf0
         chn = type_chn & 0xf
         
+        if self.midi_thru:
+            midi_send((cmd_type | chn, param, value))  # MIDI THRU
+            
         # MIDI Monitor log
         if not self.config_modeCB.isChecked():
             if cmd_type == MIDI_CC:
@@ -2029,8 +2031,6 @@ class Form(QFrame):
             else:
                 self.midi_monitor.append(_("MIDI message not supported"))
         
-        if self.midi_thru:
-            midi_send((cmd_type | chn, param, value))  # MIDI THRU
                     
         target = None
         if self.config_modeCB.isChecked():
@@ -2044,8 +2044,6 @@ class Form(QFrame):
                     target = self.inputs[param]
         
         if target is not None:                
-            #self.midi_monitor.append((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(param) + " " + str(value))
-
             target.show_value((_("CC") if cmd_type == MIDI_CC else _("Note")) + " " + str(value))
             last_value = self._last_in_values[param]
             #self.txt_log.append("Param " + str(param) + " Value " + str(value) + " Last value: " + str(self._last_in_values[param]))
